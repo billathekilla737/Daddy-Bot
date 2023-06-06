@@ -79,14 +79,9 @@ def run_discord_bot():
 
         randomName = random.choice(nameList)
         await member.edit(nick=randomName)
-       
-        #Give the new member role[2] from the list of roles (NOT RANDOM)
 
         await member.add_roles(discord.utils.get(member.guild.roles, name="Average Dick Daddies"))
-     
-    
         
-        #str(roleList[2]))
     print(roleList[2])
     client.run(token)   
     
