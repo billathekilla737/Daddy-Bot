@@ -82,7 +82,7 @@ def run_discord_bot():
        
         #Give the new member role[2] from the list of roles (NOT RANDOM)
 
-        await member.add_roles(discord.utils.get(member.guild.roles, name=roleList[2]))
+        await member.add_roles(discord.utils.get(member.guild.roles, name="Average Dick Daddies"))
      
     
         
