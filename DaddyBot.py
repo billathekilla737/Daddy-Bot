@@ -21,6 +21,10 @@ tokenFile.close()
 #The bot will also give the user a role from a list of roles from a text file.
 
 
+
+
+
+
 def Parse_Private():
     tokenFile = open("Assets/Private.txt", "r")
     token = tokenFile.read()
@@ -72,12 +76,17 @@ def run_discord_bot():
     #Called when a new user joins the server
     @client.event
     async def on_member_join(member):
-        #Assign a nickname at random from the list of names to the new user
+
         randomName = random.choice(nameList)
         await member.edit(nick=randomName)
+       
         #Give the new member role[2] from the list of roles (NOT RANDOM)
+
         await member.add_roles(discord.utils.get(member.guild.roles, name=roleList[2]))
+     
     
+        
+        #str(roleList[2]))
     print(roleList[2])
     client.run(token)   
     
