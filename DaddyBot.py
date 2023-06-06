@@ -10,49 +10,46 @@ import regex as re
 import random
 
 
-#Discord Bot Token
-#Read token from file
-tokenFile = open("Assets\Private.txt", "r")
-token = tokenFile.read()
-tokenFile.close()
-
 ###############Bot Description#####################
 #The goal of this bot is to give a new users a nickname from a list of names from a text file.
 #The bot will also give the user a role from a list of roles from a text file.
 
 
-
-
-
-
-def Parse_Private():
-    tokenFile = open("Assets/Private.txt", "r")
-    token = tokenFile.read()
-    tokenFile.close()
-    #Use Regex to grab the token and URL from the file '([^']*)'
-    pattern = r"'(.*?)'"
-    # Extract the values and store them in a list
-    try:
-        values = re.findall(pattern, token)
-    except:
-        print("Error: Private Information Not Found!")
-    # Print the list
-    token = values[0]
-    URL = values[1]
-
-    return token, URL
-
 def run_discord_bot():
-    global names, roles
-    token, URL = Parse_Private()
-    intents = discord.Intents.default()
-    intents.message_content = True
-    intents.members = True
-    intents.presences = True
-    client = discord.Client(intents=intents)
-    
+    ###########Initialize Bot#######################
+    token, URL = Parse_Private()                   #
+    Scrap_Names()                                  #
+    intents = discord.Intents.default()            #
+    intents.message_content = True                 #
+    intents.members = True                         #
+    intents.presences = True                       #
+    client = discord.Client(intents=intents)       #
+    #Set the bot's status                          #
+    nameList, roleList = Grab_Files()              #
+    ################################################
 
-    #Preload the list of names and roles from the text files
+
+
+    ###########Bot Events###########################################################################
+    @client.event
+    async def on_ready():
+        print('We have logged in as {0.user}'.format(client))
+        await client.change_presence(activity=discord.Game('with your mom'))
+
+    @client.event
+    async def on_member_join(member):
+        #Change the user's nickname
+        randomName = random.choice(nameList)
+        await member.edit(nick=randomName)
+        #Provide the user with a role
+        await member.add_roles(discord.utils.get(member.guild.roles, name=roleList[2]))
+
+    #Start the bot
+    ################################################################################################
+    client.run(token)
+
+
+def Grab_Files():
     try:
         nameFile = open("Assets/Names.txt", "r")
         names = nameFile.read()
@@ -68,25 +65,8 @@ def run_discord_bot():
         roleFile.close()
     except:
         print("Error: Roles.txt not found!")
-    
-    
 
-
-
-    #Called when a new user joins the server
-    @client.event
-    async def on_member_join(member):
-
-        randomName = random.choice(nameList)
-        await member.edit(nick=randomName)
-
-        await member.add_roles(discord.utils.get(member.guild.roles, name="Average Dick Daddies"))
-        
-    print(roleList[2])
-    client.run(token)   
-    
-    
-
+    return nameList, roleList
 
 
 def Scrap_Names():
@@ -122,6 +102,23 @@ def Scrap_Names():
             nameFile.write(Names[i].text)
         nameFile.close()
 
+def Parse_Private():
+    tokenFile = open("Assets/Private.txt", "r")
+    token = tokenFile.read()
+    tokenFile.close()
+    #Use Regex to grab the token and URL from the file '([^']*)'
+    pattern = r"'(.*?)'"
+    # Extract the values and store them in a list
+    try:
+        values = re.findall(pattern, token)
+    except:
+        print("Error: Private Information Not Found!")
+    # Print the list
+    token = values[0]
+    URL = values[1]
 
-Scrap_Names()
+    return token, URL
+    
+
+
 run_discord_bot()
