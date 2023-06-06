@@ -10,10 +10,13 @@ import regex as re
 import random
 
 
+
+#TODO: Have the bot scrape https://f1calendar.com/ once every three days. Have it grab the Time of FP1,FP2,FP3, Qualifying, and Grand Prix.
+#cont. Have the bot post the times in the f1 channel in the discord server, and @everyone with the f1 role 30min before the event starts.   
+
 ###############Bot Description#####################
 #The goal of this bot is to give a new users a nickname from a list of names from a text file.
 #The bot will also give the user a role from a list of roles from a text file.
-
 
 def run_discord_bot():
     ###########Initialize Bot#######################
@@ -44,9 +47,23 @@ def run_discord_bot():
         #Provide the user with a role
         await member.add_roles(discord.utils.get(member.guild.roles, name=roleList[2]))
 
+    #TODO: Compare current time of system with time of Next F1 event. If the difference is less than 30min, @everyone with the f1 role.
+
+
+
+
+
+
+
+
+
+
     #Start the bot
-    ################################################################################################
+    ####################
     client.run(token)
+
+
+
 
 
 def Grab_Files():
@@ -118,7 +135,16 @@ def Parse_Private():
     URL = values[1]
 
     return token, URL
-    
 
-
-run_discord_bot()
+def Scrape_F1Information():
+    print("Scraping F1 Information. This will take a few seconds.")
+    import requests
+    import time
+    from bs4 import BeautifulSoup
+    f1File = open("Assets/F1Information.txt", "w")
+    URL = 'https://f1calendar.com/'
+    page = requests.get(URL)
+    soup = BeautifulSoup(page.content, 'html.parser')
+    #TODO: Expand all hidden events with their times
+    #TODO: Grab the times of FP1, FP2, FP3, Qualifying, and Grand Prix
+    #TODO: Grab the Next Event
