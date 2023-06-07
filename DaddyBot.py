@@ -2,7 +2,12 @@
 
 import sys
 #Vivenv pathing issue. Hacky Fix.
+#Zack's PC Path
 sys.path.append(r'c:\users\zacha\appdata\local\programs\python\python310\lib\site-packages')
+
+#Alex's Pc Path
+#sys.path.append(r'c:\users\daric\appdata\local\programs\python\python310\lib\site-packages')
+
 import discord
 from discord.ext import commands
 from discord.ext.commands import Bot
@@ -98,13 +103,14 @@ def find_closest_event():
             event_date = datetime.datetime.strptime(event_date_str, '%d %m %H:%M:%S %Y')
             delta = event_date - now
             print(f'Checking event {sub_event_name}: {event_date} (delta={delta})')
+
             if delta.total_seconds() >= 0 and (closest_delta is None or delta < closest_delta):
                 closest_event = sub_event_name
                 closest_delta = delta
     if closest_event is None:
         return None
     else:
-        return closest_event
+        return closest_event, str(closest_delta)
 
 def month_to_number(month):
     month_abbr = {
