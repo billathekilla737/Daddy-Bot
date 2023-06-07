@@ -8,6 +8,7 @@ from discord.ext import commands
 from discord.ext.commands import Bot
 import regex as re
 import random
+import json
 
 
 
@@ -200,13 +201,11 @@ def correct_for_timezone(time):
 
 def scrape_race_info():
     import requests
-    import time
-    import json
     from bs4 import BeautifulSoup
+    import json
     URL = 'https://f1calendar.com/'
     page = requests.get(URL)
     soup = BeautifulSoup(page.content, 'html.parser')
-    f1Info = open("Assets/F1Information.json", "w")
     race_tables = soup.select('tbody[id]')
     races = {}
     for race_table in race_tables:
@@ -218,17 +217,14 @@ def scrape_race_info():
             race_date = race_row.select_one('td:nth-of-type(3)').text.strip()
             race_time = race_row.select_one('td:nth-of-type(4)').text.strip()
             race_time = correct_for_timezone(race_time)
-            print(race_type)
             if "Grand Prix Grand Prix" not in race_type:
                 races[race_name][race_type] = {'date': race_date, 'time': race_time}
-            else:
-                print("Duplicate")
-    print(races)
-    f1Info.write(str(races))
-
-
+    with open('Assets/F1Information.json', 'w') as f1Info:
+        json.dump(races, f1Info)
 
     
 scrape_race_info()
-f1Info = open("Assets/F1Information.txt", "r")
-f1Info = f1Info.read()
+#print json file
+with open('Assets/F1Information.json') as json_file:
+    data = json.load(json_file)
+    print(data)
