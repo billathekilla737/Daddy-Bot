@@ -9,6 +9,7 @@ from discord.ext.commands import Bot
 import regex as re
 import random
 import json
+import datetime
 
 
 
@@ -21,6 +22,7 @@ import json
 
 def run_discord_bot():
     ###########Initialize Bot#######################
+    scrape_race_info()                             #
     token, URL = Parse_Private()                   #
     Scrap_Names()                                  #
     intents = discord.Intents.default()            #
@@ -50,6 +52,20 @@ def run_discord_bot():
 
     #TODO: Compare current time of system with time of Next F1 event. If the difference is less than 30min, @everyone with the f1 role.
 
+    #When the user request the next F1 event, the bot will post the time of the next event.
+    @client.event
+    async def on_message(message):
+        if message.author == client.user:
+            return
+
+        
+
+        if message.content.startswith('$f1'):
+            await message.channel.send('The next F1 event is:')
+            await message.channel.send('Time: ' + nextEventTime)
+            await message.channel.send('Event: ' + nextEventName)
+            await message.channel.send('Location: ' + nextEventLocation)
+            await message.channel.send('Circuit: ' + nextEventCircuit)
 
 
 
@@ -65,7 +81,47 @@ def run_discord_bot():
 
 
 
+def find_closest_event():
+    with open('Assets/F1Information.json', 'r') as f:
+        events = json.load(f)
+    now = datetime.datetime.now()
+    closest_event = None
+    closest_delta = None
+    for event_name, event_data in events.items():
+        for sub_event_name, sub_event_data in event_data.items():
+            event_time = sub_event_data['time'].strip()
+            if not event_time:
+                continue
+            event_date_str = sub_event_data['date'] + ' ' + event_time
+            event_date_str = event_date_str.replace(event_date_str.split()[1], str(month_to_number(event_date_str.split()[1])))
+            event_date_str = f'{event_date_str} {datetime.datetime.now().year}'
+            event_date = datetime.datetime.strptime(event_date_str, '%d %m %H:%M:%S %Y')
+            delta = event_date - now
+            print(f'Checking event {sub_event_name}: {event_date} (delta={delta})')
+            if delta.total_seconds() >= 0 and (closest_delta is None or delta < closest_delta):
+                closest_event = sub_event_name
+                closest_delta = delta
+    if closest_event is None:
+        return None
+    else:
+        return closest_event
 
+def month_to_number(month):
+    month_abbr = {
+        'Jan': 1,
+        'Feb': 2,
+        'Mar': 3,
+        'Apr': 4,
+        'May': 5,
+        'Jun': 6,
+        'Jul': 7,
+        'Aug': 8,
+        'Sep': 9,
+        'Oct': 10,
+        'Nov': 11,
+        'Dec': 12
+    }
+    return month_abbr[month]
 
 def Grab_Files():
     try:
@@ -85,7 +141,6 @@ def Grab_Files():
         print("Error: Roles.txt not found!")
 
     return nameList, roleList
-
 
 def Scrap_Names():
     #If "Assets\Names.txt" does not exist, create it.
@@ -136,7 +191,6 @@ def Parse_Private():
     URL = values[1]
 
     return token, URL
-
 
 def twentyfourhr_to_twelvehr(time):
     # Check if the time is in the expected format
@@ -221,10 +275,15 @@ def scrape_race_info():
                 races[race_name][race_type] = {'date': race_date, 'time': race_time}
     with open('Assets/F1Information.json', 'w') as f1Info:
         json.dump(races, f1Info)
-
     
-scrape_race_info()
-#print json file
-with open('Assets/F1Information.json') as json_file:
-    data = json.load(json_file)
-    print(data)
+def fetch_race_info(Race):
+    #Use regex to find all the string up to the end of the word "Prix"
+    pattern = r"(.*)Prix"
+    #Once we have the name look it up in the json file and find it's date, time, and type
+    with open('Assets/F1Information.json') as f1Info:
+        pass
+   
+
+#run_discord_bot()
+NextEvent = find_closest_event()
+print(NextEvent)
