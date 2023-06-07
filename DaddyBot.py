@@ -136,15 +136,99 @@ def Parse_Private():
 
     return token, URL
 
-def Scrape_F1Information():
-    print("Scraping F1 Information. This will take a few seconds.")
+
+def twentyfourhr_to_twelvehr(time):
+    # Check if the time is in the expected format
+    if ':' not in time:
+        return 'Invalid time format'
+    # Split the time into hours and minutes
+    time = time.split(":")
+    # Check if the time has at least two elements
+    if len(time) < 2:
+        return 'Invalid time format'
+    hours = time[0]
+    minutes = time[1]
+    # Convert the hours and minutes to integers
+    try:
+        hours = int(hours)
+        minutes = int(minutes)
+    except ValueError:
+        return 'Invalid time format'
+    # Check if the hours and minutes are valid
+    if hours < 0 or hours > 23 or minutes < 0 or minutes > 59:
+        return 'Invalid time format'
+    # If the hours are greater than or equal to 12, subtract 12 from the hours and add PM to the end
+    if hours >= 12:
+        if hours > 12:
+            hours = hours - 12
+        hours = str(hours)
+        time = hours + ":" + str(minutes).zfill(2) + " PM"
+    # If the hours are less than 12, add AM to the end
+    else:
+        hours = str(hours)
+        time = hours + ":" + str(minutes).zfill(2) + " AM"
+    return time
+
+def correct_for_timezone(time):
+    from datetime import datetime, timedelta
+    # Return an empty string if the time argument is empty
+    if not time:
+        return ''
+
+    # Split the time string into hours and minutes if it contains a colon character
+    if ':' in time:
+        hours, minutes = time.split(':')
+    else:
+        # If the time string does not contain a colon character, assume that the minutes are 00
+        hours = time
+        minutes = '00'
+
+    # Subtract 6 hours from the hours
+    corrected_hours = int(hours) - 6
+
+    # Add 24 to the corrected hours if they are less than 0
+    if corrected_hours < 0:
+        corrected_hours += 24
+
+    # Combine the corrected hours and minutes into a datetime object
+    corrected_time_obj = datetime(1900, 1, 1, corrected_hours, int(minutes))
+
+    # Convert the corrected datetime object back to a string
+    corrected_time = corrected_time_obj.strftime('%H:%M:%S')
+
+    return corrected_time
+
+def scrape_race_info():
     import requests
     import time
+    import json
     from bs4 import BeautifulSoup
-    f1File = open("Assets/F1Information.txt", "w")
     URL = 'https://f1calendar.com/'
     page = requests.get(URL)
     soup = BeautifulSoup(page.content, 'html.parser')
-    #TODO: Expand all hidden events with their times
-    #TODO: Grab the times of FP1, FP2, FP3, Qualifying, and Grand Prix
-    #TODO: Grab the Next Event
+    f1Info = open("Assets/F1Information.json", "w")
+    race_tables = soup.select('tbody[id]')
+    races = {}
+    for race_table in race_tables:
+        race_name = race_table.select_one('td span').text
+        races[race_name] = {}
+        race_rows = race_table.find_all('tr')
+        for race_row in race_rows:
+            race_type = race_row.select_one('td:nth-of-type(2)').text.strip()
+            race_date = race_row.select_one('td:nth-of-type(3)').text.strip()
+            race_time = race_row.select_one('td:nth-of-type(4)').text.strip()
+            race_time = correct_for_timezone(race_time)
+            print(race_type)
+            if "Grand Prix Grand Prix" not in race_type:
+                races[race_name][race_type] = {'date': race_date, 'time': race_time}
+            else:
+                print("Duplicate")
+    print(races)
+    f1Info.write(str(races))
+
+
+
+    
+scrape_race_info()
+f1Info = open("Assets/F1Information.txt", "r")
+f1Info = f1Info.read()
