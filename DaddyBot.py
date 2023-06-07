@@ -66,12 +66,14 @@ def run_discord_bot():
         
 
         if message.content.startswith('$f1'):
-            await message.channel.send('The next F1 event is:')
-            await message.channel.send('Time: ' + nextEventTime)
-            await message.channel.send('Event: ' + nextEventName)
-            await message.channel.send('Location: ' + nextEventLocation)
-            await message.channel.send('Circuit: ' + nextEventCircuit)
-
+            NextEvent = find_closest_event()
+            await message.channel.send('The next F1 event is: ' + NextEvent)
+            
+            #await message.channel.send('Time: ' + NextEvent.Time)
+            #await message.channel.send('Event: ' + nextEventName)
+            #await message.channel.send('Location: ' + nextEventLocation)
+            #await message.channel.send('Circuit: ' + nextEventCircuit)
+            
 
 
 
@@ -102,16 +104,19 @@ def find_closest_event():
             event_date_str = f'{event_date_str} {datetime.datetime.now().year}'
             event_date = datetime.datetime.strptime(event_date_str, '%d %m %H:%M:%S %Y')
             delta = event_date - now
-            print(f'Checking event {sub_event_name}: {event_date} (delta={delta})')
+            
+            #print(f'Checking event {sub_event_name}: {event_date} (delta={delta})')
 
             if delta.total_seconds() >= 0 and (closest_delta is None or delta < closest_delta):
                 closest_event = sub_event_name
                 closest_delta = delta
+                
     if closest_event is None:
         return None
     else:
-        return closest_event, str(closest_delta)
-
+        closest_delta = str(closest_delta)
+        return str(closest_event + ' in ' + closest_delta)
+    
 def month_to_number(month):
     month_abbr = {
         'Jan': 1,
@@ -290,6 +295,6 @@ def fetch_race_info(Race):
         pass
    
 
-#run_discord_bot()
-NextEvent = find_closest_event()
-print(NextEvent)
+run_discord_bot()
+#NextEvent = find_closest_event()
+#print('The next F1 event is: ' + NextEvent)
