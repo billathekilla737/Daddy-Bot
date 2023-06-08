@@ -9,13 +9,12 @@ sys.path.append(r'c:\users\zacha\appdata\local\programs\python\python310\lib\sit
 #sys.path.append(r'c:\users\daric\appdata\local\programs\python\python310\lib\site-packages')
 
 import discord
-from discord.ext import commands
-from discord.ext.commands import Bot
 import regex as re
 import random
 import json
 import datetime
 import asyncio
+
 #Every Function needed for F1 Functionality
 def find_closest_event(IsTimeCheck):
     #with open('Daddy-Bot-env/Assets/TestRace.Json', 'r') as f:
@@ -54,6 +53,45 @@ def find_closest_event(IsTimeCheck):
             #Write regex to cut off all text after the seconds place
             closest_delta = re.sub(r'(\d+ Hours, \d+ Minutes, \d+ Seconds).*', r'\1', closest_delta)
             return closest_event, closest_delta
+
+def find_next_of_type(event_type):
+    Next_Location = find_json_Next_Event_Location()
+    #remove the last 4 characters from the string
+    Next_Location = Next_Location[:-4]
+    with open('Daddy-Bot-env/Assets/F1Information.json') as f:
+        data = json.load(f)
+    event_key = [key for key in data if Next_Location in key][0]
+    if "Free Pracetice" in event_type:
+        time = data[Next_Location]["Free Practice"]["time"]
+        date = data[Next_Location]["Free Practice"]["date"]
+    elif "Qualifying" in event_type:
+        time = data[event_key][Next_Location + " Qualifying"]["time"]
+        date = data[event_key][Next_Location + " Qualifying"]["date"]
+    elif "Sprint" in event_type:
+        time = data[Next_Location]["Sprint"]["time"]
+        date = data[Next_Location]["Sprint"]["date"]
+    elif "Grand Prix" in event_type:
+        time = data[Next_Location]["Grand Prix"]["time"]
+        date = data[Next_Location]["Grand Prix"]["date"]
+    else:
+        return None
+    
+
+    #Clean up the readability of the date and time
+    time = twentyfourhr_to_twelvehr(time)
+    month = date[-3:]
+    date = month + " " + date[:2]
+    return date, time
+    
+def find_json_Next_Event_Location():
+    with open('Daddy-Bot-env/Assets/F1Information.json', 'r') as f:
+        events = json.load(f)
+    for event_name, event_data in events.items():
+        if "NEXT" in event_name:
+            return event_name
+    if event_name is None:
+        print("ERROR: F1_Functions.find_json_Next_Event_Location() -> No word \"NEXT\" found in event_name")
+        return None
 
 def month_to_number(month):
     month_abbr = {
@@ -247,3 +285,6 @@ def IsRaceTime():
         return True
     else:
         return False
+    
+
+

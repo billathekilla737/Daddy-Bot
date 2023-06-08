@@ -1,5 +1,5 @@
 from Assets.F1_Functions import *
-
+from discord import app_commands
 
 
 ###############Bot Description#####################
@@ -17,6 +17,7 @@ def run_discord_bot():
     intents.presences = True                           #
     client = discord.Client(intents=intents)           #
     #Set the bot's status                              #
+    tree = app_commands.CommandTree(client)            #
     nameList, roleList = Grab_Files()                  #
     ####################################################
 
@@ -31,6 +32,7 @@ def run_discord_bot():
         PrevEvent = "" 
         Event, TimeDelta = find_closest_event(False) 
         channel = client.get_channel(907764974099787797)
+        await tree.sync(guild=discord.Object(id=632027077670862880))
 
         #   RECURRING TASKS (5 sec Loop)
         #####################################################################
@@ -38,11 +40,32 @@ def run_discord_bot():
             shouldSendMessages = IsRaceTime()
             if shouldSendMessages and PrevEvent != Event:
                 Event, TimeDelta = find_closest_event(None)
-                if "Free Practice" not in Event:
-                    role = discord.utils.get(client.guilds[0].roles, name="F1")
+                #Ping the for every event
+                if Event:
+                    #No longer in use. Formally used to ping the user for every event
+                    pass
+
+                #Ping if the User has the Free Practice role
+                if ("Free Practice" in Event):
+                    FreePracticeRole = discord.utils.get(client.guilds[0].roles, name="Free Practice")
                     #Message = f"{role.mention} {Event} is in {TimeDelta}!"
-                    await channel.send(f"{role.mention} {Event} is in {TimeDelta}!")
+                    await channel.send(f"{FreePracticeRole.mention} {Event} is in {TimeDelta}!")
                     PrevEvent = Event
+
+                #Ping if the User has the Qualifying role
+                if ("Qualifying" or "Sprint" in Event):
+                    QualifyingRole = discord.utils.get(client.guilds[0].roles, name="Qualifying")
+                    #Message = f"{role.mention} {Event} is in {TimeDelta}!"
+                    await channel.send(f"{QualifyingRole.mention} {Event} is in {TimeDelta}!")
+                    PrevEvent = Event
+
+                #Ping if the User has the Grand Prix role
+                if ("Grand Prix Grand Prix" in Event):
+                    GrandPrix = discord.utils.get(client.guilds[0].roles, name="Grand Prix")
+                    #Message = f"{role.mention} {Event} is in {TimeDelta}!"
+                    await channel.send(f"{GrandPrix.mention} {Event} is in {TimeDelta}!")
+                    PrevEvent = Event
+
             await asyncio.sleep(5)
 
     @client.event
@@ -62,6 +85,40 @@ def run_discord_bot():
             NextEvent, TimeDelta = find_closest_event(None)
             #Send message with time and event to the user as a reply
             await message.channel.send(f"{NextEvent} is in {TimeDelta}!")
+    
+
+    #Slash Commands
+    ##############################################################################################################################################
+    #Create a / command to tell the next "Qualifying" event
+    @tree.command(name = "qualifying", description = "Tells you the next qualifying event", guild=discord.Object(id=632027077670862880))
+    async def qualifying(interaction):
+        find_next_of_type("Qualifying")
+        await interaction.response.send_message(f"{find_next_of_type('Qualifying')}")
+    
+    #Create a / command to tell the next "Free Practice" event
+    @tree.command(name = "freepractice", description = "Tells you the next free practice event", guild=discord.Object(id=632027077670862880))
+    async def freepractice(interaction):
+        find_next_of_type("Free Practice")
+        await interaction.response.send_message(f"{find_next_of_type('Free Practice')}")
+
+    #Create a / command to tell the next "Grand Prix" event
+    @tree.command(name = "grandprix", description = "Tells you the next grand prix event", guild=discord.Object(id=632027077670862880))
+    async def grandprix(interaction):
+        find_next_of_type("Grand Prix")
+        await interaction.response.send_message(f"{find_next_of_type('Grand Prix')}")
+
+    #Create a / command to tell the next "Sprint" event
+    @tree.command(name = "sprint", description = "Tells you the next sprint event", guild=discord.Object(id=632027077670862880))
+    async def sprint(interaction):
+        find_next_of_type("Sprint")
+        await interaction.response.send_message(f"{find_next_of_type('Sprint')}")
+    ##############################################################################################################################################
+
+
+
+
+
+
 
     client.run(token)
 
@@ -74,23 +131,3 @@ run_discord_bot()                                                               
                                                                                                 #
                                                                                                 #
 #################################################################################################
-
-
-#with open('Assets/F1Information.json') as f:
-#    data = json.load(f)
-#
-#eventType = ""
-#time = data["Brazilian Grand Prix"]["Brazilian Grand Prix" + eventType]["time"]
-#date = data["Brazilian Grand Prix"]["Brazilian Grand Prix" + eventType]["date"]
-
-# TODO
-# " Free Practice 1"
-# " Free Practice 2"
-# " Free Practice 3"
-# " Qualifying"
-# " Sprint Shootout"
-# " Sprint"
-# ""
-# "Brazilian Grand Prix Free Practice 1" check against above
-# check string from find_closest_event
-
