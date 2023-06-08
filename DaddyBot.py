@@ -22,8 +22,7 @@ def run_discord_bot():
 
 
 
-    ###########Bot Events###############################################################################################
-    @client.event
+    #################################-Bot Events-########################################
     async def on_ready():
         #Variable Initialization
         #####################################################################
@@ -33,7 +32,7 @@ def run_discord_bot():
         Event, TimeDelta = find_closest_event(False) 
         channel = client.get_channel(907764974099787797)
 
-        #RECURRING TASKS 5 sec Loop
+        #   RECURRING TASKS (5 sec Loop)
         #####################################################################
         while True:
             shouldSendMessages = IsRaceTime()
