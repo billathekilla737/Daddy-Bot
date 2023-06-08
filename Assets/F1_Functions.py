@@ -16,11 +16,10 @@ import random
 import json
 import datetime
 import asyncio
-
 #Every Function needed for F1 Functionality
 def find_closest_event(IsTimeCheck):
-    #with open('Assets/TestRace.Json', 'r') as f:
-    with open('Assets/F1Information.json', 'r') as f:
+    #with open('Daddy-Bot-env/Assets/TestRace.Json', 'r') as f:
+    with open('Daddy-Bot-env/Assets/F1Information.json', 'r') as f:
         events = json.load(f)
     now = datetime.datetime.now()
     closest_event = None
@@ -75,7 +74,7 @@ def month_to_number(month):
 
 def Grab_Files():
     try:
-        nameFile = open("Assets/Names.txt", "r")
+        nameFile = open("Daddy-Bot-env/Assets/Names.txt", "r")
         names = nameFile.read()
         nameList = names.splitlines()
         nameFile.close()
@@ -83,7 +82,7 @@ def Grab_Files():
         print("Error: Names.txt not found!")
     #Grab the list of roles from the text file
     try:
-        roleFile = open("Assets/Roles.txt", "r")
+        roleFile = open("Daddy-Bot-env/Assets/Roles.txt", "r")
         roles = roleFile.read()
         roleList = roles.splitlines()
         roleFile.close()
@@ -95,14 +94,14 @@ def Grab_Files():
 def Scrap_Names():
     #If "Assets\Names.txt" does not exist, create it.
     try:
-        nameFile = open("Assets/Names.txt", "r")
+        nameFile = open("Daddy-Bot-env/Assets/Names.txt", "r")
         nameFile.close()
     except:
         print("Scraping Names. This will take a few seconds.")
         import requests
         import time
         from bs4 import BeautifulSoup
-        nameFile = open("Assets/Names.txt", "w")
+        nameFile = open("Daddy-Bot-env/Assets/Names.txt", "w")
         URL = 'https://www.pornhub.com/pornstars?gender=male&age=18-30'
         page = requests.get(URL)
         soup = BeautifulSoup(page.content, 'html.parser')
@@ -120,13 +119,13 @@ def Scrap_Names():
             Names = Names + soup.find_all('span', class_='pornStarName performerCardName')
 
         #Write the names to the file
-        nameFile = open("Assets/Names.txt", "w")
+        nameFile = open("Daddy-Bot-env/Assets/Names.txt", "w")
         for i in range(len(Names)):
             nameFile.write(Names[i].text)
         nameFile.close()
 
 def Parse_Private():
-    tokenFile = open("Assets/Private.txt", "r")
+    tokenFile = open("Daddy-Bot-env/Assets/Private.txt", "r")
     token = tokenFile.read()
     tokenFile.close()
     #Use Regex to grab the token and URL from the file '([^']*)'
@@ -223,7 +222,7 @@ def scrape_race_info():
             race_time = correct_for_timezone(race_time)
             #if "Grand Prix Grand Prix" not in race_type:
             races[race_name][race_type] = {'date': race_date, 'time': race_time}
-    with open('Assets/F1Information.json', 'w') as f1Info:
+    with open('Daddy-Bot-env/Assets/F1Information.json', 'w') as f1Info:
         json.dump(races, f1Info)
 
 def IsRaceTime():
