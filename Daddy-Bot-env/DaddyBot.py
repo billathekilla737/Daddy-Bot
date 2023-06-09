@@ -17,44 +17,13 @@ def run_discord_bot():
     intents.presences = True                           #
     client = discord.Client(intents=intents)           #
     #Set the bot's status                              #
-    tree = app_commands.CommandTree(client)            #
+    tree = discord.app_commands.CommandTree(client)            #
     nameList, roleList = Grab_Files()                  #
     ####################################################
 
 
 
-        #Slash Commands
-    ##############################################################################################################################################
-    #Create a / command to tell the next "Qualifying" event
-    @tree.command(name = "qualifying", description = "Tells you the next qualifying event", guild=discord.Object(id=632027077670862880))
-    async def qualifying(interaction):
-        find_next_of_type("Qualifying")
-        await interaction.response.send_message(f"{find_next_of_type('Qualifying')}")
-    
-    #Create a / command to tell the next "Free Practice" event
-    @tree.command(name = "freepractice", description = "Tells you the next free practice event", guild=discord.Object(id=632027077670862880))
-    async def freepractice(interaction):
-        find_next_of_type("Free Practice")
-        await interaction.response.send_message(f"{find_next_of_type('Free Practice')}")
 
-    #Create a / command to tell the next "Grand Prix" event
-    @tree.command(name = "grandprix", description = "Tells you the next grand prix event", guild=discord.Object(id=632027077670862880))
-    async def grandprix(interaction):
-        find_next_of_type("Grand Prix")
-        await interaction.response.send_message(f"{find_next_of_type('Grand Prix')}")
-
-    #Create a / command to tell the next "Sprint" event
-    @tree.command(name = "sprint", description = "Tells you the next sprint event", guild=discord.Object(id=632027077670862880))
-    async def sprint(interaction):
-        find_next_of_type("Sprint")
-        await interaction.response.send_message(f"{find_next_of_type('Sprint')}")
-
-    @client.event
-    async def on_slash_command_error(ctx, error):
-        print(f"Error registering slash commands: {error}"
-    ##############################################################################################################################################
-
-    
     
     
     #################################-Bot Events-########################################
@@ -122,7 +91,34 @@ def run_discord_bot():
     
 
 
+            #Slash Commands
+    ##############################################################################################################################################
+    #Create a / command to tell the next "Qualifying" event
+    @tree.command(name = "qualifying", description = "Tells you the next qualifying event")
+    async def qualifying(interaction: discord.Interaction):
+        find_next_of_type("Qualifying")
+        await interaction.response.send_message(f"{find_next_of_type('Qualifying')}")
+    
+    #Create a / command to tell the next "Free Practice" event
+    @tree.command(name = "freepractice", description = "Tells you the next free practice event")
+    async def freepractice(interaction: discord.Interaction):
+        find_next_of_type("Free Practice")
+        await interaction.response.send_message(f"{find_next_of_type('Free Practice')}")
 
+    #Create a / command to tell the next "Grand Prix" event
+    @tree.command(name = "grandprix", description = "Tells you the next grand prix event")
+    async def grandprix(interaction: discord.Interaction):
+        find_next_of_type("Grand Prix")
+        await interaction.response.send_message(f"{find_next_of_type('Grand Prix')}")
+
+    #Create a / command to tell the next "Sprint" event
+    @tree.command(name = "sprint", description = "Tells you the next sprint event", guild=discord.Object(id=632027077670862880))
+    async def sprint(interaction: discord.Interaction):
+        find_next_of_type("Sprint")
+        await interaction.response.send_message(f"{find_next_of_type('Sprint')}")
+    ##############################################################################################################################################
+
+    
 
 
 
@@ -135,11 +131,11 @@ def run_discord_bot():
 #################################################################################################
                                                                                                 #
                                                                                                 #
-#run_discord_bot()                                                                               #
+run_discord_bot()                                                                               #
                                                                                                 #
                                                                                                 #
 #################################################################################################
 
-Names, Dates = Scrap_Melee()
-for i in range(len(Names)):
-    print(f"{Names[i]}: {Dates[i]}")
+# Names, Dates = Scrap_Melee()
+# for i in range(len(Names)):
+#     print(f"{Names[i]}: {Dates[i]}")
