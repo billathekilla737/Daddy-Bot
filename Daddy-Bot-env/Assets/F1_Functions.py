@@ -14,6 +14,7 @@ import random
 import json
 import datetime
 import asyncio
+from discord import Interaction
 
 #Every Function needed for F1 Functionality
 def find_closest_event(IsTimeCheck):
@@ -62,17 +63,17 @@ def find_next_of_type(event_type):
         data = json.load(f)
     event_key = [key for key in data if Next_Location in key][0]
     if "Free Pracetice" in event_type:
-        time = data[Next_Location]["Free Practice"]["time"]
-        date = data[Next_Location]["Free Practice"]["date"]
+        time = data[Next_Location][" Free Practice"]["time"]
+        date = data[Next_Location][" Free Practice"]["date"]
     elif "Qualifying" in event_type:
         time = data[event_key][Next_Location + " Qualifying"]["time"]
         date = data[event_key][Next_Location + " Qualifying"]["date"]
     elif "Sprint" in event_type:
-        time = data[Next_Location]["Sprint"]["time"]
-        date = data[Next_Location]["Sprint"]["date"]
+        time = data[Next_Location][" Sprint"]["time"]
+        date = data[Next_Location][" Sprint"]["date"]
     elif "Grand Prix" in event_type:
-        time = data[Next_Location]["Grand Prix"]["time"]
-        date = data[Next_Location]["Grand Prix"]["date"]
+        time = data[Next_Location][" Grand Prix"]["time"]
+        date = data[Next_Location][" Grand Prix"]["date"]
     else:
         return None
     
