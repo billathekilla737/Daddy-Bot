@@ -1,6 +1,6 @@
 from Assets.F1_Functions import *
 from discord import app_commands
-
+from Assets.Melee_Functions import *
 
 ###############Bot Description#####################
 #The goal of this bot is to give a new users a nickname from a list of names from a text file.
@@ -48,6 +48,10 @@ def run_discord_bot():
     async def sprint(interaction):
         find_next_of_type("Sprint")
         await interaction.response.send_message(f"{find_next_of_type('Sprint')}")
+
+    @client.event
+    async def on_slash_command_error(ctx, error):
+        print(f"Error registering slash commands: {error}"
     ##############################################################################################################################################
 
     
@@ -131,7 +135,11 @@ def run_discord_bot():
 #################################################################################################
                                                                                                 #
                                                                                                 #
-run_discord_bot()                                                                               #
+#run_discord_bot()                                                                               #
                                                                                                 #
                                                                                                 #
 #################################################################################################
+
+Names, Dates = Scrap_Melee()
+for i in range(len(Names)):
+    print(f"{Names[i]}: {Dates[i]}")
