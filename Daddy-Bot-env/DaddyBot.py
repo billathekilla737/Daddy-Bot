@@ -114,7 +114,7 @@ def run_discord_bot():
     async def freepractice(interaction: discord.Interaction, practice_number: str):
         date, time = find_next_of_type("Free Practice", practice_number)
         if date and time != None:
-            await interaction.response.send_message("the next F1 free practice " + practice_number + f" event is on {date} at {time}")
+            await interaction.response.send_message("The next F1 free practice " + practice_number + f" event is on {date} at {time}")
         else:
             await interaction.response.send_message(f"Free Practice, Not Found")
     @tree.command(name = "qualifying", description = "Tells you the next F1 qualifying event")
@@ -129,14 +129,14 @@ def run_discord_bot():
     async def sprint(interaction: discord.Interaction):
         date, time = find_next_of_type("Sprint",None)
         if date and time != None:
-            await interaction.response.send_message(f"the next F1 sprint event is on {date} at {time}")
+            await interaction.response.send_message(f"The next F1 sprint event is on {date} at {time}")
         else:
             date, time = find_next_of_type("Qualifying",None)
             await interaction.response.send_message(f"There is NO sprint, QUALIFYING is on {date} at {time}")
     @tree.command(name = "grandprix", description = "Tells you the next F1 Grand Prix event")
     async def grandprix(interaction: discord.Interaction):
         date, time = find_next_of_type("Grand Prix",None)
-        await interaction.response.send_message(f"the next F1 Grand Prix event is on {date} at {time}")
+        await interaction.response.send_message(f"The next F1 Grand Prix event is on {date} at {time}")
 
 
      #A command to spit out the whole week Free Practice 1,2,3, Qualifying, Sprint, Grand Prix
