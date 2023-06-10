@@ -12,6 +12,7 @@ def run_discord_bot():
     scrape_race_info()                                          #
     token, URL = Parse_Private()                                #
     Scrap_Names()                                               #
+    Scrap_Melee()                                               #
     intents = discord.Intents.all()                             #
                                                                 #
                                                                 #
@@ -34,6 +35,7 @@ def run_discord_bot():
         await client.change_presence(activity=discord.Game('with your mom'))
         PrevEvent = "" 
         Event, TimeDelta = find_closest_event(False) 
+        MeleeEvent, *_ = find_Next_Major()
         channel = client.get_channel(907764974099787797)
         try:
             synced = await tree.sync()
@@ -43,8 +45,10 @@ def run_discord_bot():
         #   RECURRING TASKS (5 sec Loop)
         #####################################################################
         while True:
-            shouldSendMessages = IsRaceTime()
-            if shouldSendMessages and PrevEvent != Event:
+            #F1 Race Reminders
+            #################################################################
+            shouldSendF1Reminder = IsRaceTime()
+            if shouldSendF1Reminder and PrevEvent != Event:
                 Event, TimeDelta = find_closest_event(None)
                 #Ping the for every event
                 if Event:
@@ -71,7 +75,15 @@ def run_discord_bot():
                     #Message = f"{role.mention} {Event} is in {TimeDelta}!"
                     await channel.send(f"{GrandPrix.mention} {Event} is in {TimeDelta}!")
                     PrevEvent = Event
-
+            #Melee Reminder
+            #################################################################
+            shouldSendMeleeReminder = isMeleeTime()
+            if shouldSendMeleeReminder and PrevMeleeEvent != MeleeEvent:
+                 if ("Melee" in MeleeEvent):
+                    MeleeRole = discord.utils.get(client.guilds[0].roles, name="Melee")
+                    #Message = f"{role.mention} {Event} is in {TimeDelta}!"
+                    await channel.send(f"{MeleeRole.mention} {MeleeEvent} is tomorrow!")
+                    PrevMeleeEvent = MeleeEvent
             await asyncio.sleep(5)
 
     @client.event
@@ -88,9 +100,10 @@ def run_discord_bot():
             return
 
         if message.content.startswith('$f1'):
-            NextEvent, TimeDelta = find_closest_event(None)
-            #Send message with time and event to the user as a reply
-            await message.channel.send(f"{NextEvent} is in {TimeDelta}!")
+            pass
+            #Deactivated for now
+            #NextEvent, TimeDelta = find_closest_event(None)
+            #await message.channel.send(f"{NextEvent} is in {TimeDelta}!")
     
 
 
@@ -140,6 +153,12 @@ def run_discord_bot():
             await interaction.response.send_message('The next F1 Event is at ' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nQualifying on {QualifyingDate} at {QualifyingTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
         else:
             await interaction.response.send_message('The next F1 Event is at ' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nSprint on {SprintDate} at {SprintTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
+
+    @tree.command(name = "NextMeleeMajor", description = "Tells you the next Melee Major Event is")
+    async def MeleeMajor(interaction: discord.Interaction):
+        NextMajor, Month, Start, End = find_Next_Major()
+        await interaction.response.send_message(f"The next Melee Major is {NextMajor} in {Month} from {Start} to {End}")
+
     ##############################################################################################################################################
     client.run(token)
 
@@ -152,10 +171,3 @@ run_discord_bot()                                                               
                                                                                                 #
                                                                                                 #
 #################################################################################################
-
-# Names, Dates = Scrap_Melee()
-# for i in range(len(Names)):
-#     print(f"{Names[i]}: {Dates[i]}")
-
-
-#NextEventofTest, time = find_next_of_type("Sprint")
