@@ -37,6 +37,7 @@ def run_discord_bot():
         Event, TimeDelta = find_closest_event(False) 
         MeleeEvent, *_ = find_Next_Major()
         channel = client.get_channel(907764974099787797)
+        meleechannel = client.get_channel(1117158502989844600)
         try:
             synced = await tree.sync()
             print(f"Synced {len(synced)} commands")
@@ -82,7 +83,7 @@ def run_discord_bot():
                  if ("Melee" in MeleeEvent):
                     MeleeRole = discord.utils.get(client.guilds[0].roles, name="Melee")
                     #Message = f"{role.mention} {Event} is in {TimeDelta}!"
-                    await channel.send(f"{MeleeRole.mention} {MeleeEvent} is tomorrow!")
+                    await meleechannel.send(f"{MeleeRole.mention} {MeleeEvent} is tomorrow!")
                     PrevMeleeEvent = MeleeEvent
             await asyncio.sleep(5)
 
