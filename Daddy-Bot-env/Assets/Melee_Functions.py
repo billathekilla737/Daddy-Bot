@@ -4,6 +4,7 @@ def Scrap_Melee():
     import requests
     import time
     from bs4 import BeautifulSoup
+
     Meleejson = {}
     URL = 'https://meleemajors.com/'
     page = requests.get(URL)

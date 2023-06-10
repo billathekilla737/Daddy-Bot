@@ -1,32 +1,32 @@
 from Assets.F1_Functions import *
-from discord import app_commands
 from Assets.Melee_Functions import *
+from discord import app_commands
+from discord.ext import commands
 
 ###############Bot Description#####################
 #The goal of this bot is to give a new users a nickname from a list of names from a text file.
 #The bot will also give the user a role from a list of roles from a text file.
 
 def run_discord_bot():
-    ###########Initialize Bot###########################
-    scrape_race_info()                                 #
-    token, URL = Parse_Private()                       #
-    Scrap_Names()                                      #
-    intents = discord.Intents.default()                #
-    intents.message_content = True                     #
-    intents.members = True                             #
-    intents.presences = True                           #
-    client = discord.Client(intents=intents)           #
-    #Set the bot's status                              #
-    tree = discord.app_commands.CommandTree(client)            #
-    nameList, roleList = Grab_Files()                  #
-    ####################################################
-
-
-
+    ###########Initialize Bot####################################
+    scrape_race_info()                                          #
+    token, URL = Parse_Private()                                #
+    Scrap_Names()                                               #
+    intents = discord.Intents.all()                             #
+                                                                #
+                                                                #
+                                                                #
+    client = discord.Client(command_prefix='/',intents=intents) #
+    #Set the bot's status                                       #
+    tree = app_commands.CommandTree(client)                     #
+    #bot = commands.Bot(command_prefix='/', intents=intents)    #
+    nameList, roleList = Grab_Files()                           #
+    #############################################################
 
     
     
     #################################-Bot Events-########################################
+    @client.event
     async def on_ready():
         #Variable Initialization
         #####################################################################
@@ -35,8 +35,11 @@ def run_discord_bot():
         PrevEvent = "" 
         Event, TimeDelta = find_closest_event(False) 
         channel = client.get_channel(907764974099787797)
-        await tree.sync(guild=discord.Object(id=632027077670862880))
-
+        try:
+            synced = await tree.sync()
+            print(f"Synced {len(synced)} commands")
+        except Exception as e:
+            print(e)
         #   RECURRING TASKS (5 sec Loop)
         #####################################################################
         while True:
@@ -93,37 +96,52 @@ def run_discord_bot():
 
             #Slash Commands
     ##############################################################################################################################################
-    #Create a / command to tell the next "Qualifying" event
-    @tree.command(name = "qualifying", description = "Tells you the next qualifying event")
-    async def qualifying(interaction: discord.Interaction):
-        find_next_of_type("Qualifying")
-        await interaction.response.send_message(f"{find_next_of_type('Qualifying')}")
-    
-    #Create a / command to tell the next "Free Practice" event
-    @tree.command(name = "freepractice", description = "Tells you the next free practice event")
-    async def freepractice(interaction: discord.Interaction):
+    @tree.command(name="freepractice", description="Tells you the next F1 free practice event")
+    async def freepractice(interaction: discord.Interaction, practice_number: str):
         find_next_of_type("Free Practice")
-        await interaction.response.send_message(f"{find_next_of_type('Free Practice')}")
-
-    #Create a / command to tell the next "Grand Prix" event
-    @tree.command(name = "grandprix", description = "Tells you the next grand prix event")
-    async def grandprix(interaction: discord.Interaction):
-        find_next_of_type("Grand Prix")
-        await interaction.response.send_message(f"{find_next_of_type('Grand Prix')}")
-
-    #Create a / command to tell the next "Sprint" event
-    @tree.command(name = "sprint", description = "Tells you the next sprint event", guild=discord.Object(id=632027077670862880))
+        date, time = find_next_of_type("Free Practice", practice_number)
+        if date and time != None:
+            await interaction.response.send_message("the next F1 free practice " + practice_number + f" event is on {date} at {time}")
+        else:
+            await interaction.response.send_message(f"Free Practice, Not Found")
+    @tree.command(name = "qualifying", description = "Tells you the next F1 qualifying event")
+    async def qualifying(interaction: discord.Interaction):
+        date, time = find_next_of_type("Qualifying", None)
+        if date and time != None:
+            await interaction.response.send_message(f"the next F1 qualifying event is on {date} at {time}")
+        else:
+            date, time = find_next_of_type("Sprint",None)
+            await interaction.response.send_message(f"There is NO qualifying, SPRINT is on {date} at {time}")
+    @tree.command(name = "sprint", description = "Tells you the next F1 sprint event")
     async def sprint(interaction: discord.Interaction):
-        find_next_of_type("Sprint")
-        await interaction.response.send_message(f"{find_next_of_type('Sprint')}")
+        date, time = find_next_of_type("Sprint",None)
+        if date and time != None:
+            await interaction.response.send_message(f"the next F1 sprint event is on {date} at {time}")
+        else:
+            date, time = find_next_of_type("Qualifying",None)
+            await interaction.response.send_message(f"There is NO sprint, QUALIFYING is on {date} at {time}")
+    @tree.command(name = "grandprix", description = "Tells you the next F1 Grand Prix event")
+    async def grandprix(interaction: discord.Interaction):
+        date, time = find_next_of_type("Grand Prix",None)
+        await interaction.response.send_message(f"the next F1 Grand Prix event is on {date} at {time}")
+
+
+     #A command to spit out the whole week Free Practice 1,2,3, Qualifying, Sprint, Grand Prix
+    @tree.command(name = "week", description = "Tells you the next F1 events for the week")
+    async def week(interaction: discord.Interaction):
+        FreePractice1Date, FreePractice1Time = find_next_of_type("Free Practice", "1")
+        FreePractice2Date, FreePractice2Time = find_next_of_type("Free Practice", "2")
+        FreePractice3Date, FreePractice3Time = find_next_of_type("Free Practice", "3")
+        QualifyingDate, QualifyingTime = find_next_of_type("Qualifying", None)
+        SprintDate, SprintTime = find_next_of_type("Sprint", None)
+        GrandPrixDate, GrandPrixTime = find_next_of_type("Grand Prix", None)
+        Next_Location = str(find_json_Next_Event_Location())
+        Next_Location = Next_Location[:-4]
+        if QualifyingDate and QualifyingTime != None:
+            await interaction.response.send_message('The next F1 Event is at ' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nQualifying on {QualifyingDate} at {QualifyingTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
+        else:
+            await interaction.response.send_message('The next F1 Event is at ' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nSprint on {SprintDate} at {SprintTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
     ##############################################################################################################################################
-
-    
-
-
-
-
-
     client.run(token)
 
 
@@ -139,3 +157,6 @@ run_discord_bot()                                                               
 # Names, Dates = Scrap_Melee()
 # for i in range(len(Names)):
 #     print(f"{Names[i]}: {Dates[i]}")
+
+
+#NextEventofTest, time = find_next_of_type("Sprint")

@@ -55,27 +55,37 @@ def find_closest_event(IsTimeCheck):
             closest_delta = re.sub(r'(\d+ Hours, \d+ Minutes, \d+ Seconds).*', r'\1', closest_delta)
             return closest_event, closest_delta
 
-def find_next_of_type(event_type):
+def find_next_of_type(event_type, practiceNum):
     Next_Location = find_json_Next_Event_Location()
     #remove the last 4 characters from the string
     Next_Location = Next_Location[:-4]
     with open('Daddy-Bot-env/Assets/F1Information.json') as f:
         data = json.load(f)
     event_key = [key for key in data if Next_Location in key][0]
-    if "Free Pracetice" in event_type:
-        time = data[Next_Location][" Free Practice"]["time"]
-        date = data[Next_Location][" Free Practice"]["date"]
+    if "Free Practice" in event_type:
+        try:
+            time = data[event_key][Next_Location +" Free Practice " + practiceNum]["time"]
+            date = data[event_key][Next_Location +" Free Practice " + practiceNum]["date"]
+        except:
+            print("Error: Invalid Practice Number")
+            return None, None
     elif "Qualifying" in event_type:
-        time = data[event_key][Next_Location + " Qualifying"]["time"]
-        date = data[event_key][Next_Location + " Qualifying"]["date"]
+        try:
+            time = data[event_key][Next_Location + " Qualifying"]["time"]
+            date = data[event_key][Next_Location + " Qualifying"]["date"]
+        except:
+            return None, None
     elif "Sprint" in event_type:
-        time = data[Next_Location][" Sprint"]["time"]
-        date = data[Next_Location][" Sprint"]["date"]
+        try:
+            time = data[event_key][Next_Location +" Sprint"]["time"]
+            date = data[event_key][Next_Location +" Sprint"]["date"]
+        except:
+            return None, None
     elif "Grand Prix" in event_type:
-        time = data[Next_Location][" Grand Prix"]["time"]
-        date = data[Next_Location][" Grand Prix"]["date"]
+        time = data[event_key][Next_Location +" Grand Prix"]["time"]
+        date = data[event_key][Next_Location +" Grand Prix"]["date"]
     else:
-        return None
+        return None, None
     
 
     #Clean up the readability of the date and time
