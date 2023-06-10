@@ -2,7 +2,7 @@
 *.pyc
 Lib/
 Scripts/
-
+*.json
 
 
 # Byte-compiled / optimized / DLL files
