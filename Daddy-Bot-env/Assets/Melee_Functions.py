@@ -84,6 +84,35 @@ def isMeleeTime():
                 return True
     return False
 
+#Super Jank but it works, and I'm feeling lazy. Should have never been converted to #.
+def abv_to_full_month(month):
+    if month == "Jan":
+        return "January"
+    elif month == "Feb":
+        return "February"
+    elif month == "Mar":
+        return "March"
+    elif month == "Apr":
+        return "April"
+    elif month == "May":
+        return "May"
+    elif month == "Jun":
+        return "June"
+    elif month == "Jul":
+        return "July"
+    elif month == "Aug":
+        return "August"
+    elif month == "Sep":
+        return "September"
+    elif month == "Oct":
+        return "October"
+    elif month == "Nov":
+        return "November"
+    elif month == "Dec":
+        return "December"
+    else:
+        return "Error"
+
     
 
 
