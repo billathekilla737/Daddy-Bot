@@ -98,7 +98,6 @@ def run_discord_bot():
     ##############################################################################################################################################
     @tree.command(name="freepractice", description="Tells you the next F1 free practice event")
     async def freepractice(interaction: discord.Interaction, practice_number: str):
-        find_next_of_type("Free Practice")
         date, time = find_next_of_type("Free Practice", practice_number)
         if date and time != None:
             await interaction.response.send_message("the next F1 free practice " + practice_number + f" event is on {date} at {time}")
