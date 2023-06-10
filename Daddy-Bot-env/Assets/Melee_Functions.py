@@ -57,6 +57,28 @@ def find_Next_Major():
     StartDate = list(Meleejson.values())[0]["Start Date"]
     EndDate = list(Meleejson.values())[0]["End Date"]
 
+
+    #Get the current month
+    now = datetime.datetime.now()
+    current_sys_month = now.strftime("%m")
+    #if current month has a 0 in front, remove it
+    if current_sys_month[0] == "0":
+        current_sys_month = current_sys_month[1:]
+    #Get the current day
+    current_sys_day = now.strftime("%d")
+    #if current day has a 0 in front, remove it
+    if current_sys_day[0] == "0":
+        current_sys_day = current_sys_day[1:]
+    
+
+    #Will only work "One time deep". Could be made into a loop.
+    if NextMonth[0] == current_sys_month and int(current_sys_day) >= int(StartDate):
+        NextMonth = list(Meleejson.values())[1]["Month"]
+        StartDate = list(Meleejson.values())[1]["Start Date"]
+        EndDate = list(Meleejson.values())[1]["End Date"]
+        NextMajor = list(Meleejson.keys())[1]
+
+     
     return NextMajor, NextMonth, StartDate, EndDate
 
 def isMeleeTime():
