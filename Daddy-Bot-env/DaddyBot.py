@@ -23,8 +23,6 @@ def run_discord_bot():
     #bot = commands.Bot(command_prefix='/', intents=intents)    #
     nameList, roleList = Grab_Files()                           #
     #############################################################
-
-    
     
     #################################-Bot Events-########################################
     @client.event
@@ -37,12 +35,20 @@ def run_discord_bot():
         Event, TimeDelta = find_closest_event(False) 
         MeleeEvent, *_ = find_Next_Major()
         channel = client.get_channel(907764974099787797)
+        #meleechannel = client.get_channel(1117158502989844600)
         meleechannel = client.get_channel(1117158502989844600)
         try:
             synced = await tree.sync()
             print(f"Synced {len(synced)} commands")
         except Exception as e:
             print(e)
+
+        #Reaction Role Setup
+        #####################################################################
+        reactText = ("React to this message to get the Melee role!")
+        Moji = await meleechannel.send(reactText)
+        await Moji.add_reaction('🥊')
+
         #   RECURRING TASKS (5 sec Loop)
         #####################################################################
         while True:
@@ -87,6 +93,7 @@ def run_discord_bot():
                     PrevMeleeEvent = MeleeEvent
             await asyncio.sleep(5)
 
+        
     @client.event
     async def on_member_join(member):
         #Change the user's nickname
@@ -137,9 +144,6 @@ def run_discord_bot():
     async def grandprix(interaction: discord.Interaction):
         date, time = find_next_of_type("Grand Prix",None)
         await interaction.response.send_message(f"The next F1 Grand Prix event is on {date} at {time}")
-
-
-     #A command to spit out the whole week Free Practice 1,2,3, Qualifying, Sprint, Grand Prix
     @tree.command(name = "week", description = "Tells you the next F1 events for the week")
     async def week(interaction: discord.Interaction):
         FreePractice1Date, FreePractice1Time = find_next_of_type("Free Practice", "1")
@@ -154,15 +158,34 @@ def run_discord_bot():
             await interaction.response.send_message('The next F1 Event is at ' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nQualifying on {QualifyingDate} at {QualifyingTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
         else:
             await interaction.response.send_message('The next F1 Event is at ' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nSprint on {SprintDate} at {SprintTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
-
     @tree.command(name = "nextmeleemajor", description = "Tells you the next Melee Major Event is")
     async def meleemajor(interaction: discord.Interaction):
         NextMajor, Month, Start, End = find_Next_Major()
         await interaction.response.send_message(f"The next Melee Major is {NextMajor} in {monthNum_to_full_Name(Month)} from {dateReadabilty(Start)} to {dateReadabilty(End)}")
-
+    
+    #Reaction Roles
     ##############################################################################################################################################
-    client.run(token)
-
+    @client.event
+    async def on_reaction_add(reaction, user):
+        meleechannel = client.get_channel(1117158502989844600)
+        if reaction.message.channel.id != meleechannel.id:
+            return
+        if reaction.emoji == "🥊":
+            Role = discord.utils.get(user.guild.roles, name="Melee")
+            await user.add_roles(Role)
+    #Now when the user remove their reaction remove the role
+    @client.event
+    async def on_reaction_remove(reaction, user):
+        meleechannel = client.get_channel(1117158502989844600)
+        if reaction.message.channel.id != meleechannel.id:
+            return
+        if reaction.emoji == "🥊":
+            Role = discord.utils.get(user.guild.roles, name="Melee")
+            await user.remove_roles(Role)
+    
+    ####Start the bot###
+    client.run(token)  #
+    ####################
 
 #Start the bot
 #################################################################################################
