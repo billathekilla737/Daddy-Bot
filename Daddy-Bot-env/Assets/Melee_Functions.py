@@ -11,8 +11,6 @@ def Scrap_Melee():
     Meleejson = {}
     URL = 'https://meleemajors.com/'
     page = requests.get(URL)
-    soup = BeautifulSoup(page.content, 'html.parser')
-    Names = soup.find_all('span', class_='pornStarName performerCardName')
     Names = [name.text for name in soup.find_all('h2')]
     #Remove the first two elements in Names
     Names = Names[2:]
