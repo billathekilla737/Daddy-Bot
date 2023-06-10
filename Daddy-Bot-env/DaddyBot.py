@@ -154,8 +154,8 @@ def run_discord_bot():
         else:
             await interaction.response.send_message('The next F1 Event is at ' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nSprint on {SprintDate} at {SprintTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
 
-    @tree.command(name = "NextMeleeMajor", description = "Tells you the next Melee Major Event is")
-    async def MeleeMajor(interaction: discord.Interaction):
+    @tree.command(name = "nextmeleemajor", description = "Tells you the next Melee Major Event is")
+    async def meleemajor(interaction: discord.Interaction):
         NextMajor, Month, Start, End = find_Next_Major()
         await interaction.response.send_message(f"The next Melee Major is {NextMajor} in {Month} from {Start} to {End}")
 
