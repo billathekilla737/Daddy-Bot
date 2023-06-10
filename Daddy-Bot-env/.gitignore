@@ -7,7 +7,11 @@ Scripts/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
+Assets/__pycache__/
 *.py[cod]
+
+#Missed in pycache
+*.pyc
 
 # C extensions
 *.so
