@@ -11,6 +11,7 @@ def Scrap_Melee():
     Meleejson = {}
     URL = 'https://meleemajors.com/'
     page = requests.get(URL)
+    soup = BeautifulSoup(page.content, 'html.parser')
     Names = [name.text for name in soup.find_all('h2')]
     #Remove the first two elements in Names
     Names = Names[2:]
@@ -84,36 +85,33 @@ def isMeleeTime():
                 return True
     return False
 
-#Super Jank but it works, and I'm feeling lazy. Should have never been converted to #.
-def abv_to_full_month(month):
-    if month == "Jan":
+    
+
+
+def monthNum_to_full_Name(monthNum):
+    if monthNum == 1:
         return "January"
-    elif month == "Feb":
+    elif monthNum == 2:
         return "February"
-    elif month == "Mar":
+    elif monthNum == 3:
         return "March"
-    elif month == "Apr":
+    elif monthNum == 4:
         return "April"
-    elif month == "May":
+    elif monthNum == 5:
         return "May"
-    elif month == "Jun":
+    elif monthNum == 6:
         return "June"
-    elif month == "Jul":
+    elif monthNum == 7:
         return "July"
-    elif month == "Aug":
+    elif monthNum == 8:
         return "August"
-    elif month == "Sep":
+    elif monthNum == 9:
         return "September"
-    elif month == "Oct":
+    elif monthNum == 10:
         return "October"
-    elif month == "Nov":
+    elif monthNum == 11:
         return "November"
-    elif month == "Dec":
+    elif monthNum == 12:
         return "December"
     else:
         return "Error"
-
-    
-
-
-    

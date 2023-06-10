@@ -157,7 +157,7 @@ def run_discord_bot():
     @tree.command(name = "nextmeleemajor", description = "Tells you the next Melee Major Event is")
     async def meleemajor(interaction: discord.Interaction):
         NextMajor, Month, Start, End = find_Next_Major()
-        await interaction.response.send_message(f"The next Melee Major is {NextMajor} in {Month} from {Start} to {End}")
+        await interaction.response.send_message(f"The next Melee Major is {NextMajor} in {monthNum_to_full_Name(Month)} from {Start} to {End}")
 
     ##############################################################################################################################################
     client.run(token)
