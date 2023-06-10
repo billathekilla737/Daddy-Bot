@@ -87,8 +87,9 @@ def isMeleeTime():
 
     
 
-
+#Super Jank to add these back in retoactively
 def monthNum_to_full_Name(monthNum):
+    monthNum = int(monthNum)
     if monthNum == 1:
         return "January"
     elif monthNum == 2:
@@ -115,3 +116,18 @@ def monthNum_to_full_Name(monthNum):
         return "December"
     else:
         return "Error"
+    
+#Super Jank to add these back in retoactively
+def dateReadabilty(date):
+    #If the date is 1, 21, or 31, add st to the end
+    if date == "1" or date == "21" or date == "31":
+        return date + "st"
+    #If the date is 2 or 22, add nd to the end
+    elif date == "2" or date == "22":
+        return date + "nd"
+    #If the date is 3 or 23, add rd to the end
+    elif date == "3" or date == "23":
+        return date + "rd"
+    #Else, add th to the end
+    else:
+        return date + "th"
