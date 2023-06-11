@@ -314,6 +314,8 @@ async def freepractice(interaction: discord.Interaction, practice_number: str):
         await interaction.response.send_message("The next F1 free practice " + practice_number + f" event is on {date} at {time}")
     else:
         await interaction.response.send_message(f"Free Practice, Not Found")
+
+        
 #@tree.command(name = "qualifying", description = "Tells you the next F1 qualifying event")
 async def qualifying(interaction: discord.Interaction):
     date, time = find_next_of_type("Qualifying", None)
@@ -348,14 +350,9 @@ async def week(interaction: discord.Interaction):
         await interaction.response.send_message('The next F1 Event is at ' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nQualifying on {QualifyingDate} at {QualifyingTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
     else:
         await interaction.response.send_message('The next F1 Event is at ' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nSprint on {SprintDate} at {SprintTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
-#@tree.command(name = "nextmeleemajor", description = "Tells you the next Melee Major Event is")
-async def meleemajor(interaction: discord.Interaction):
-    NextMajor, Month, Start, End = find_Next_Major()
-    await interaction.response.send_message(f"The next Melee Major is {NextMajor} in {monthNum_to_full_Name(Month)} from {dateReadabilty(Start)} to {dateReadabilty(End)}")
 
 
 
 
-
-def setup(bot):
+async def setup(bot):
     bot.add_command(freepractice)

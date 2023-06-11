@@ -153,3 +153,11 @@ def dateReadabilty(date):
     #Else, add th to the end
     else:
         return date + "th"
+    
+
+
+#@tree.command(name = "nextmeleemajor", description = "Tells you the next Melee Major Event is")
+# async def meleemajor(interaction: discord.Interaction):
+#     NextMajor, Month, Start, End = find_Next_Major()
+#     await interaction.response.send_message(f"The next Melee Major is {NextMajor} in {monthNum_to_full_Name(Month)} from {dateReadabilty(Start)} to {dateReadabilty(End)}")
+
