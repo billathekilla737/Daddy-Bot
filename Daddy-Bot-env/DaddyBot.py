@@ -1,5 +1,6 @@
 from Assets.F1_Functions import *
 from Assets.Melee_Functions import *
+from Assets.FlatFuckFriday import *
 from discord import app_commands
 from discord.ext import commands
 
@@ -14,16 +15,21 @@ def run_discord_bot():
     Scrap_Names()                                               #
     Scrap_Melee()                                               #
     intents = discord.Intents.all()                             #
+    global sent                                                 #
                                                                 #
                                                                 #
-                                                                #
-    client = discord.Client(command_prefix='/',intents=intents) #
-    #Set the bot's status                                       #
-    tree = app_commands.CommandTree(client)                     #
-    #bot = commands.Bot(command_prefix='/', intents=intents)    #
+    #client = discord.Client(command_prefix='/',intents=intents) #
+    client = commands.Bot(command_prefix='/',intents=intents)    #
+    #tree = app_commands.CommandTree(client)                     #
     nameList, roleList = Grab_Files()                           #
     #############################################################
     
+
+
+
+
+
+
     #################################-Bot Events-########################################
     @client.event
     async def on_ready():
@@ -37,17 +43,25 @@ def run_discord_bot():
         channel = client.get_channel(907764974099787797)
         #meleechannel = client.get_channel(1117158502989844600)
         meleechannel = client.get_channel(1117158502989844600)
-        try:
-            synced = await tree.sync()
-            print(f"Synced {len(synced)} commands")
-        except Exception as e:
-            print(e)
+        sent = False
+        #try:
+            #synced = await tree.sync()
+            #print(f"Synced {len(synced)} commands")
+        #except Exception as e:
+        #    print(e)
+
+        
+        #Import Commands
+        #####################################################################
+        client.load_extension('Assets.F1_Functions')
+        #client.load_extension('Assets.Melee_Functions')
+
 
         #Reaction Role Setup
         #####################################################################
-        reactText = ("React to this message to get the Melee role!")
-        Moji = await meleechannel.send(reactText)
-        await Moji.add_reaction('🥊')
+        # reactText = ("React to this message to get the Melee role!")
+        # Moji = await meleechannel.send(reactText)
+        # await Moji.add_reaction('🥊')
 
         #   RECURRING TASKS (5 sec Loop)
         #####################################################################
@@ -91,7 +105,19 @@ def run_discord_bot():
                     #Message = f"{role.mention} {Event} is in {TimeDelta}!"
                     await meleechannel.send(f"{MeleeRole.mention} {MeleeEvent} is tomorrow!")
                     PrevMeleeEvent = MeleeEvent
-            await asyncio.sleep(5)
+            #Flat Fuck Friday Reminder
+            ################################################################
+            if isFlatFuckFriday() and sent != True:
+                #IT'S FLAT FUCK FRIDAY! :FlatFuck:
+                #Send a message in General that it's Flat Fuck Friday!
+                message = ":FlatFuck: It's Flat Fuck Friday You Fucking Losers! :FlatFuck:\nhttps://youtu.be/A5U8ypHq3BU"
+                GeneralChannel = client.get_channel(632027078371573775)
+                await GeneralChannel.send(message)
+                sent = True
+                asyncio.create_task(reset_sent())
+
+            #Loop all in While Loop   
+            await asyncio.sleep(45)
 
         
     @client.event
@@ -117,52 +143,57 @@ def run_discord_bot():
 
             #Slash Commands
     ##############################################################################################################################################
-    @tree.command(name="freepractice", description="Tells you the next F1 free practice event")
-    async def freepractice(interaction: discord.Interaction, practice_number: str):
-        date, time = find_next_of_type("Free Practice", practice_number)
-        if date and time != None:
-            await interaction.response.send_message("The next F1 free practice " + practice_number + f" event is on {date} at {time}")
-        else:
-            await interaction.response.send_message(f"Free Practice, Not Found")
-    @tree.command(name = "qualifying", description = "Tells you the next F1 qualifying event")
-    async def qualifying(interaction: discord.Interaction):
-        date, time = find_next_of_type("Qualifying", None)
-        if date and time != None:
-            await interaction.response.send_message(f"the next F1 qualifying event is on {date} at {time}")
-        else:
-            date, time = find_next_of_type("Sprint",None)
-            await interaction.response.send_message(f"There is NO qualifying, SPRINT is on {date} at {time}")
-    @tree.command(name = "sprint", description = "Tells you the next F1 sprint event")
-    async def sprint(interaction: discord.Interaction):
-        date, time = find_next_of_type("Sprint",None)
-        if date and time != None:
-            await interaction.response.send_message(f"The next F1 sprint event is on {date} at {time}")
-        else:
-            date, time = find_next_of_type("Qualifying",None)
-            await interaction.response.send_message(f"There is NO sprint, QUALIFYING is on {date} at {time}")
-    @tree.command(name = "grandprix", description = "Tells you the next F1 Grand Prix event")
-    async def grandprix(interaction: discord.Interaction):
-        date, time = find_next_of_type("Grand Prix",None)
-        await interaction.response.send_message(f"The next F1 Grand Prix event is on {date} at {time}")
-    @tree.command(name = "week", description = "Tells you the next F1 events for the week")
-    async def week(interaction: discord.Interaction):
-        FreePractice1Date, FreePractice1Time = find_next_of_type("Free Practice", "1")
-        FreePractice2Date, FreePractice2Time = find_next_of_type("Free Practice", "2")
-        FreePractice3Date, FreePractice3Time = find_next_of_type("Free Practice", "3")
-        QualifyingDate, QualifyingTime = find_next_of_type("Qualifying", None)
-        SprintDate, SprintTime = find_next_of_type("Sprint", None)
-        GrandPrixDate, GrandPrixTime = find_next_of_type("Grand Prix", None)
-        Next_Location = str(find_json_Next_Event_Location())
-        Next_Location = Next_Location[:-4]
-        if QualifyingDate and QualifyingTime != None:
-            await interaction.response.send_message('The next F1 Event is at ' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nQualifying on {QualifyingDate} at {QualifyingTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
-        else:
-            await interaction.response.send_message('The next F1 Event is at ' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nSprint on {SprintDate} at {SprintTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
-    @tree.command(name = "nextmeleemajor", description = "Tells you the next Melee Major Event is")
-    async def meleemajor(interaction: discord.Interaction):
-        NextMajor, Month, Start, End = find_Next_Major()
-        await interaction.response.send_message(f"The next Melee Major is {NextMajor} in {monthNum_to_full_Name(Month)} from {dateReadabilty(Start)} to {dateReadabilty(End)}")
+
+
+    # @tree.command(name="freepractice", description="Tells you the next F1 free practice event")
+    # async def freepractice(interaction: discord.Interaction, practice_number: str):
+    #     date, time = find_next_of_type("Free Practice", practice_number)
+    #     if date and time != None:
+    #         await interaction.response.send_message("The next F1 free practice " + practice_number + f" event is on {date} at {time}")
+    #     else:
+    #         await interaction.response.send_message(f"Free Practice, Not Found")
+    # @tree.command(name = "qualifying", description = "Tells you the next F1 qualifying event")
+    # async def qualifying(interaction: discord.Interaction):
+    #     date, time = find_next_of_type("Qualifying", None)
+    #     if date and time != None:
+    #         await interaction.response.send_message(f"the next F1 qualifying event is on {date} at {time}")
+    #     else:
+    #         date, time = find_next_of_type("Sprint",None) 
+    #         await interaction.response.send_message(f"There is NO qualifying, SPRINT is on {date} at {time}")
+    # @tree.command(name = "sprint", description = "Tells you the next F1 sprint event")
+    # async def sprint(interaction: discord.Interaction):
+    #     date, time = find_next_of_type("Sprint",None)
+    #     if date and time != None:
+    #         await interaction.response.send_message(f"The next F1 sprint event is on {date} at {time}")
+    #     else:
+    #         date, time = find_next_of_type("Qualifying",None)
+    #         await interaction.response.send_message(f"There is NO sprint, QUALIFYING is on {date} at {time}")
+    # @tree.command(name = "grandprix", description = "Tells you the next F1 Grand Prix event")
+    # async def grandprix(interaction: discord.Interaction):
+    #     date, time = find_next_of_type("Grand Prix",None)
+    #     await interaction.response.send_message(f"The next F1 Grand Prix event is on {date} at {time}")
+    # @tree.command(name = "week", description = "Tells you the next F1 events for the week")
+    # async def week(interaction: discord.Interaction):
+    #     FreePractice1Date, FreePractice1Time = find_next_of_type("Free Practice", "1")
+    #     FreePractice2Date, FreePractice2Time = find_next_of_type("Free Practice", "2")
+    #     FreePractice3Date, FreePractice3Time = find_next_of_type("Free Practice", "3")
+    #     QualifyingDate, QualifyingTime = find_next_of_type("Qualifying", None)
+    #     SprintDate, SprintTime = find_next_of_type("Sprint", None)
+    #     GrandPrixDate, GrandPrixTime = find_next_of_type("Grand Prix", None)
+    #     Next_Location = str(find_json_Next_Event_Location())
+    #     Next_Location = Next_Location[:-4]
+    #     if QualifyingDate and QualifyingTime != None:
+    #         await interaction.response.send_message('The next F1 Event is at ' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nQualifying on {QualifyingDate} at {QualifyingTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
+    #     else:
+    #         await interaction.response.send_message('The next F1 Event is at ' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nSprint on {SprintDate} at {SprintTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
+    # @tree.command(name = "nextmeleemajor", description = "Tells you the next Melee Major Event is")
+    # async def meleemajor(interaction: discord.Interaction):
+    #     NextMajor, Month, Start, End = find_Next_Major()
+    #     await interaction.response.send_message(f"The next Melee Major is {NextMajor} in {monthNum_to_full_Name(Month)} from {dateReadabilty(Start)} to {dateReadabilty(End)}")
     
+
+
+
     #Reaction Roles
     ##############################################################################################################################################
     @client.event
@@ -182,6 +213,11 @@ def run_discord_bot():
         if reaction.emoji == "🥊":
             Role = discord.utils.get(user.guild.roles, name="Melee")
             await user.remove_roles(Role)
+    #Misc.
+    ##############################################################################################################################################
+    async def reset_sent():
+        await asyncio.sleep(24 * 60 * 60) # Wait for 24 hours
+        sent_back = False
     
     ####Start the bot###
     client.run(token)  #
@@ -195,4 +231,3 @@ run_discord_bot()                                                               
                                                                                                 #
                                                                                                 #
 #################################################################################################
-
