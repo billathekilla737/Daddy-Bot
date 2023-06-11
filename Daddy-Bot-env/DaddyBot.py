@@ -3,6 +3,7 @@ from Assets.Melee_Functions import *
 from Assets.FlatFuckFriday import *
 from discord import app_commands
 from discord.ext import commands
+import Assets.F1_Commands
 
 ###############Bot Description#####################
 #The goal of this bot is to give a new users a nickname from a list of names from a text file.
@@ -18,9 +19,8 @@ def run_discord_bot():
     global sent                                                 #
                                                                 #
                                                                 #
-    #client = discord.Client(command_prefix='/',intents=intents) #
-    client = commands.Bot(command_prefix='/',intents=intents)    #
-    #tree = app_commands.CommandTree(client)                     #
+    client = discord.Client(command_prefix='/',intents=intents) #
+    tree = app_commands.CommandTree(client)                     #
     nameList, roleList = Grab_Files()                           #
     #############################################################
     
@@ -36,19 +36,18 @@ def run_discord_bot():
         Event, TimeDelta = find_closest_event(False) 
         MeleeEvent, *_ = find_Next_Major()
         channel = client.get_channel(907764974099787797)
-        #meleechannel = client.get_channel(1117158502989844600)
         meleechannel = client.get_channel(1117158502989844600)
         sent = False
-        #try:
-            #synced = await tree.sync()
-            #print(f"Synced {len(synced)} commands")
-        #except Exception as e:
-        #    print(e)
+        try:
+            synced = await tree.sync()
+            print(f"Synced {len(synced)} commands")
+        except Exception as e:
+           print(e)
 
         
         #Import Commands
         #####################################################################
-        await client.load_extension('Assets.F1_Functions')
+        
 
         #Reaction Role Setup
         #####################################################################
@@ -168,9 +167,10 @@ def run_discord_bot():
         await asyncio.sleep(24 * 60 * 60) # Wait for 24 hours
         sent_back = False
     
-    ####Start the bot###
-    client.run(token)  #
-    ####################
+    ####Start the bot#####
+    print("Starting Bot")#
+    client.run(token)    #
+    ######################
 
 #Start the bot
 #################################################################################################
