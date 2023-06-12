@@ -1,1 +1,574 @@
-{"Bahrain Grand Prix": {"Bahrain Grand Prix": {"date": "5 Mar", "time": "09:00:00"}, "Bahrain Grand Prix Free Practice 1": {"date": "3 Mar", "time": "05:30:00"}, "Bahrain Grand Prix Free Practice 2": {"date": "3 Mar", "time": "09:00:00"}, "Bahrain Grand Prix Free Practice 3": {"date": "4 Mar", "time": "05:30:00"}, "Bahrain Grand Prix Qualifying": {"date": "4 Mar", "time": "09:00:00"}, "Bahrain Grand Prix Grand Prix": {"date": "5 Mar", "time": "09:00:00"}}, "Saudi Arabian Grand Prix": {"Saudi Arabian Grand Prix": {"date": "19 Mar", "time": "11:00:00"}, "Saudi Arabian Grand Prix Free Practice 1": {"date": "17 Mar", "time": "07:30:00"}, "Saudi Arabian Grand Prix Free Practice 2": {"date": "17 Mar", "time": "11:00:00"}, "Saudi Arabian Grand Prix Free Practice 3": {"date": "18 Mar", "time": "07:30:00"}, "Saudi Arabian Grand Prix Qualifying": {"date": "18 Mar", "time": "11:00:00"}, "Saudi Arabian Grand Prix Grand Prix": {"date": "19 Mar", "time": "11:00:00"}}, "Australian Grand Prix": {"Australian Grand Prix": {"date": "2 Apr", "time": "00:00:00"}, "Australian Grand Prix Free Practice 1": {"date": "31 Mar", "time": "20:30:00"}, "Australian Grand Prix Free Practice 2": {"date": "31 Mar", "time": "00:00:00"}, "Australian Grand Prix Free Practice 3": {"date": "1 Apr", "time": "20:30:00"}, "Australian Grand Prix Qualifying": {"date": "1 Apr", "time": "00:00:00"}, "Australian Grand Prix Grand Prix": {"date": "2 Apr", "time": "00:00:00"}}, "Azerbaijan Grand Prix": {"Azerbaijan Grand Prix": {"date": "30 Apr", "time": "06:00:00"}, "Azerbaijan Grand Prix Free Practice 1": {"date": "28 Apr", "time": "04:30:00"}, "Azerbaijan Grand Prix Qualifying": {"date": "28 Apr", "time": "08:00:00"}, "Azerbaijan Grand Prix Sprint Shootout": {"date": "29 Apr", "time": "03:30:00"}, "Azerbaijan Grand Prix Sprint": {"date": "29 Apr", "time": "08:30:00"}, "Azerbaijan Grand Prix Grand Prix": {"date": "30 Apr", "time": "06:00:00"}}, "Miami Grand Prix": {"Miami Grand Prix": {"date": "7 May", "time": "14:30:00"}, "Miami Grand Prix Free Practice 1": {"date": "5 May", "time": "13:00:00"}, "Miami Grand Prix Free Practice 2": {"date": "5 May", "time": "16:30:00"}, "Miami Grand Prix Free Practice 3": {"date": "6 May", "time": "11:30:00"}, "Miami Grand Prix Qualifying": {"date": "6 May", "time": "15:00:00"}, "Miami Grand Prix Grand Prix": {"date": "7 May", "time": "14:30:00"}}, "Monaco Grand Prix": {"Monaco Grand Prix": {"date": "28 May", "time": "08:00:00"}, "Monaco Grand Prix Free Practice 1": {"date": "26 May", "time": "06:30:00"}, "Monaco Grand Prix Free Practice 2": {"date": "26 May", "time": "10:00:00"}, "Monaco Grand Prix Free Practice 3": {"date": "27 May", "time": "05:30:00"}, "Monaco Grand Prix Qualifying": {"date": "27 May", "time": "09:00:00"}, "Monaco Grand Prix Grand Prix": {"date": "28 May", "time": "08:00:00"}}, "Spanish Grand Prix": {"Spanish Grand Prix": {"date": "4 Jun", "time": "08:00:00"}, "Spanish Grand Prix Free Practice 1": {"date": "2 Jun", "time": "06:30:00"}, "Spanish Grand Prix Free Practice 2": {"date": "2 Jun", "time": "10:00:00"}, "Spanish Grand Prix Free Practice 3": {"date": "3 Jun", "time": "05:30:00"}, "Spanish Grand Prix Qualifying": {"date": "3 Jun", "time": "09:00:00"}, "Spanish Grand Prix Grand Prix": {"date": "4 Jun", "time": "08:00:00"}}, "Canadian Grand PrixNEXT": {"Canadian Grand PrixNEXT": {"date": "", "time": ""}, "Canadian Grand Prix Free Practice 1": {"date": "16 Jun", "time": "12:30:00"}, "Canadian Grand Prix Free Practice 2": {"date": "16 Jun", "time": "16:00:00"}, "Canadian Grand Prix Free Practice 3": {"date": "17 Jun", "time": "11:30:00"}, "Canadian Grand Prix Qualifying": {"date": "17 Jun", "time": "15:00:00"}, "Canadian Grand Prix Grand Prix": {"date": "18 Jun", "time": "13:00:00"}}, "Austrian Grand Prix": {"Austrian Grand Prix": {"date": "2 Jul", "time": "08:00:00"}, "Austrian Grand Prix Free Practice 1": {"date": "30 Jun", "time": "06:30:00"}, "Austrian Grand Prix Qualifying": {"date": "30 Jun", "time": "10:00:00"}, "Austrian Grand Prix Sprint Shootout": {"date": "1 Jul", "time": "05:00:00"}, "Austrian Grand Prix Sprint": {"date": "1 Jul", "time": "09:30:00"}, "Austrian Grand Prix Grand Prix": {"date": "2 Jul", "time": "08:00:00"}}, "British Grand Prix": {"British Grand Prix": {"date": "9 Jul", "time": "09:00:00"}, "British Grand Prix Free Practice 1": {"date": "7 Jul", "time": "06:30:00"}, "British Grand Prix Free Practice 2": {"date": "7 Jul", "time": "10:00:00"}, "British Grand Prix Free Practice 3": {"date": "8 Jul", "time": "05:30:00"}, "British Grand Prix Qualifying": {"date": "8 Jul", "time": "09:00:00"}, "British Grand Prix Grand Prix": {"date": "9 Jul", "time": "09:00:00"}}, "Hungarian Grand Prix": {"Hungarian Grand Prix": {"date": "23 Jul", "time": "08:00:00"}, "Hungarian Grand Prix Free Practice 1": {"date": "21 Jul", "time": "06:30:00"}, "Hungarian Grand Prix Free Practice 2": {"date": "21 Jul", "time": "10:00:00"}, "Hungarian Grand Prix Free Practice 3": {"date": "22 Jul", "time": "05:30:00"}, "Hungarian Grand Prix Qualifying": {"date": "22 Jul", "time": "09:00:00"}, "Hungarian Grand Prix Grand Prix": {"date": "23 Jul", "time": "08:00:00"}}, "Belgian Grand Prix": {"Belgian Grand Prix": {"date": "30 Jul", "time": "08:00:00"}, "Belgian Grand Prix Free Practice 1": {"date": "28 Jul", "time": "06:30:00"}, "Belgian Grand Prix Qualifying": {"date": "28 Jul", "time": "10:00:00"}, "Belgian Grand Prix Sprint Shootout": {"date": "29 Jul", "time": "05:00:00"}, "Belgian Grand Prix Sprint": {"date": "29 Jul", "time": "09:30:00"}, "Belgian Grand Prix Grand Prix": {"date": "30 Jul", "time": "08:00:00"}}, "Dutch Grand Prix": {"Dutch Grand Prix": {"date": "27 Aug", "time": "08:00:00"}, "Dutch Grand Prix Free Practice 1": {"date": "25 Aug", "time": "05:30:00"}, "Dutch Grand Prix Free Practice 2": {"date": "25 Aug", "time": "09:00:00"}, "Dutch Grand Prix Free Practice 3": {"date": "26 Aug", "time": "04:30:00"}, "Dutch Grand Prix Qualifying": {"date": "26 Aug", "time": "08:00:00"}, "Dutch Grand Prix Grand Prix": {"date": "27 Aug", "time": "08:00:00"}}, "Italian Grand Prix": {"Italian Grand Prix": {"date": "3 Sep", "time": "08:00:00"}, "Italian Grand Prix Free Practice 1": {"date": "1 Sep", "time": "06:30:00"}, "Italian Grand Prix Free Practice 2": {"date": "1 Sep", "time": "10:00:00"}, "Italian Grand Prix Free Practice 3": {"date": "2 Sep", "time": "05:30:00"}, "Italian Grand Prix Qualifying": {"date": "2 Sep", "time": "09:00:00"}, "Italian Grand Prix Grand Prix": {"date": "3 Sep", "time": "08:00:00"}}, "Singapore Grand Prix": {"Singapore Grand Prix": {"date": "17 Sep", "time": "07:00:00"}, "Singapore Grand Prix Free Practice 1": {"date": "15 Sep", "time": "04:30:00"}, "Singapore Grand Prix Free Practice 2": {"date": "15 Sep", "time": "08:00:00"}, "Singapore Grand Prix Free Practice 3": {"date": "16 Sep", "time": "04:30:00"}, "Singapore Grand Prix Qualifying": {"date": "16 Sep", "time": "08:00:00"}, "Singapore Grand Prix Grand Prix": {"date": "17 Sep", "time": "07:00:00"}}, "Japanese Grand Prix": {"Japanese Grand Prix": {"date": "24 Sep", "time": "00:00:00"}, "Japanese Grand Prix Free Practice 1": {"date": "22 Sep", "time": "21:30:00"}, "Japanese Grand Prix Free Practice 2": {"date": "22 Sep", "time": "01:00:00"}, "Japanese Grand Prix Free Practice 3": {"date": "23 Sep", "time": "21:30:00"}, "Japanese Grand Prix Qualifying": {"date": "23 Sep", "time": "01:00:00"}, "Japanese Grand Prix Grand Prix": {"date": "24 Sep", "time": "00:00:00"}}, "Qatar Grand Prix": {"Qatar Grand Prix": {"date": "8 Oct", "time": "12:00:00"}, "Qatar Grand Prix Free Practice 1": {"date": "6 Oct", "time": "08:30:00"}, "Qatar Grand Prix Qualifying": {"date": "6 Oct", "time": "12:00:00"}, "Qatar Grand Prix Sprint Shootout": {"date": "7 Oct", "time": "08:00:00"}, "Qatar Grand Prix Sprint": {"date": "7 Oct", "time": "12:30:00"}, "Qatar Grand Prix Grand Prix": {"date": "8 Oct", "time": "12:00:00"}}, "United States Grand Prix": {"United States Grand Prix": {"date": "22 Oct", "time": "14:00:00"}, "United States Grand Prix Free Practice 1": {"date": "20 Oct", "time": "12:30:00"}, "United States Grand Prix Qualifying": {"date": "20 Oct", "time": "16:00:00"}, "United States Grand Prix Sprint Shootout": {"date": "21 Oct", "time": "12:30:00"}, "United States Grand Prix Sprint": {"date": "21 Oct", "time": "17:00:00"}, "United States Grand Prix Grand Prix": {"date": "22 Oct", "time": "14:00:00"}}, "Mexico City Grand Prix": {"Mexico City Grand Prix": {"date": "29 Oct", "time": "14:00:00"}, "Mexico City Grand Prix Free Practice 1": {"date": "27 Oct", "time": "13:30:00"}, "Mexico City Grand Prix Free Practice 2": {"date": "27 Oct", "time": "17:00:00"}, "Mexico City Grand Prix Free Practice 3": {"date": "28 Oct", "time": "12:30:00"}, "Mexico City Grand Prix Qualifying": {"date": "28 Oct", "time": "16:00:00"}, "Mexico City Grand Prix Grand Prix": {"date": "29 Oct", "time": "14:00:00"}}, "Brazilian Grand Prix": {"Brazilian Grand Prix": {"date": "5 Nov", "time": "11:00:00"}, "Brazilian Grand Prix Free Practice 1": {"date": "3 Nov", "time": "08:30:00"}, "Brazilian Grand Prix Qualifying": {"date": "3 Nov", "time": "12:00:00"}, "Brazilian Grand Prix Sprint Shootout": {"date": "4 Nov", "time": "08:00:00"}, "Brazilian Grand Prix Sprint": {"date": "4 Nov", "time": "12:30:00"}, "Brazilian Grand Prix Grand Prix": {"date": "5 Nov", "time": "11:00:00"}}, "Las Vegas Grand Prix": {"Las Vegas Grand Prix": {"date": "19 Nov", "time": "00:00:00"}, "Las Vegas Grand Prix Free Practice 1": {"date": "17 Nov", "time": "22:30:00"}, "Las Vegas Grand Prix Free Practice 2": {"date": "17 Nov", "time": "02:00:00"}, "Las Vegas Grand Prix Free Practice 3": {"date": "18 Nov", "time": "22:30:00"}, "Las Vegas Grand Prix Qualifying": {"date": "18 Nov", "time": "02:00:00"}, "Las Vegas Grand Prix Grand Prix": {"date": "19 Nov", "time": "00:00:00"}}, "Abu Dhabi Grand Prix": {"Abu Dhabi Grand Prix": {"date": "26 Nov", "time": "07:00:00"}, "Abu Dhabi Grand Prix Free Practice 1": {"date": "24 Nov", "time": "03:30:00"}, "Abu Dhabi Grand Prix Free Practice 2": {"date": "24 Nov", "time": "07:00:00"}, "Abu Dhabi Grand Prix Free Practice 3": {"date": "25 Nov", "time": "04:30:00"}, "Abu Dhabi Grand Prix Qualifying": {"date": "25 Nov", "time": "08:00:00"}, "Abu Dhabi Grand Prix Grand Prix": {"date": "26 Nov", "time": "07:00:00"}}}
+{
+    "Bahrain Grand Prix": {
+        "Bahrain Grand Prix": {
+            "date": "5 Mar",
+            "time": "09:00:00"
+        },
+        "Bahrain Grand Prix Free Practice 1": {
+            "date": "3 Mar",
+            "time": "05:30:00"
+        },
+        "Bahrain Grand Prix Free Practice 2": {
+            "date": "3 Mar",
+            "time": "09:00:00"
+        },
+        "Bahrain Grand Prix Free Practice 3": {
+            "date": "4 Mar",
+            "time": "05:30:00"
+        },
+        "Bahrain Grand Prix Qualifying": {
+            "date": "4 Mar",
+            "time": "09:00:00"
+        },
+        "Bahrain Grand Prix Grand Prix": {
+            "date": "5 Mar",
+            "time": "09:00:00"
+        }
+    },
+    "Saudi Arabian Grand Prix": {
+        "Saudi Arabian Grand Prix": {
+            "date": "19 Mar",
+            "time": "11:00:00"
+        },
+        "Saudi Arabian Grand Prix Free Practice 1": {
+            "date": "17 Mar",
+            "time": "07:30:00"
+        },
+        "Saudi Arabian Grand Prix Free Practice 2": {
+            "date": "17 Mar",
+            "time": "11:00:00"
+        },
+        "Saudi Arabian Grand Prix Free Practice 3": {
+            "date": "18 Mar",
+            "time": "07:30:00"
+        },
+        "Saudi Arabian Grand Prix Qualifying": {
+            "date": "18 Mar",
+            "time": "11:00:00"
+        },
+        "Saudi Arabian Grand Prix Grand Prix": {
+            "date": "19 Mar",
+            "time": "11:00:00"
+        }
+    },
+    "Australian Grand Prix": {
+        "Australian Grand Prix": {
+            "date": "2 Apr",
+            "time": "00:00:00"
+        },
+        "Australian Grand Prix Free Practice 1": {
+            "date": "31 Mar",
+            "time": "20:30:00"
+        },
+        "Australian Grand Prix Free Practice 2": {
+            "date": "31 Mar",
+            "time": "00:00:00"
+        },
+        "Australian Grand Prix Free Practice 3": {
+            "date": "1 Apr",
+            "time": "20:30:00"
+        },
+        "Australian Grand Prix Qualifying": {
+            "date": "1 Apr",
+            "time": "00:00:00"
+        },
+        "Australian Grand Prix Grand Prix": {
+            "date": "2 Apr",
+            "time": "00:00:00"
+        }
+    },
+    "Azerbaijan Grand Prix": {
+        "Azerbaijan Grand Prix": {
+            "date": "30 Apr",
+            "time": "06:00:00"
+        },
+        "Azerbaijan Grand Prix Free Practice 1": {
+            "date": "28 Apr",
+            "time": "04:30:00"
+        },
+        "Azerbaijan Grand Prix Qualifying": {
+            "date": "28 Apr",
+            "time": "08:00:00"
+        },
+        "Azerbaijan Grand Prix Sprint Shootout": {
+            "date": "29 Apr",
+            "time": "03:30:00"
+        },
+        "Azerbaijan Grand Prix Sprint": {
+            "date": "29 Apr",
+            "time": "08:30:00"
+        },
+        "Azerbaijan Grand Prix Grand Prix": {
+            "date": "30 Apr",
+            "time": "06:00:00"
+        }
+    },
+    "Miami Grand Prix": {
+        "Miami Grand Prix": {
+            "date": "7 May",
+            "time": "14:30:00"
+        },
+        "Miami Grand Prix Free Practice 1": {
+            "date": "5 May",
+            "time": "13:00:00"
+        },
+        "Miami Grand Prix Free Practice 2": {
+            "date": "5 May",
+            "time": "16:30:00"
+        },
+        "Miami Grand Prix Free Practice 3": {
+            "date": "6 May",
+            "time": "11:30:00"
+        },
+        "Miami Grand Prix Qualifying": {
+            "date": "6 May",
+            "time": "15:00:00"
+        },
+        "Miami Grand Prix Grand Prix": {
+            "date": "7 May",
+            "time": "14:30:00"
+        }
+    },
+    "Monaco Grand Prix": {
+        "Monaco Grand Prix": {
+            "date": "28 May",
+            "time": "08:00:00"
+        },
+        "Monaco Grand Prix Free Practice 1": {
+            "date": "26 May",
+            "time": "06:30:00"
+        },
+        "Monaco Grand Prix Free Practice 2": {
+            "date": "26 May",
+            "time": "10:00:00"
+        },
+        "Monaco Grand Prix Free Practice 3": {
+            "date": "27 May",
+            "time": "05:30:00"
+        },
+        "Monaco Grand Prix Qualifying": {
+            "date": "27 May",
+            "time": "09:00:00"
+        },
+        "Monaco Grand Prix Grand Prix": {
+            "date": "28 May",
+            "time": "08:00:00"
+        }
+    },
+    "Spanish Grand Prix": {
+        "Spanish Grand Prix": {
+            "date": "4 Jun",
+            "time": "08:00:00"
+        },
+        "Spanish Grand Prix Free Practice 1": {
+            "date": "2 Jun",
+            "time": "06:30:00"
+        },
+        "Spanish Grand Prix Free Practice 2": {
+            "date": "2 Jun",
+            "time": "10:00:00"
+        },
+        "Spanish Grand Prix Free Practice 3": {
+            "date": "3 Jun",
+            "time": "05:30:00"
+        },
+        "Spanish Grand Prix Qualifying": {
+            "date": "3 Jun",
+            "time": "09:00:00"
+        },
+        "Spanish Grand Prix Grand Prix": {
+            "date": "4 Jun",
+            "time": "08:00:00"
+        }
+    },
+    "Canadian Grand PrixNEXT": {
+        "Canadian Grand PrixNEXT": {
+            "date": "",
+            "time": ""
+        },
+        "Canadian Grand Prix Free Practice 1": {
+            "date": "16 Jun",
+            "time": "12:30:00"
+        },
+        "Canadian Grand Prix Free Practice 2": {
+            "date": "16 Jun",
+            "time": "16:00:00"
+        },
+        "Canadian Grand Prix Free Practice 3": {
+            "date": "17 Jun",
+            "time": "11:30:00"
+        },
+        "Canadian Grand Prix Qualifying": {
+            "date": "17 Jun",
+            "time": "15:00:00"
+        },
+        "Canadian Grand Prix Grand Prix": {
+            "date": "18 Jun",
+            "time": "13:00:00"
+        }
+    },
+    "Austrian Grand Prix": {
+        "Austrian Grand Prix": {
+            "date": "2 Jul",
+            "time": "08:00:00"
+        },
+        "Austrian Grand Prix Free Practice 1": {
+            "date": "30 Jun",
+            "time": "06:30:00"
+        },
+        "Austrian Grand Prix Qualifying": {
+            "date": "30 Jun",
+            "time": "10:00:00"
+        },
+        "Austrian Grand Prix Sprint Shootout": {
+            "date": "1 Jul",
+            "time": "05:00:00"
+        },
+        "Austrian Grand Prix Sprint": {
+            "date": "1 Jul",
+            "time": "09:30:00"
+        },
+        "Austrian Grand Prix Grand Prix": {
+            "date": "2 Jul",
+            "time": "08:00:00"
+        }
+    },
+    "British Grand Prix": {
+        "British Grand Prix": {
+            "date": "9 Jul",
+            "time": "09:00:00"
+        },
+        "British Grand Prix Free Practice 1": {
+            "date": "7 Jul",
+            "time": "06:30:00"
+        },
+        "British Grand Prix Free Practice 2": {
+            "date": "7 Jul",
+            "time": "10:00:00"
+        },
+        "British Grand Prix Free Practice 3": {
+            "date": "8 Jul",
+            "time": "05:30:00"
+        },
+        "British Grand Prix Qualifying": {
+            "date": "8 Jul",
+            "time": "09:00:00"
+        },
+        "British Grand Prix Grand Prix": {
+            "date": "9 Jul",
+            "time": "09:00:00"
+        }
+    },
+    "Hungarian Grand Prix": {
+        "Hungarian Grand Prix": {
+            "date": "23 Jul",
+            "time": "08:00:00"
+        },
+        "Hungarian Grand Prix Free Practice 1": {
+            "date": "21 Jul",
+            "time": "06:30:00"
+        },
+        "Hungarian Grand Prix Free Practice 2": {
+            "date": "21 Jul",
+            "time": "10:00:00"
+        },
+        "Hungarian Grand Prix Free Practice 3": {
+            "date": "22 Jul",
+            "time": "05:30:00"
+        },
+        "Hungarian Grand Prix Qualifying": {
+            "date": "22 Jul",
+            "time": "09:00:00"
+        },
+        "Hungarian Grand Prix Grand Prix": {
+            "date": "23 Jul",
+            "time": "08:00:00"
+        }
+    },
+    "Belgian Grand Prix": {
+        "Belgian Grand Prix": {
+            "date": "30 Jul",
+            "time": "08:00:00"
+        },
+        "Belgian Grand Prix Free Practice 1": {
+            "date": "28 Jul",
+            "time": "06:30:00"
+        },
+        "Belgian Grand Prix Qualifying": {
+            "date": "28 Jul",
+            "time": "10:00:00"
+        },
+        "Belgian Grand Prix Sprint Shootout": {
+            "date": "29 Jul",
+            "time": "05:00:00"
+        },
+        "Belgian Grand Prix Sprint": {
+            "date": "29 Jul",
+            "time": "09:30:00"
+        },
+        "Belgian Grand Prix Grand Prix": {
+            "date": "30 Jul",
+            "time": "08:00:00"
+        }
+    },
+    "Dutch Grand Prix": {
+        "Dutch Grand Prix": {
+            "date": "27 Aug",
+            "time": "08:00:00"
+        },
+        "Dutch Grand Prix Free Practice 1": {
+            "date": "25 Aug",
+            "time": "05:30:00"
+        },
+        "Dutch Grand Prix Free Practice 2": {
+            "date": "25 Aug",
+            "time": "09:00:00"
+        },
+        "Dutch Grand Prix Free Practice 3": {
+            "date": "26 Aug",
+            "time": "04:30:00"
+        },
+        "Dutch Grand Prix Qualifying": {
+            "date": "26 Aug",
+            "time": "08:00:00"
+        },
+        "Dutch Grand Prix Grand Prix": {
+            "date": "27 Aug",
+            "time": "08:00:00"
+        }
+    },
+    "Italian Grand Prix": {
+        "Italian Grand Prix": {
+            "date": "3 Sep",
+            "time": "08:00:00"
+        },
+        "Italian Grand Prix Free Practice 1": {
+            "date": "1 Sep",
+            "time": "06:30:00"
+        },
+        "Italian Grand Prix Free Practice 2": {
+            "date": "1 Sep",
+            "time": "10:00:00"
+        },
+        "Italian Grand Prix Free Practice 3": {
+            "date": "2 Sep",
+            "time": "05:30:00"
+        },
+        "Italian Grand Prix Qualifying": {
+            "date": "2 Sep",
+            "time": "09:00:00"
+        },
+        "Italian Grand Prix Grand Prix": {
+            "date": "3 Sep",
+            "time": "08:00:00"
+        }
+    },
+    "Singapore Grand Prix": {
+        "Singapore Grand Prix": {
+            "date": "17 Sep",
+            "time": "07:00:00"
+        },
+        "Singapore Grand Prix Free Practice 1": {
+            "date": "15 Sep",
+            "time": "04:30:00"
+        },
+        "Singapore Grand Prix Free Practice 2": {
+            "date": "15 Sep",
+            "time": "08:00:00"
+        },
+        "Singapore Grand Prix Free Practice 3": {
+            "date": "16 Sep",
+            "time": "04:30:00"
+        },
+        "Singapore Grand Prix Qualifying": {
+            "date": "16 Sep",
+            "time": "08:00:00"
+        },
+        "Singapore Grand Prix Grand Prix": {
+            "date": "17 Sep",
+            "time": "07:00:00"
+        }
+    },
+    "Japanese Grand Prix": {
+        "Japanese Grand Prix": {
+            "date": "24 Sep",
+            "time": "00:00:00"
+        },
+        "Japanese Grand Prix Free Practice 1": {
+            "date": "22 Sep",
+            "time": "21:30:00"
+        },
+        "Japanese Grand Prix Free Practice 2": {
+            "date": "22 Sep",
+            "time": "01:00:00"
+        },
+        "Japanese Grand Prix Free Practice 3": {
+            "date": "23 Sep",
+            "time": "21:30:00"
+        },
+        "Japanese Grand Prix Qualifying": {
+            "date": "23 Sep",
+            "time": "01:00:00"
+        },
+        "Japanese Grand Prix Grand Prix": {
+            "date": "24 Sep",
+            "time": "00:00:00"
+        }
+    },
+    "Qatar Grand Prix": {
+        "Qatar Grand Prix": {
+            "date": "8 Oct",
+            "time": "12:00:00"
+        },
+        "Qatar Grand Prix Free Practice 1": {
+            "date": "6 Oct",
+            "time": "08:30:00"
+        },
+        "Qatar Grand Prix Qualifying": {
+            "date": "6 Oct",
+            "time": "12:00:00"
+        },
+        "Qatar Grand Prix Sprint Shootout": {
+            "date": "7 Oct",
+            "time": "08:00:00"
+        },
+        "Qatar Grand Prix Sprint": {
+            "date": "7 Oct",
+            "time": "12:30:00"
+        },
+        "Qatar Grand Prix Grand Prix": {
+            "date": "8 Oct",
+            "time": "12:00:00"
+        }
+    },
+    "United States Grand Prix": {
+        "United States Grand Prix": {
+            "date": "22 Oct",
+            "time": "14:00:00"
+        },
+        "United States Grand Prix Free Practice 1": {
+            "date": "20 Oct",
+            "time": "12:30:00"
+        },
+        "United States Grand Prix Qualifying": {
+            "date": "20 Oct",
+            "time": "16:00:00"
+        },
+        "United States Grand Prix Sprint Shootout": {
+            "date": "21 Oct",
+            "time": "12:30:00"
+        },
+        "United States Grand Prix Sprint": {
+            "date": "21 Oct",
+            "time": "17:00:00"
+        },
+        "United States Grand Prix Grand Prix": {
+            "date": "22 Oct",
+            "time": "14:00:00"
+        }
+    },
+    "Mexico City Grand Prix": {
+        "Mexico City Grand Prix": {
+            "date": "29 Oct",
+            "time": "14:00:00"
+        },
+        "Mexico City Grand Prix Free Practice 1": {
+            "date": "27 Oct",
+            "time": "13:30:00"
+        },
+        "Mexico City Grand Prix Free Practice 2": {
+            "date": "27 Oct",
+            "time": "17:00:00"
+        },
+        "Mexico City Grand Prix Free Practice 3": {
+            "date": "28 Oct",
+            "time": "12:30:00"
+        },
+        "Mexico City Grand Prix Qualifying": {
+            "date": "28 Oct",
+            "time": "16:00:00"
+        },
+        "Mexico City Grand Prix Grand Prix": {
+            "date": "29 Oct",
+            "time": "14:00:00"
+        }
+    },
+    "Brazilian Grand Prix": {
+        "Brazilian Grand Prix": {
+            "date": "5 Nov",
+            "time": "11:00:00"
+        },
+        "Brazilian Grand Prix Free Practice 1": {
+            "date": "3 Nov",
+            "time": "08:30:00"
+        },
+        "Brazilian Grand Prix Qualifying": {
+            "date": "3 Nov",
+            "time": "12:00:00"
+        },
+        "Brazilian Grand Prix Sprint Shootout": {
+            "date": "4 Nov",
+            "time": "08:00:00"
+        },
+        "Brazilian Grand Prix Sprint": {
+            "date": "4 Nov",
+            "time": "12:30:00"
+        },
+        "Brazilian Grand Prix Grand Prix": {
+            "date": "5 Nov",
+            "time": "11:00:00"
+        }
+    },
+    "Las Vegas Grand Prix": {
+        "Las Vegas Grand Prix": {
+            "date": "19 Nov",
+            "time": "00:00:00"
+        },
+        "Las Vegas Grand Prix Free Practice 1": {
+            "date": "17 Nov",
+            "time": "22:30:00"
+        },
+        "Las Vegas Grand Prix Free Practice 2": {
+            "date": "17 Nov",
+            "time": "02:00:00"
+        },
+        "Las Vegas Grand Prix Free Practice 3": {
+            "date": "18 Nov",
+            "time": "22:30:00"
+        },
+        "Las Vegas Grand Prix Qualifying": {
+            "date": "18 Nov",
+            "time": "02:00:00"
+        },
+        "Las Vegas Grand Prix Grand Prix": {
+            "date": "19 Nov",
+            "time": "00:00:00"
+        }
+    },
+    "Abu Dhabi Grand Prix": {
+        "Abu Dhabi Grand Prix": {
+            "date": "26 Nov",
+            "time": "07:00:00"
+        },
+        "Abu Dhabi Grand Prix Free Practice 1": {
+            "date": "24 Nov",
+            "time": "03:30:00"
+        },
+        "Abu Dhabi Grand Prix Free Practice 2": {
+            "date": "24 Nov",
+            "time": "07:00:00"
+        },
+        "Abu Dhabi Grand Prix Free Practice 3": {
+            "date": "25 Nov",
+            "time": "04:30:00"
+        },
+        "Abu Dhabi Grand Prix Qualifying": {
+            "date": "25 Nov",
+            "time": "08:00:00"
+        },
+        "Abu Dhabi Grand Prix Grand Prix": {
+            "date": "26 Nov",
+            "time": "07:00:00"
+        }
+    }
+}

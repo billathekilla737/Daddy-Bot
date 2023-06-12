@@ -7,11 +7,14 @@ from pathlib import Path
 from pytz import timezone, utc
 
 year = datetime.datetime.now().year
+data_dir = Path(__file__).parent.parent / "data"
+data_dir.mkdir(exist_ok=True)
 
 
 @serde
-@dataclass
+@dataclass(slots=True)
 class RaceEvent:
+    grand_prix: str
     name: str
     time: datetime.datetime
 
@@ -29,7 +32,7 @@ class GrandsPrix:
     grand_prix: List[GrandPrix]
 
 
-def scrape_race_info(file_path: Path = Path(__file__).parent / "test2.json"):
+def scrape_race_info(file_path: Path = data_dir / "f1.json"):
     import requests
     from bs4 import BeautifulSoup
     import json
@@ -38,11 +41,9 @@ def scrape_race_info(file_path: Path = Path(__file__).parent / "test2.json"):
     page = requests.get(URL)
     soup = BeautifulSoup(page.content, "html.parser")
     race_tables = soup.select("tbody[id]")
-    races: List[GrandPrix] = []
+    races: List[RaceEvent] = []
     for race_table in race_tables:
         prix_name = race_table.select_one("td span").text  # type: ignore
-        # races[prix_name] = {}
-        prix = GrandPrix(prix_name, [])
         race_rows = race_table.find_all("tr")
         for race_row in race_rows:
             race_type = race_row.select_one("td:nth-of-type(2)").text.strip()
@@ -61,13 +62,21 @@ def scrape_race_info(file_path: Path = Path(__file__).parent / "test2.json"):
             ).astimezone(timezone("America/Chicago"))
 
             # race_time = correct_for_timezone(race_time)
-            event = RaceEvent(race_type, race_time)
+            event = RaceEvent(prix_name, race_type, race_time)
+            races.append(event)
             # if "Grand Prix Grand Prix" not in race_type:
-            prix.events.append(event)
+            # prix.events.append(event)
             # races[prix_name][race_type] = {"date": race_date, "time": race_time}
-        races.append(prix)
-    with open("Daddy-Bot-env/Assets/test.json", "w") as f1Info:
+
+    with open(file_path, "w") as f1Info:
         f1Info.write(to_json(races))
+
+
+def get_F1_events(file: Path = data_dir / "f1.json") -> List[RaceEvent]:
+    if not file.exists():
+        scrape_race_info(file)
+    with open(file, "r") as f1Info:
+        return from_json(List[RaceEvent], f1Info.read())
 
 
 if __name__ == "__main__":

@@ -1,12 +1,15 @@
 # F1 Bot Functionality
 
 import sys
+from typing import Optional
+
 
 # Vivenv pathing issue. Hacky Fix.
 # Zack's PC Path
 sys.path.append(
     r"c:\users\zacha\appdata\local\programs\python\python310\lib\site-packages"
 )
+
 
 # Alex's Pc Path
 # sys.path.append(r'c:\users\daric\appdata\local\programs\python\python310\lib\site-packages')
@@ -17,46 +20,39 @@ import random
 import json
 import datetime
 import asyncio
+from pathlib import Path
 from discord import Interaction
 from discord import app_commands
 from discord.ext import commands
+from DaddyBot.data import RaceEvent, get_F1_events
+
+data_dir = Path(__file__).parent.parent / "data"
+__closest_set_flag: bool = False
+__closest_event: Optional[RaceEvent] = None
+__now: datetime.datetime = datetime.datetime.now()
 
 
 # Every Function needed for F1 Functionality
-def find_closest_event(IsTimeCheck):
+def find_closest_event():
     # with open('Daddy-Bot-env/Assets/TestRace.Json', 'r') as f:
-    with open("Daddy-Bot-env/Assets/F1Information.json", "r") as f:
-        events = json.load(f)
     now = datetime.datetime.now()
     closest_event = None
-    closest_delta = None
-    for event_name, event_data in events.items():
-        for sub_event_name, sub_event_data in event_data.items():
-            event_time = sub_event_data["time"].strip()
-            if not event_time:
-                continue
-            event_date_str = sub_event_data["date"] + " " + event_time
-            event_date_str = event_date_str.replace(
-                event_date_str.split()[1],
-                str(month_to_number(event_date_str.split()[1])),
-            )
-            event_date_str = f"{event_date_str} {datetime.datetime.now().year}"
-            event_date = datetime.datetime.strptime(event_date_str, "%d %m %H:%M:%S %Y")
-            delta = event_date - now
-            # print(f'Checking event {sub_event_name}: {event_date} (delta={delta})')
+    closest_delta = datetime.timedelta(days=9999)
+    for event in get_F1_events(data_dir / "f1.json"):
+        delta = event.time - now
 
-            if delta.total_seconds() >= 0 and (
-                closest_delta is None or delta < closest_delta
-            ):
-                closest_event = sub_event_name
-                closest_delta = delta
-    if closest_event is None:
-        return None
-    if IsTimeCheck == True:
-        # Race Time Check Comes Here
-        return str(closest_delta)
-    else:
-        return _extracted_from_find_closest_event_30(closest_delta, closest_event)
+        if delta.total_seconds() >= 0 and (delta < closest_delta):
+            closest_event = event
+            closest_delta = delta
+    __closest_set_flag = True
+    __closest_event = closest_event
+    return _extracted_from_find_closest_event_30(closest_delta, __closest_event)
+
+
+def time_check():
+    if not __closest_set_flag:
+        find_closest_event()
+    return None if __closest_event is None else (__now - __closest_event.time)
 
 
 # TODO Rename this here and in `find_closest_event`
@@ -167,7 +163,7 @@ def Grab_Files():
     return nameList, roleList
 
 
-def Scrap_Names():
+def Scrape_Names():
     # If "Assets\Names.txt" does not exist, create it.
     try:
         nameFile = open("Daddy-Bot-env/Assets/Names.txt", "r")

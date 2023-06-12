@@ -4,7 +4,6 @@ Lib/
 Scripts/
 *.json
 
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 Assets/__pycache__/
@@ -59,3 +58,4 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+.venv
