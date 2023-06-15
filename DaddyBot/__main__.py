@@ -1,7 +1,7 @@
 from DaddyBot.F1_Functions import *
 from DaddyBot.Melee_Functions import *
 from DaddyBot.FlatFuckFriday import *
-from discord import app_commands
+from discord import Role, StageChannel, Thread, app_commands
 from discord.ext import commands
 
 ###############Bot Description#####################
@@ -33,9 +33,9 @@ def run_discord_bot():
         print("We have logged in as {0.user}".format(client))
         await client.change_presence(activity=discord.Game("with your mom"))
         PrevEvent = ""
-        Event, TimeDelta = find_closest_event(False)
+        Event, TimeDelta = find_closest_event()
         MeleeEvent, *_ = find_Next_Major()
-        channel = client.get_channel(907764974099787797)
+        channel: Thread = client.get_channel(907764974099787797)  # type: ignore
         # meleechannel = client.get_channel(1117158502989844600)
         meleechannel = client.get_channel(1117158502989844600)
         sent = False
@@ -62,43 +62,43 @@ def run_discord_bot():
             #################################################################
             shouldSendF1Reminder = IsRaceTime()
             if shouldSendF1Reminder and PrevEvent != Event:
-                Event, TimeDelta = find_closest_event(None)
+                Event, TimeDelta = find_closest_event()
                 # Ping the for every event
                 if Event:
                     # No longer in use. Formally used to ping the user for every event
-                    pass
+                    match Event.name:
+                        case "Free Practice":
+                            # Ping if the User has the Free Practice role
+                            FreePracticeRole: Role = discord.utils.get(
+                                client.guilds[0].roles, name="Free Practice"
+                            )  # type: ignore
+                            # Message = f"{role.mention} {Event} is in {TimeDelta}!
+                            await channel.send(
+                                f"{FreePracticeRole.mention} {Event} is in {TimeDelta}!"
+                            )
 
-                # Ping if the User has the Free Practice role
-                if "Free Practice" in Event:
-                    FreePracticeRole = discord.utils.get(
-                        client.guilds[0].roles, name="Free Practice"
-                    )
-                    # Message = f"{role.mention} {Event} is in {TimeDelta}!"
-                    await channel.send(
-                        f"{FreePracticeRole.mention} {Event} is in {TimeDelta}!"
-                    )
-                    PrevEvent = Event
+                        case "Qualifying" | "Sprint":
+                            # Ping if the User has the Qualifying role
+                            QualifyingRole: Role = discord.utils.get(
+                                client.guilds[0].roles, name="Qualifying"
+                            ) # type: ignore
+                            # Message = f"{role.mention} {Event} is in {TimeDelta}!"
+                            await channel.send(
+                                f"{QualifyingRole.mention} {Event} is in {TimeDelta}!"
+                            )
+                            PrevEvent = Event
+                        case "Grand Prix":
+                            # Ping if the User has the Grand Prix role
+                            GrandPrix = discord.utils.get(
+                                client.guilds[0].roles, name="Grand Prix"
+                            )
+                            # Message = f"{role.mention} {Event} is in {TimeDelta}!"
+                            await channel.send(
+                                f"{GrandPrix.mention} {Event} is in {TimeDelta}!"
+                            )
+                        case _:
+                            PANIC  # type: ignore
 
-                # Ping if the User has the Qualifying role
-                if "Qualifying" or "Sprint" in Event:
-                    QualifyingRole = discord.utils.get(
-                        client.guilds[0].roles, name="Qualifying"
-                    )
-                    # Message = f"{role.mention} {Event} is in {TimeDelta}!"
-                    await channel.send(
-                        f"{QualifyingRole.mention} {Event} is in {TimeDelta}!"
-                    )
-                    PrevEvent = Event
-
-                # Ping if the User has the Grand Prix role
-                if "Grand Prix Grand Prix" in Event:
-                    GrandPrix = discord.utils.get(
-                        client.guilds[0].roles, name="Grand Prix"
-                    )
-                    # Message = f"{role.mention} {Event} is in {TimeDelta}!"
-                    await channel.send(
-                        f"{GrandPrix.mention} {Event} is in {TimeDelta}!"
-                    )
                     PrevEvent = Event
             # Melee Reminder
             #################################################################

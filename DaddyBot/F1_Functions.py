@@ -1,7 +1,9 @@
 # F1 Bot Functionality
 
 import sys
-from typing import Optional
+from typing import List, Optional
+
+from DaddyBot.data import GrandPrix
 
 
 # Vivenv pathing issue. Hacky Fix.
@@ -15,7 +17,7 @@ sys.path.append(
 # sys.path.append(r'c:\users\daric\appdata\local\programs\python\python310\lib\site-packages')
 
 import discord
-import regex as re
+import re
 import random
 import json
 import datetime
@@ -39,7 +41,7 @@ def find_closest_event():
     closest_event = None
     closest_delta = datetime.timedelta(days=9999)
     for event in get_F1_events(data_dir / "f1.json"):
-        delta = event.time - now
+        delta = #event.time - now
 
         if delta.total_seconds() >= 0 and (delta < closest_delta):
             closest_event = event
@@ -69,39 +71,47 @@ def _extracted_from_find_closest_event_30(closest_delta, closest_event):
     return closest_event, closest_delta
 
 
-def find_next_of_type(event_type, practiceNum):
-    Next_Location = find_json_Next_Event_Location()
-    # remove the last 4 characters from the string
-    Next_Location = Next_Location[:-4]
-    with open("Daddy-Bot-env/Assets/F1Information.json") as f:
-        data = json.load(f)
-    event_key = [key for key in data if Next_Location in key][0]
+def find_next_of_type(event_type:str):
+    next_prix = find_next_prix()
+    if next_prix is None:
+        return "Error: No Next Event Found!"
+    
+    
+
+    supported_types = ["Free Practice".lower(), "Qualifying".lower(), "Sprint".lower(), "Grand Prix".lower()]
+    if event_type.lower() not in supported_types:
+        return "Error: Invalid Event Type"
+    
+    __now = datetime.datetime.now()
+    for event in next_prix:
+        if event_type.lower() in event.name.lower():
+            if event_type.lower() == "free practice":
+                event.name,practiceNum= event.name.rsplit(" ")
+                    
+            else:
+                return event
     if "Free Practice" in event_type:
         try:
-            time = data[event_key][Next_Location + " Free Practice " + practiceNum][
-                "time"
-            ]
-            date = data[event_key][Next_Location + " Free Practice " + practiceNum][
-                "date"
-            ]
+            time = data[event_key][f"{next_prix} Free Practice {practiceNum}"]["time"]
+            date = data[event_key][f"{next_prix} Free Practice {practiceNum}"]["date"]
         except Exception:
             print("Error: Invalid Practice Number")
             return None, None
     elif "Qualifying" in event_type:
         try:
-            time = data[event_key][Next_Location + " Qualifying"]["time"]
-            date = data[event_key][Next_Location + " Qualifying"]["date"]
+            time = data[event_key][f"{next_prix} Qualifying"]["time"]
+            date = data[event_key][f"{next_prix} Qualifying"]["date"]
         except Exception:
             return None, None
     elif "Sprint" in event_type:
         try:
-            time = data[event_key][Next_Location + " Sprint"]["time"]
-            date = data[event_key][Next_Location + " Sprint"]["date"]
+            time = data[event_key][next_prix + " Sprint"]["time"]
+            date = data[event_key][next_prix + " Sprint"]["date"]
         except:
             return None, None
     elif "Grand Prix" in event_type:
-        time = data[event_key][Next_Location + " Grand Prix"]["time"]
-        date = data[event_key][Next_Location + " Grand Prix"]["date"]
+        time = data[event_key][next_prix.name + " Grand Prix"]["time"]
+        date = data[event_key][next_prix.name + " Grand Prix"]["date"]
     else:
         return None, None
 
@@ -112,14 +122,14 @@ def find_next_of_type(event_type, practiceNum):
     return date, time
 
 
-def find_json_Next_Event_Location():
-    with open("Daddy-Bot-env/Assets/F1Information.json", "r") as f:
-        events = json.load(f)
-    for event_name, event_data in events.items():
-        if "NEXT" in event_name:
-            return event_name
-    if event_name is None:
-        print(
+def find_next_prix() -> List[GrandPrix] | None:
+    events= get_F1_events()
+    for event in events:
+        if "NEXT" in event.grand_prix:
+            event.grand_prix = event.grand_prix[:-4]
+            return event
+    else:
+        (
             'ERROR: F1_Functions.find_json_Next_Event_Location() -> No word "NEXT" found in event_name'
         )
         return None
@@ -339,7 +349,7 @@ def IsRaceTime():
     name="freepractice", description="Tells you the next F1 free practice event"
 )
 async def freepractice(interaction: discord.Interaction, practice_number: str):
-    date, time = find_next_of_type("Free Practice", practice_number)
+    date, time = find_next_of_type("Free Practice")
     if date and time != None:
         await interaction.response.send_message(
             "The next F1 free practice "
@@ -394,7 +404,7 @@ async def week(interaction: discord.Interaction):
     QualifyingDate, QualifyingTime = find_next_of_type("Qualifying", None)
     SprintDate, SprintTime = find_next_of_type("Sprint", None)
     GrandPrixDate, GrandPrixTime = find_next_of_type("Grand Prix", None)
-    Next_Location = str(find_json_Next_Event_Location())
+    Next_Location = str(find_next_prix())
     Next_Location = Next_Location[:-4]
     if QualifyingDate and QualifyingTime != None:
         await interaction.response.send_message(
@@ -412,3 +422,5 @@ async def week(interaction: discord.Interaction):
 
 async def setup(bot):
     bot.add_command(freepractice)
+if __name__=="__main__":
+    print(find_next_prix())

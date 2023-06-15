@@ -14,7 +14,6 @@ data_dir.mkdir(exist_ok=True)
 @serde
 @dataclass(slots=True)
 class RaceEvent:
-    grand_prix: str
     name: str
     time: datetime.datetime
 
@@ -41,9 +40,10 @@ def scrape_race_info(file_path: Path = data_dir / "f1.json"):
     page = requests.get(URL)
     soup = BeautifulSoup(page.content, "html.parser")
     race_tables = soup.select("tbody[id]")
-    races: List[RaceEvent] = []
+    grands_prix: List[GrandPrix] = []
     for race_table in race_tables:
         prix_name = race_table.select_one("td span").text  # type: ignore
+        prix = GrandPrix(prix_name, [])
         race_rows = race_table.find_all("tr")
         for race_row in race_rows:
             race_type = race_row.select_one("td:nth-of-type(2)").text.strip()
@@ -62,21 +62,22 @@ def scrape_race_info(file_path: Path = data_dir / "f1.json"):
             ).astimezone(timezone("America/Chicago"))
 
             # race_time = correct_for_timezone(race_time)
-            event = RaceEvent(prix_name, race_type, race_time)
-            races.append(event)
+            event = RaceEvent(race_type, race_time)
+            prix.events.append(event)
+        grands_prix.append(prix)
             # if "Grand Prix Grand Prix" not in race_type:
             # prix.events.append(event)
             # races[prix_name][race_type] = {"date": race_date, "time": race_time}
 
     with open(file_path, "w") as f1Info:
-        f1Info.write(to_json(races))
+        f1Info.write(to_json(grands_prix))
 
 
-def get_F1_events(file: Path = data_dir / "f1.json") -> List[RaceEvent]:
+def get_F1_events(file: Path = data_dir / "f1.json") -> List[GrandPrix]:
     if not file.exists():
         scrape_race_info(file)
     with open(file, "r") as f1Info:
-        return from_json(List[RaceEvent], f1Info.read())
+        return from_json(List[GrandPrix], f1Info.read())
 
 
 if __name__ == "__main__":
