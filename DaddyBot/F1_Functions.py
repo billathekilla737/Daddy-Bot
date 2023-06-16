@@ -40,15 +40,16 @@ def find_closest_event():
     now = datetime.datetime.now()
     closest_event = None
     closest_delta = datetime.timedelta(days=9999)
-    for event in get_F1_events(data_dir / "f1.json"):
-        delta = #event.time - now
+    if next_prix := find_next_prix():
+        for event in next_prix.events:
+            delta = event.time - now
 
-        if delta.total_seconds() >= 0 and (delta < closest_delta):
-            closest_event = event
+            if delta.total_seconds() >= 0 and (delta < closest_delta):
+                closest_event = event
             closest_delta = delta
-    __closest_set_flag = True
+        __closest_set_flag = True
     __closest_event = closest_event
-    return _extracted_from_find_closest_event_30(closest_delta, __closest_event)
+    return __closest_event, closest_delta
 
 
 def time_check():
@@ -57,18 +58,6 @@ def time_check():
     return None if __closest_event is None else (__now - __closest_event.time)
 
 
-# TODO Rename this here and in `find_closest_event`
-def _extracted_from_find_closest_event_30(closest_delta, closest_event):
-    closest_delta = str(closest_delta)
-    # Write a formated string to place the words Hours, Minutes, and Seconds in the correct place.
-    closest_delta = closest_delta.replace(":", " Hours, ", 1)
-    closest_delta = closest_delta.replace(":", " Minutes, ", 1)
-    closest_delta = closest_delta.replace(".", " Seconds", 1)
-    # Write regex to cut off all text after the seconds place
-    closest_delta = re.sub(
-        r"(\d+ Hours, \d+ Minutes, \d+ Seconds).*", r"\1", closest_delta
-    )
-    return closest_event, closest_delta
 
 
 def find_next_of_type(event_type:str):
@@ -83,35 +72,10 @@ def find_next_of_type(event_type:str):
         return "Error: Invalid Event Type"
     
     __now = datetime.datetime.now()
-    for event in next_prix:
+    for event in next_prix.events:
         if event_type.lower() in event.name.lower():
-            if event_type.lower() == "free practice":
-                event.name,practiceNum= event.name.rsplit(" ")
-                    
-            else:
+            if event.time > __now:
                 return event
-    if "Free Practice" in event_type:
-        try:
-            time = data[event_key][f"{next_prix} Free Practice {practiceNum}"]["time"]
-            date = data[event_key][f"{next_prix} Free Practice {practiceNum}"]["date"]
-        except Exception:
-            print("Error: Invalid Practice Number")
-            return None, None
-    elif "Qualifying" in event_type:
-        try:
-            time = data[event_key][f"{next_prix} Qualifying"]["time"]
-            date = data[event_key][f"{next_prix} Qualifying"]["date"]
-        except Exception:
-            return None, None
-    elif "Sprint" in event_type:
-        try:
-            time = data[event_key][next_prix + " Sprint"]["time"]
-            date = data[event_key][next_prix + " Sprint"]["date"]
-        except:
-            return None, None
-    elif "Grand Prix" in event_type:
-        time = data[event_key][next_prix.name + " Grand Prix"]["time"]
-        date = data[event_key][next_prix.name + " Grand Prix"]["date"]
     else:
         return None, None
 
@@ -122,17 +86,9 @@ def find_next_of_type(event_type:str):
     return date, time
 
 
-def find_next_prix() -> List[GrandPrix] | None:
-    events= get_F1_events()
-    for event in events:
-        if "NEXT" in event.grand_prix:
-            event.grand_prix = event.grand_prix[:-4]
-            return event
-    else:
-        (
-            'ERROR: F1_Functions.find_json_Next_Event_Location() -> No word "NEXT" found in event_name'
-        )
-        return None
+def find_next_prix() -> GrandPrix | None:
+    return next((prix for prix in get_F1_events() if prix.next), None)
+    
 
 
 def month_to_number(month):
