@@ -23,12 +23,10 @@ class RaceEvent:
 class GrandPrix:
     name: str
     events: List[RaceEvent]
+    next: bool
 
 
-@serde
-@dataclass
-class GrandsPrix:
-    grand_prix: List[GrandPrix]
+
 
 
 def scrape_race_info(file_path: Path = data_dir / "f1.json"):
@@ -43,7 +41,9 @@ def scrape_race_info(file_path: Path = data_dir / "f1.json"):
     grands_prix: List[GrandPrix] = []
     for race_table in race_tables:
         prix_name = race_table.select_one("td span").text  # type: ignore
-        prix = GrandPrix(prix_name, [])
+         
+
+        prix = GrandPrix(prix_name[:-4], [], True) if prix_name.endswith("NEXT") else GrandPrix(prix_name, [], False)
         race_rows = race_table.find_all("tr")
         for race_row in race_rows:
             race_type = race_row.select_one("td:nth-of-type(2)").text.strip()
