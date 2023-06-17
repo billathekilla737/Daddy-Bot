@@ -2,6 +2,8 @@ from Assets.F1_Functions import *
 from Assets.Melee_Functions import *
 from discord import app_commands
 from discord.ext import commands
+from Assets.FlatFuckFriday import *
+
 
 ###############Bot Description#####################
 #The goal of this bot is to give a new users a nickname from a list of names from a text file.
@@ -14,7 +16,7 @@ def run_discord_bot():
     Scrap_Names()                                               #
     Scrap_Melee()                                               #
     intents = discord.Intents.all()                             #
-                                                                #
+    global sent                                                 #
                                                                 #
                                                                 #
     client = discord.Client(command_prefix='/',intents=intents) #
@@ -37,6 +39,7 @@ def run_discord_bot():
         channel = client.get_channel(907764974099787797)
         #meleechannel = client.get_channel(1117158502989844600)
         meleechannel = client.get_channel(1117158502989844600)
+        sent = False
         try:
             synced = await tree.sync()
             print(f"Synced {len(synced)} commands")
@@ -90,6 +93,16 @@ def run_discord_bot():
                 #Message = f"{role.mention} {Event} is in {TimeDelta}!"
                 await meleechannel.send(f"{MeleeRole.mention} {MeleeEvent} is tomorrow!")
                 PrevMeleeEvent = MeleeEvent
+                        #Flat Fuck Friday Reminder
+            ################################################################
+            if isFlatFuckFriday() and sent != True:
+                #IT'S FLAT FUCK FRIDAY! :FlatFuck:
+                #Send a message in General that it's Flat Fuck Friday!
+                message = ":FlatFuck: It's Flat Fuck Friday You Fucking Losers! :FlatFuck:\nhttps://youtu.be/A5U8ypHq3BU"
+                GeneralChannel = client.get_channel(632027078371573775)
+                await GeneralChannel.send(message)
+                sent = True
+                asyncio.create_task(reset_sent())
             await asyncio.sleep(45)
 
         
@@ -181,6 +194,11 @@ def run_discord_bot():
         if reaction.emoji == "🥊":
             Role = discord.utils.get(user.guild.roles, name="Melee")
             await user.remove_roles(Role)
+    #Misc.
+    ##############################################################################################################################################
+    async def reset_sent():
+        await asyncio.sleep(24 * 60 * 60) # Wait for 24 hours
+        sent_back = False
     
     ####Start the bot###
     client.run(token)  #
