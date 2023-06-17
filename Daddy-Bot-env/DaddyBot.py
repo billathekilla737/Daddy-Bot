@@ -55,8 +55,8 @@ def run_discord_bot():
             #F1 Race Reminders
             #################################################################
             shouldSendF1Reminder = IsRaceTime()
+            Event, TimeDelta = find_closest_event(None)
             if shouldSendF1Reminder and PrevEvent != Event:
-                Event, TimeDelta = find_closest_event(None)
                 #Ping the for every event
                 if Event:
                     #No longer in use. Formally used to ping the user for every event
@@ -190,22 +190,7 @@ def run_discord_bot():
 #################################################################################################
                                                                                                 #
                                                                                                 #
-#run_discord_bot()                                                                               #
+run_discord_bot()                                                                               #
                                                                                                 #
                                                                                                 #
 #################################################################################################
-
-Event, TimeDelta = find_closest_event(None)
-
-print(f"{Event} is in {TimeDelta}!")
-print(IsRaceTime())
-
-if "Qualifying" in Event or "Sprint" in Event:
-    print("Qualifying or Sprint")
-
-
-
-
-
-MeleeEvent, *_ = find_Next_Major()
-print(MeleeEvent)
