@@ -183,18 +183,24 @@ def run_discord_bot():
     @client.event
     async def on_reaction_add(reaction, user):
         meleechannel = client.get_channel(1117158502989844600)
-        if reaction.message.channel.id != meleechannel.id:
+        # if reaction.message.channel.id != meleechannel.id:
+        #     return
+        if reaction.message.id != 1119503042144911440:
             return
         if reaction.emoji == "🥊":
+            print("Adding Role")
             Role = discord.utils.get(user.guild.roles, name="Melee")
             await user.add_roles(Role)
     #Now when the user remove their reaction remove the role
     @client.event
     async def on_reaction_remove(reaction, user):
         meleechannel = client.get_channel(1117158502989844600)
-        if reaction.message.channel.id != meleechannel.id:
+        # if reaction.message.channel.id != meleechannel.id:
+        #     return
+        if reaction.message.id != 1119503042144911440:
             return
         if reaction.emoji == "🥊":
+            print("Removing Role")
             Role = discord.utils.get(user.guild.roles, name="Melee")
             await user.remove_roles(Role)
     #Misc.
@@ -223,6 +229,8 @@ run_discord_bot()                                                               
 # Event,  TimeDelta = find_closest_event(None)
 
 # print(f"{Event} is in {TimeDelta}!")
+
+# print(IsRaceTime())
 
 
 
