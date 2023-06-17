@@ -34,8 +34,6 @@ def find_closest_event(IsTimeCheck):
             event_date_str = f'{event_date_str} {datetime.datetime.now().year}'
             event_date = datetime.datetime.strptime(event_date_str, '%d %m %H:%M:%S %Y')
             delta = event_date - now
-            #print(f'Checking event {sub_event_name}: {event_date} (delta={delta})')
-
             if delta.total_seconds() >= 0 and (closest_delta is None or delta < closest_delta):
                 closest_event = sub_event_name
                 closest_delta = delta
@@ -223,8 +221,9 @@ def twentyfourhr_to_twelvehr(time):
     return time
 
 def correct_for_timezone(time):
-    from datetime import datetime, timedelta
-    # Return an empty string if the time argument is empty
+    from datetime import datetime
+
+
     if not time:
         return ''
 

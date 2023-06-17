@@ -36,6 +36,7 @@ def run_discord_bot():
         PrevEvent = "" 
         Event, TimeDelta = find_closest_event(False) 
         MeleeEvent, *_ = find_Next_Major()
+        PrevMeleeEvent = ""
         channel = client.get_channel(907764974099787797)
         #meleechannel = client.get_channel(1117158502989844600)
         meleechannel = client.get_channel(1117158502989844600)
@@ -73,14 +74,14 @@ def run_discord_bot():
                     PrevEvent = Event
 
                 #Ping if the User has the Qualifying role
-                if "Qualifying" in Event or "Sprint" in Event:
+                elif "Qualifying" in Event or "Sprint" in Event:
                     QualifyingRole = discord.utils.get(client.guilds[0].roles, name="Qualifying")
                     #Message = f"{role.mention} {Event} is in {TimeDelta}!"
                     await channel.send(f"{QualifyingRole.mention} {Event} is in {TimeDelta}!")
                     PrevEvent = Event
 
                 #Ping if the User has the Grand Prix role
-                if ("Grand Prix Grand Prix" in Event):
+                elif ("Grand Prix Grand Prix" in Event):
                     GrandPrix = discord.utils.get(client.guilds[0].roles, name="Grand Prix")
                     #Message = f"{role.mention} {Event} is in {TimeDelta}!"
                     await channel.send(f"{GrandPrix.mention} {Event} is in {TimeDelta}!")
@@ -103,6 +104,8 @@ def run_discord_bot():
                 await GeneralChannel.send(message)
                 sent = True
                 asyncio.create_task(reset_sent())
+
+
             await asyncio.sleep(45)
 
         
@@ -140,7 +143,7 @@ def run_discord_bot():
     async def qualifying(interaction: discord.Interaction):
         date, time = find_next_of_type("Qualifying", None)
         if date and time != None:
-            await interaction.response.send_message(f"the next F1 qualifying event is on {date} at {time}")
+            await interaction.response.send_message(f"The next F1 qualifying event is on {date} at {time}")
         else:
             date, time = find_next_of_type("Sprint",None)
             await interaction.response.send_message(f"There is NO qualifying, SPRINT is on {date} at {time}")
@@ -198,7 +201,10 @@ def run_discord_bot():
     ##############################################################################################################################################
     async def reset_sent():
         await asyncio.sleep(24 * 60 * 60) # Wait for 24 hours
-        sent_back = False
+        global sent
+        sent = False
+        print("Reset for FFF sent")
+        
     
     ####Start the bot###
     client.run(token)  #
@@ -212,3 +218,11 @@ run_discord_bot()                                                               
                                                                                                 #
                                                                                                 #
 #################################################################################################
+# scrape_race_info()
+
+# Event,  TimeDelta = find_closest_event(None)
+
+# print(f"{Event} is in {TimeDelta}!")
+
+
+
