@@ -45,9 +45,9 @@ def run_discord_bot():
 
         #Reaction Role Setup
         #####################################################################
-        reactText = ("React to this message to get the Melee role!")
-        Moji = await meleechannel.send(reactText)
-        await Moji.add_reaction('🥊')
+        # reactText = ("React to this message to get the Melee role!")
+        # Moji = await meleechannel.send(reactText)
+        # await Moji.add_reaction('🥊')
 
         #   RECURRING TASKS (5 sec Loop)
         #####################################################################
@@ -70,7 +70,7 @@ def run_discord_bot():
                     PrevEvent = Event
 
                 #Ping if the User has the Qualifying role
-                if ("Qualifying" or "Sprint" in Event):
+                if "Qualifying" in Event or "Sprint" in Event:
                     QualifyingRole = discord.utils.get(client.guilds[0].roles, name="Qualifying")
                     #Message = f"{role.mention} {Event} is in {TimeDelta}!"
                     await channel.send(f"{QualifyingRole.mention} {Event} is in {TimeDelta}!")
@@ -86,12 +86,11 @@ def run_discord_bot():
             #################################################################
             shouldSendMeleeReminder = isMeleeTime()
             if shouldSendMeleeReminder and PrevMeleeEvent != MeleeEvent:
-                 if ("Melee" in MeleeEvent):
-                    MeleeRole = discord.utils.get(client.guilds[0].roles, name="Melee")
-                    #Message = f"{role.mention} {Event} is in {TimeDelta}!"
-                    await meleechannel.send(f"{MeleeRole.mention} {MeleeEvent} is tomorrow!")
-                    PrevMeleeEvent = MeleeEvent
-            await asyncio.sleep(5)
+                MeleeRole = discord.utils.get(client.guilds[0].roles, name="Melee")
+                #Message = f"{role.mention} {Event} is in {TimeDelta}!"
+                await meleechannel.send(f"{MeleeRole.mention} {MeleeEvent} is tomorrow!")
+                PrevMeleeEvent = MeleeEvent
+            await asyncio.sleep(45)
 
         
     @client.event
@@ -191,8 +190,22 @@ def run_discord_bot():
 #################################################################################################
                                                                                                 #
                                                                                                 #
-run_discord_bot()                                                                               #
+#run_discord_bot()                                                                               #
                                                                                                 #
                                                                                                 #
 #################################################################################################
 
+Event, TimeDelta = find_closest_event(None)
+
+print(f"{Event} is in {TimeDelta}!")
+print(IsRaceTime())
+
+if "Qualifying" in Event or "Sprint" in Event:
+    print("Qualifying or Sprint")
+
+
+
+
+
+MeleeEvent, *_ = find_Next_Major()
+print(MeleeEvent)
