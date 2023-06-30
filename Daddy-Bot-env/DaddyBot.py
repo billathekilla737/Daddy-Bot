@@ -72,7 +72,6 @@ def run_discord_bot():
                     #Message = f"{role.mention} {Event} is in {TimeDelta}!"
                     await channel.send(f"{FreePracticeRole.mention} {Event} is in {TimeDelta}!")
                     PrevEvent = Event
-                    print("The event is Free Practice and the time is" + datetime.datetime.now().strftime("%H:%M:%S"))
 
                 #Ping if the User has the Qualifying role
                 elif "Qualifying" in Event or "Sprint" in Event:
@@ -80,7 +79,6 @@ def run_discord_bot():
                     #Message = f"{role.mention} {Event} is in {TimeDelta}!"
                     await channel.send(f"{QualifyingRole.mention} {Event} is in {TimeDelta}!")
                     PrevEvent = Event
-                    print("The event is Qualifying and the time is" + datetime.datetime.now().strftime("%H:%M:%S"))
                     
                 #Ping if the User has the Grand Prix role
                 elif ("Grand Prix Grand Prix" in Event):
@@ -89,7 +87,6 @@ def run_discord_bot():
                     Event = Event[:-10]
                     await channel.send(f"{GrandPrix.mention} {Event} is in {TimeDelta}! <:LewisDab:844441514557440040>")
                     PrevEvent = Event
-                    print("The event is Grand Prix and the time is" + datetime.datetime.now().strftime("%H:%M:%S"))
 
             #Melee Reminder
             #################################################################
@@ -99,7 +96,6 @@ def run_discord_bot():
                 #Message = f"{role.mention} {Event} is in {TimeDelta}!"
                 await meleechannel.send(f"{MeleeRole.mention} {MeleeEvent} is tomorrow!")
                 PrevMeleeEvent = MeleeEvent
-                print("The event is Melee and the time is" + datetime.datetime.now().strftime("%H:%M:%S"))
                         #Flat Fuck Friday Reminder
             ################################################################
             if isFlatFuckFriday() and sent != True:
@@ -110,7 +106,6 @@ def run_discord_bot():
                 await GeneralChannel.send(message)
                 sent = True
                 asyncio.create_task(reset_sent())
-                print("It's Flat Fuck Friday and the system time is " + datetime.datetime.now().strftime("%H:%M:%S"))
             await asyncio.sleep(45)
         
 

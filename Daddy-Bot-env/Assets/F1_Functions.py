@@ -254,7 +254,7 @@ def correct_for_timezone(time):
     corrected_time = corrected_time_obj.strftime('%H:%M:%S')
 
 
-    print(datetime.now().strftime('%H:%M:%S'))
+   
     return corrected_time
 
 def scrape_race_info():
