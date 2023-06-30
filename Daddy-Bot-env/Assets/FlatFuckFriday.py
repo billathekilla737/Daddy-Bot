@@ -10,7 +10,7 @@ def isFlatFuckFriday():
     correctednow = datetime.datetime.now(chi_tz)
 
     #Check if it is Friday and between 9am-10am
-    if correctednow.weekday() == 4 and now.hour == 9:
+    if correctednow.weekday() == 4 and correctednow.hour == 9:
         #IT IS FLAT FUCK FRIDAY!
         return True
     else:
