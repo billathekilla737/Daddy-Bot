@@ -15,13 +15,16 @@ import json
 import datetime
 import asyncio
 from discord import Interaction
+import pytz
+from datetime import datetime
 
 #Every Function needed for F1 Functionality
 def find_closest_event(IsTimeCheck):
     #with open('Daddy-Bot-env/Assets/TestRace.Json', 'r') as f:
     with open('Daddy-Bot-env/Assets/F1Information.json', 'r') as f:
         events = json.load(f)
-    now = datetime.datetime.now()
+    chi_tz = pytz.timezone('America/Chicago')
+    now = datetime.now(chi_tz)
     closest_event = None
     closest_delta = None
     for event_name, event_data in events.items():
@@ -31,8 +34,8 @@ def find_closest_event(IsTimeCheck):
                 continue
             event_date_str = sub_event_data['date'] + ' ' + event_time
             event_date_str = event_date_str.replace(event_date_str.split()[1], str(month_to_number(event_date_str.split()[1])))
-            event_date_str = f'{event_date_str} {datetime.datetime.now().year}'
-            event_date = datetime.datetime.strptime(event_date_str, '%d %m %H:%M:%S %Y')
+            event_date_str = f'{event_date_str} {datetime.now().year}'
+            event_date = chi_tz.localize(datetime.strptime(event_date_str, '%d %m %H:%M:%S %Y'))
             delta = event_date - now
             if delta.total_seconds() >= 0 and (closest_delta is None or delta < closest_delta):
                 closest_event = sub_event_name
@@ -52,6 +55,7 @@ def find_closest_event(IsTimeCheck):
             #Write regex to cut off all text after the seconds place
             closest_delta = re.sub(r'(\d+ Hours, \d+ Minutes, \d+ Seconds).*', r'\1', closest_delta)
             return closest_event, closest_delta
+
 
 def find_next_of_type(event_type, practiceNum):
     Next_Location = find_json_Next_Event_Location()
@@ -221,7 +225,8 @@ def twentyfourhr_to_twelvehr(time):
     return time
 
 def correct_for_timezone(time):
-    from datetime import datetime
+    chi_tz = pytz.timezone('America/Chicago')
+    correctedNow = datetime.now(chi_tz)
 
 
     if not time:
@@ -248,6 +253,8 @@ def correct_for_timezone(time):
     # Convert the corrected datetime object back to a string
     corrected_time = corrected_time_obj.strftime('%H:%M:%S')
 
+
+    print(datetime.now().strftime('%H:%M:%S'))
     return corrected_time
 
 def scrape_race_info():
@@ -273,28 +280,59 @@ def scrape_race_info():
     with open('Daddy-Bot-env/Assets/F1Information.json', 'w') as f1Info:
         json.dump(races, f1Info)
 
+# def IsRaceTime():
+#     from datetime import datetime
+#     #Checks if the Event is less than 30 minutes away
+#     closest_delta = find_closest_event(True)
+#     try:
+#         pattern = r'(\d+) days, (\d+):(\d+):'
+#         match = re.search(pattern, closest_delta)
+        
+#         #if days exist set to match.group1 else set to None
+#         days = int(match.group(1))
+#         hours = int(match.group(2))
+#         minutes = int(match.group(3))
+#     except:
+#         pattern = r'(\d+):(\d+):'
+#         match = re.search(pattern, closest_delta)
+#         hours = int(match.group(1))
+#         minutes = int(match.group(2))
+#         days = None
+
+#     print(days, hours, minutes)
+#     if days == None and hours == 0 and minutes <= 30:
+#         return True
+#     else:
+#         return False
+    
+
 def IsRaceTime():
+    from datetime import datetime
     #Checks if the Event is less than 30 minutes away
     closest_delta = find_closest_event(True)
+
+    #I think the top of this try statement can be removed, Leaving it in for now
     try:
-        pattern = r'(\d+) days, (\d+):(\d+):'
+        pattern = r'(\d+) days?, (\d+):(\d+):(\d+)\.(\d+)'
         match = re.search(pattern, closest_delta)
-        
-        #if days exist set to match.group1 else set to None
         days = int(match.group(1))
         hours = int(match.group(2))
         minutes = int(match.group(3))
+        seconds = int(match.group(4))
+        microseconds = int(match.group(5))
     except:
-        pattern = r'(\d+):(\d+):'
+        pattern = r'(\d+):(\d+):(\d+)\.(\d+)'
         match = re.search(pattern, closest_delta)
+        days = 0
         hours = int(match.group(1))
         minutes = int(match.group(2))
-        days = None
+        seconds = int(match.group(3))
+        microseconds = int(match.group(4))
+    
+    #print(f'Days: {days}, Hours: {hours}, Minutes: {minutes}, Seconds: {seconds}, Microseconds: {microseconds}')
 
-    if days == None and hours == 0 and minutes <= 30:
+    if days == 0 and hours == 0 and minutes <= 30:
+        print(f"It's Event time count down is Days: {days}, Hours: {hours}, Minutes: {minutes}, Seconds: {seconds}, Microseconds: {microseconds}")
         return True
     else:
         return False
-    
-
-
