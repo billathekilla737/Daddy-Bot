@@ -1,5 +1,7 @@
 from Assets.F1_Functions import month_to_number
 import json
+import pytz
+
 def Scrap_Melee():
     
     print("Scraping Melee Data. This will take a few seconds.")
@@ -59,13 +61,14 @@ def find_Next_Major():
 
 
     #Get the current month
-    now = datetime.datetime.now()
-    current_sys_month = now.strftime("%m")
+    chi_tz = pytz.timezone('America/Chicago')
+    correctednow = datetime.datetime.now(chi_tz)
+    current_sys_month = correctednow.strftime("%m")
     #if current month has a 0 in front, remove it
     if current_sys_month[0] == "0":
         current_sys_month = current_sys_month[1:]
     #Get the current day
-    current_sys_day = now.strftime("%d")
+    current_sys_day = correctednow.strftime("%d")
     #if current day has a 0 in front, remove it
     if current_sys_day[0] == "0":
         current_sys_day = current_sys_day[1:]
@@ -87,9 +90,10 @@ def isMeleeTime():
     import time
     MajorName, Month, StartDate, EndDate = find_Next_Major()
     #Use Datetime to get the current month
-    now = datetime.now()
-    current_sys_month = now.strftime("%m")
-    current_sys_day = now.strftime("%d")
+    chi_tz = pytz.timezone('America/Chicago')
+    correctednow = datetime.now(chi_tz)
+    current_sys_month = correctednow.strftime("%m")
+    current_sys_day = correctednow.strftime("%d")
     #if current month has a 0 in front, remove it 
     if current_sys_month[0] == "0":
         current_sys_month = current_sys_month[1:]
