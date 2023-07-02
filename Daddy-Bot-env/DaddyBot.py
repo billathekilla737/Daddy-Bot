@@ -84,9 +84,10 @@ def run_discord_bot():
                 elif ("Grand Prix Grand Prix" in Event):
                     GrandPrix = discord.utils.get(client.guilds[0].roles, name="Grand Prix")
                     #Message = f"{role.mention} {Event} is in {TimeDelta}!"
+                    PrevEvent = Event
                     Event = Event[:-10]
                     await channel.send(f"{GrandPrix.mention} {Event} is in {TimeDelta}! <a:max_nice:1117178831120371824>")
-                    PrevEvent = Event
+                    
 
             #Melee Reminder
             #################################################################
