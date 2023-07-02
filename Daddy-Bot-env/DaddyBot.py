@@ -85,7 +85,7 @@ def run_discord_bot():
                     GrandPrix = discord.utils.get(client.guilds[0].roles, name="Grand Prix")
                     #Message = f"{role.mention} {Event} is in {TimeDelta}!"
                     Event = Event[:-10]
-                    await channel.send(f"{GrandPrix.mention} {Event} is in {TimeDelta}! <:LewisDab:844441514557440040>")
+                    await channel.send(f"{GrandPrix.mention} {Event} is in {TimeDelta}! <:LewisDab:844441514557440040> ")
                     PrevEvent = Event
 
             #Melee Reminder
@@ -126,7 +126,7 @@ def run_discord_bot():
             #Deactivated for now
             #NextEvent, TimeDelta = find_closest_event(None)
             #await message.channel.send(f"{NextEvent} is in {TimeDelta}!")
-            await message.channel.send("<:FlatFuck:1117199409478914128>")
+            await message.channel.send(" is in timeeeeee! <:LewisDab:844441514557440040>")
     
 
 
@@ -162,6 +162,13 @@ def run_discord_bot():
     async def grandprix(interaction: discord.Interaction):
         date, time = find_next_of_type("Grand Prix",None)
         await interaction.response.send_message(f"The next F1 Grand Prix event is on {date} at {time} <:LewisDab:844441514557440040>")
+
+
+    @tree.command(name = "NextEvent", description = "Tells you the next F1 Event")
+    async def NextEvent(interaction: discord.Interaction):
+        Event, TimeDelta = find_closest_event(False)
+        await interaction.response.send_message(f"The next F1 Grand Prix event is {Event} in {TimeDelta} <:LewisDab:844441514557440040>")
+    
 
     @tree.command(name = "week", description = "Tells you the next F1 events for the week")
     async def week(interaction: discord.Interaction):
