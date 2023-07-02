@@ -164,8 +164,8 @@ def run_discord_bot():
         await interaction.response.send_message(f"The next F1 Grand Prix event is on {date} at {time} <:LewisDab:844441514557440040>")
 
 
-    @tree.command(name = "NextEvent", description = "Tells you the next F1 Event")
-    async def NextEvent(interaction: discord.Interaction):
+    @tree.command(name = "nextevent", description = "Tells you the next F1 Event")
+    async def nextevent(interaction: discord.Interaction):
         Event, TimeDelta = find_closest_event(False)
         await interaction.response.send_message(f"The next F1 Grand Prix event is {Event} in {TimeDelta} <:LewisDab:844441514557440040>")
     
