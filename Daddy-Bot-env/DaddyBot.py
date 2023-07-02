@@ -168,6 +168,30 @@ def run_discord_bot():
     @tree.command(name = "nextevent", description = "Tells you the next F1 Event")
     async def nextevent(interaction: discord.Interaction):
         Event, TimeDelta = find_closest_event(False)
+        if ("Free Practice" in Event):
+            date, time = find_next_of_type("Free Practice", None)
+            await interaction.response.send_message(f"The next F1 Grand Prix event is on {date} at {time} <a:max_nice:1117178831120371824> \n T-minus {TimeDelta} until the next event!")
+        if ("Qualifying" in Event) or ("Sprint" in Event):
+            date, time = find_next_of_type("Qualifying", None)
+            await interaction.response.send_message(f"The next F1 Grand Prix event is on {date} at {time} <a:max_nice:1117178831120371824> \n T-minus {TimeDelta} until the next event!")
+        if ("Grand Prix" in Event):
+            date, time = find_next_of_type("Grand Prix", None)
+            await interaction.response.send_message(f"The next F1 Grand Prix event is on {date} at {time} <a:max_nice:1117178831120371824> \n T-minus {TimeDelta} until the next event!")
+        else:
+            await interaction.response.send_message(f"The next F1 Grand Prix event is the {Event} in {TimeDelta} <a:max_nice:1117178831120371824>")
+
+
+
+
+
+
+
+
+
+
+
+
+
         await interaction.response.send_message(f"The next F1 Grand Prix event is the {Event} in {TimeDelta} <a:max_nice:1117178831120371824>")
     
 
