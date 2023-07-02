@@ -181,7 +181,7 @@ def run_discord_bot():
             else:
                 date, time = find_next_of_type("Free Practice", "3")
 
-            await interaction.response.send_message(f"The next F1 Grand Prix event in on {fpdate} at {fptime} <a:max_nice:1117178831120371824> \n T-minus {TimeDelta} until the next event!"")    
+            await interaction.response.send_message(f"The next F1 Grand Prix event in on {fpdate} at {fptime} <a:max_nice:1117178831120371824> \n T-minus {TimeDelta} until the next event!")    
 
         elif ("Qualifying" in Event) or ("Sprint" in Event):
             date, time = find_next_of_type("Qualifying", None)
