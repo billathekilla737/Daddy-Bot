@@ -332,7 +332,7 @@ def IsRaceTime():
     #print(f'Days: {days}, Hours: {hours}, Minutes: {minutes}, Seconds: {seconds}, Microseconds: {microseconds}')
 
     if days == 0 and hours == 0 and minutes <= 30:
-        print(f"It's Event time count down is Days: {days}, Hours: {hours}, Minutes: {minutes}, Seconds: {seconds}, Microseconds: {microseconds}")
+        #print(f"It's Event time count down is Days: {days}, Hours: {hours}, Minutes: {minutes}, Seconds: {seconds}, Microseconds: {microseconds}")
         return True
     else:
         return False

@@ -60,6 +60,9 @@ def find_Next_Major():
     EndDate = list(Meleejson.values())[0]["End Date"]
 
 
+
+   
+
     #Get the current month
     chi_tz = pytz.timezone('America/Chicago')
     correctednow = datetime.datetime.now(chi_tz)
@@ -75,13 +78,11 @@ def find_Next_Major():
     
 
     #Will only work "One time deep". Could be made into a loop.
-    if NextMonth[0] == current_sys_month and int(current_sys_day) >= int(StartDate):
+    if NextMonth[0] == current_sys_month and int(current_sys_day) > int(EndDate):
         NextMonth = list(Meleejson.values())[1]["Month"]
         StartDate = list(Meleejson.values())[1]["Start Date"]
         EndDate = list(Meleejson.values())[1]["End Date"]
         NextMajor = list(Meleejson.keys())[1]
-
-     
     return NextMajor, NextMonth, StartDate, EndDate
 
 def isMeleeTime():
@@ -101,7 +102,8 @@ def isMeleeTime():
     current_sys_month = current_sys_month.replace(" ", "")
     current_sys_day = current_sys_day.replace(" ", "")
 
-
+    #print(f"Current Month: {current_sys_month} Current Day: {current_sys_day} Next Major Month: {Month} Next Major Start Date: {StartDate} Next Major End Date: {EndDate}")
+    
     #If the current month is the same as the month of the next major
     if current_sys_month == Month:
         #If the current day is greater than or equal to the start date

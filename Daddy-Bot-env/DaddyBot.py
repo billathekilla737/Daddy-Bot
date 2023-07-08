@@ -225,9 +225,3 @@ run_discord_bot()                                                               
                                                                                                 #
                                                                                                 #
 #################################################################################################
-
-# Event, TimeDelta = find_closest_event(False)
-# print(IsRaceTime())
-
-# if "Qualifying" in Event or "Sprint" in Event:
-#     print("Qualifying or Sprint")
