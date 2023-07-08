@@ -84,9 +84,10 @@ def run_discord_bot():
                 elif ("Grand Prix Grand Prix" in Event):
                     GrandPrix = discord.utils.get(client.guilds[0].roles, name="Grand Prix")
                     #Message = f"{role.mention} {Event} is in {TimeDelta}!"
-                    Event = Event[:-10]
-                    await channel.send(f"{GrandPrix.mention} {Event} is in {TimeDelta}! <:LewisDab:844441514557440040>")
                     PrevEvent = Event
+                    Event = Event[:-10]
+                    await channel.send(f"{GrandPrix.mention} {Event} is in {TimeDelta}! <a:max_nice:1117178831120371824>")
+                    
 
             #Melee Reminder
             #################################################################
@@ -126,7 +127,7 @@ def run_discord_bot():
             #Deactivated for now
             #NextEvent, TimeDelta = find_closest_event(None)
             #await message.channel.send(f"{NextEvent} is in {TimeDelta}!")
-            await message.channel.send("<:FlatFuck:1117199409478914128>")
+            await message.channel.send(" is in timeeeeee! <:LewisDab:844441514557440040>")
     
 
 
@@ -161,7 +162,39 @@ def run_discord_bot():
     @tree.command(name = "grandprix", description = "Tells you the next F1 Grand Prix event")
     async def grandprix(interaction: discord.Interaction):
         date, time = find_next_of_type("Grand Prix",None)
-        await interaction.response.send_message(f"The next F1 Grand Prix event is on {date} at {time} <:LewisDab:844441514557440040>")
+        await interaction.response.send_message(f"The next F1 Grand Prix event is on {date} at {time} <a:max_nice:1117178831120371824>")
+
+
+    @tree.command(name = "nextevent", description = "Tells you the next F1 Event")
+    async def nextevent(interaction: discord.Interaction):
+        Event, TimeDelta = find_closest_event(False)
+        fpdate, fptime = None, None
+        
+        if "Free Practice" in Event:
+            date, time = find_next_of_type("Free Practice", "1")
+            if date:
+                fpdate, fptime = date, time
+            else:
+                date, time = find_next_of_type("Free Practice", "2")
+                if date:
+                    fpdate, fptime = date, time
+                else:
+                    date, time = find_next_of_type("Free Practice", "3")
+                    if date:
+                        fpdate, fptime = date, time
+            await interaction.response.send_message(f"The next F1 event is {Event} on {fpdate} at {fptime} <a:max_nice:1117178831120371824> \n T-minus {TimeDelta} until the next event!")    
+
+        elif "Qualifying" in Event or "Sprint" in Event:
+            date, time = find_next_of_type("Qualifying", None)
+            await interaction.response.send_message(f"The next F1 event is {Event} on {date} at {time} <a:max_nice:1117178831120371824> \n T-minus {TimeDelta} until the next event!")
+        
+        elif "Grand Prix" in Event:
+            date, time = find_next_of_type("Grand Prix", None)
+            await interaction.response.send_message(f"The next F1 event is {Event} on {date} at {time} <a:max_nice:1117178831120371824> \n T-minus {TimeDelta} until the next event!")
+        
+        else:
+            await interaction.response.send_message(f"The next F1 event is the {Event} in {TimeDelta} <a:max_nice:1117178831120371824>")
+    
 
     @tree.command(name = "week", description = "Tells you the next F1 events for the week")
     async def week(interaction: discord.Interaction):
