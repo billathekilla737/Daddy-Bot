@@ -95,6 +95,8 @@ def isMeleeTime():
     correctednow = datetime.now(chi_tz)
     current_sys_month = correctednow.strftime("%m")
     current_sys_day = correctednow.strftime("%d")
+    current_sys_hour = correctednow.strftime("%H")
+    current_sys_minute = correctednow.strftime("%M")
     #if current month has a 0 in front, remove it 
     if current_sys_month[0] == "0":
         current_sys_month = current_sys_month[1:]
@@ -103,14 +105,16 @@ def isMeleeTime():
     current_sys_day = current_sys_day.replace(" ", "")
 
     #print(f"Current Month: {current_sys_month} Current Day: {current_sys_day} Next Major Month: {Month} Next Major Start Date: {StartDate} Next Major End Date: {EndDate}")
-    
+    print(f"Current System  Hour: {current_sys_hour} Current System Minute: {current_sys_minute}")
     #If the current month is the same as the month of the next major
     if current_sys_month == Month:
         #If the current day is greater than or equal to the start date
         if int(current_sys_day) >= int(StartDate):
             #If the current day is less than or equal to the end date
             if int(current_sys_day) <= int(EndDate):
-                return True
+                #If the current hour is greater than or equal to 9 and the current minute is greater than or equal to 30
+                if int(current_sys_hour) >= 9:
+                    return True
     return False
 
     
