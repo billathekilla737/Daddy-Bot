@@ -40,12 +40,20 @@ def run_discord_bot():
         channel = client.get_channel(907764974099787797)
         #meleechannel = client.get_channel(1117158502989844600)
         meleechannel = client.get_channel(1117158502989844600)
+        devchannel = client.get_channel(1115817757267730533)
         sent = False
         try:
             synced = await tree.sync()
             print(f"Synced {len(synced)} commands")
         except Exception as e:
             print(e)
+        #Send Startup Message to Dev Channel
+        #####################################################################
+
+        await devchannel.send("I'm back online! <:LewisDab:844441514557440040>")
+        
+        
+
 
         #   RECURRING TASKS (5 sec Loop)
         #####################################################################
