@@ -29,7 +29,12 @@ def Scrap_Melee():
     Dates = [date.replace(" ", "") for date in Dates]
     Dates = [date.split("-") for date in Dates]
     StartDate = [date[0] for date in Dates]
-    EndDate = [date[1] for date in Dates]
+    EndDate = []
+    for date in Dates:
+        if len(date) >= 2:
+            EndDate.append(date[1])
+        else:
+            EndDate.append("N/A")
 
     for i in range(len(Names)):
         #Give each name a key
@@ -37,8 +42,13 @@ def Scrap_Melee():
         #Give each key a value
         Meleejson[Names[i]]["Month"] = Months[i]
         Meleejson[Names[i]]["Start Date"] = StartDate[i]
-        Meleejson[Names[i]]["End Date"] = EndDate[i]
-        
+        try:
+            Meleejson[Names[i]]["End Date"] = EndDate[i]
+        except IndexError:
+            print(f"No end date found for {Names[i]}")
+            EndDate.append("N/A")
+            Meleejson[Names[i]]["End Date"] = "N/A"
+    
     
     #Write the json file
     with open('Daddy-Bot-env/Assets/Melee.json', 'w') as json_file:
@@ -104,8 +114,6 @@ def isMeleeTime():
     current_sys_month = current_sys_month.replace(" ", "")
     current_sys_day = current_sys_day.replace(" ", "")
 
-    #print(f"Current Month: {current_sys_month} Current Day: {current_sys_day} Next Major Month: {Month} Next Major Start Date: {StartDate} Next Major End Date: {EndDate}")
-    print(f"Current System  Hour: {current_sys_hour} Current System Minute: {current_sys_minute}")
     #If the current month is the same as the month of the next major
     if current_sys_month == Month:
         #If the current day is greater than or equal to the start date

@@ -47,12 +47,6 @@ def run_discord_bot():
         except Exception as e:
             print(e)
 
-        #Reaction Role Setup
-        #####################################################################
-        # reactText = ("React to this message to get the Melee role!")
-        # Moji = await meleechannel.send(reactText)
-        # await Moji.add_reaction('🥊')
-
         #   RECURRING TASKS (5 sec Loop)
         #####################################################################
         while True:
@@ -207,7 +201,7 @@ def run_discord_bot():
         Next_Location = str(find_json_Next_Event_Location())
         Next_Location = Next_Location[:-4]
         if QualifyingDate and QualifyingTime != None:
-            await interaction.response.send_message('The next F1 Event is the' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nQualifying on {QualifyingDate} at {QualifyingTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
+            await interaction.response.send_message('The next F1 Event is the ' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nQualifying on {QualifyingDate} at {QualifyingTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
         else:
             await interaction.response.send_message('The next F1 Event is the ' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nSprint on {SprintDate} at {SprintTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
     
