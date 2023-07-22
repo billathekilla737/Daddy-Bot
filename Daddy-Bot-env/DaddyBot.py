@@ -3,6 +3,8 @@ from Assets.Melee_Functions import *
 from discord import app_commands # type: ignore
 from discord.ext import commands # type: ignore
 from Assets.FlatFuckFriday import *
+import datetime
+import pytz
 
 
 ###############Bot Description#####################
@@ -47,12 +49,14 @@ def run_discord_bot():
             print(f"Synced {len(synced)} commands")
         except Exception as e:
             print(e)
-        #Send Startup Message to Dev Channel
-        #####################################################################
 
-        await devchannel.send("I'm back online! <:LewisDab:844441514557440040>")
-        
-        
+        #Send Startup Message to Dev Channel if the system time is not between 4-5a.m. chicago time
+        #####################################################################
+        chi_tz = pytz.timezone('America/Chicago')
+        correctednow = datetime.datetime.now(chi_tz)
+        if correctednow.hour < 4 or correctednow.hour > 5:
+            await devchannel.send("I had an unscheduled restart!!!")
+
 
 
         #   RECURRING TASKS (5 sec Loop)
