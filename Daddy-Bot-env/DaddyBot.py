@@ -101,7 +101,7 @@ def run_discord_bot():
             if shouldSendMeleeReminder and PrevMeleeEvent != MeleeEvent:
                 MeleeRole = discord.utils.get(client.guilds[0].roles, name="Melee")
                 #Message = f"{role.mention} {Event} is in {TimeDelta}!"
-                await meleechannel.send(f"{MeleeRole.mention} {MeleeEvent} is tomorrow!")
+                await meleechannel.send(f"{MeleeRole.mention} {MeleeEvent} is Today!")
                 PrevMeleeEvent = MeleeEvent
                         #Flat Fuck Friday Reminder
             ################################################################
