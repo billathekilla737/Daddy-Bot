@@ -164,6 +164,8 @@ def run_discord_bot():
         date, time = find_next_of_type("Sprint",None)
         if date and time != None:
             await interaction.response.send_message(f"The next F1 **Sprint** event is on **{date} at {time}** <:f1_logo:1132150006988673034>")
+        else:
+            await interaction.response.send_message(f"There is **NO Sprint** this week. <:f1_logo:1132150006988673034>")
         # else:
         #     date, time = find_next_of_type("Qualifying",None)
         #     await interaction.response.send_message(f"There is NO sprint, QUALIFYING is on {date} at {time} <:f1_logo:1132150006988673034>")
@@ -173,8 +175,11 @@ def run_discord_bot():
     @tree.command(name = "sprintshootout", description = "Tells you the next F1 sprint shootout event")
     async def sprintshootout(interaction: discord.Interaction):
         date, time = find_next_of_type("Sprint Shootout",None)
-        await interaction.response.send_message(f"The next F1 **Sprint Shootout** event is on **{date} at {time}** <:f1_logo:1132150006988673034>")
-
+        if date and time != None:
+            await interaction.response.send_message(f"The next F1 **Sprint Shootout** event is on **{date} at {time}** <:f1_logo:1132150006988673034>")
+        else:
+            await interaction.response.send_message(f"There is **NO Sprint Shootout** this week. <:f1_logo:1132150006988673034>")
+    
     @tree.command(name = "grandprix", description = "Tells you the next F1 Grand Prix event")
     async def grandprix(interaction: discord.Interaction):
         date, time = find_next_of_type("Grand Prix",None)
@@ -231,13 +236,21 @@ def run_discord_bot():
         FreePractice3Date, FreePractice3Time = find_next_of_type("Free Practice", "3")
         QualifyingDate, QualifyingTime = find_next_of_type("Qualifying", None)
         SprintDate, SprintTime = find_next_of_type("Sprint", None)
+        SprintShootoutDate, SprintShootoutTime = find_next_of_type("Sprint Shootout", None)
         GrandPrixDate, GrandPrixTime = find_next_of_type("Grand Prix", None)
         Next_Location = str(find_json_Next_Event_Location())
         Next_Location = Next_Location[:-4]
-        if QualifyingDate and QualifyingTime != None:
+        
+        if SprintDate == None:
             await interaction.response.send_message('The next F1 Event is the ' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nQualifying on {QualifyingDate} at {QualifyingTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
         else:
-            await interaction.response.send_message('The next F1 Event is the ' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nSprint on {SprintDate} at {SprintTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
+            await interaction.response.send_message('The next F1 Event is the ' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nQualifying on {QualifyingDate} at {QualifyingTime} \nSprint Shootout on {SprintShootoutDate} at {SprintShootoutTime} \nSprint on {SprintDate} at {SprintTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
+
+
+        # if QualifyingDate and QualifyingTime != None:
+        #     await interaction.response.send_message('The next F1 Event is the ' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nQualifying on {QualifyingDate} at {QualifyingTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
+        # else:
+        #     await interaction.response.send_message('The next F1 Event is the ' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nSprint on {SprintDate} at {SprintTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
     
     @tree.command(name = "nextmeleemajor", description = "Tells you the next Melee Major Event is")
     async def meleemajor(interaction: discord.Interaction):
