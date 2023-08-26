@@ -121,7 +121,10 @@ def month_to_number(month):
         'Nov': 11,
         'Dec': 12
     }
-    return month_abbr[month]
+    if month in month_abbr:
+        return month_abbr[month]
+    else:
+        return "Err: Invalid month abbreviation"
 
 def Grab_Files():
     try:

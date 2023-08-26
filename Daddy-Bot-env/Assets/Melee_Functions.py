@@ -28,8 +28,8 @@ def Scrap_Melee():
     Dates = [re.sub(r'[a-zA-Z]', r'', date) for date in Dates]
     Dates = [date.replace(" ", "") for date in Dates]
     Dates = [date.split("-") for date in Dates]
-    StartDate = [date[0] for date in Dates]
-    EndDate = [date[1] for date in Dates]
+    StartDate = [date[0] if len(date) > 0 else "Unknown" for date in Dates]
+    EndDate = [date[1] if len(date) > 1 else "Unknown" for date in Dates]
 
     for i in range(len(Names)):
         #Give each name a key
@@ -103,9 +103,7 @@ def isMeleeTime():
         #remove and spaces
     current_sys_month = current_sys_month.replace(" ", "")
     current_sys_day = current_sys_day.replace(" ", "")
-
     #print(f"Current Month: {current_sys_month} Current Day: {current_sys_day} Next Major Month: {Month} Next Major Start Date: {StartDate} Next Major End Date: {EndDate}")
-    print(f"Current System  Hour: {current_sys_hour} Current System Minute: {current_sys_minute}")
     #If the current month is the same as the month of the next major
     if current_sys_month == Month:
         #If the current day is greater than or equal to the start date

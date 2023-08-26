@@ -46,13 +46,7 @@ def run_discord_bot():
             print(f"Synced {len(synced)} commands")
         except Exception as e:
             print(e)
-
-        #Reaction Role Setup
-        #####################################################################
-        # reactText = ("React to this message to get the Melee role!")
-        # Moji = await meleechannel.send(reactText)
-        # await Moji.add_reaction('🥊')
-
+        print("RUNNING!")
         #   RECURRING TASKS (5 sec Loop)
         #####################################################################
         while True:
@@ -108,6 +102,7 @@ def run_discord_bot():
                 sent = True
                 asyncio.create_task(reset_sent())
             await asyncio.sleep(45)
+
         
 
     @client.event
