@@ -77,7 +77,14 @@ def find_next_of_type(event_type, practiceNum):
             date = data[event_key][Next_Location + " Qualifying"]["date"]
         except:
             return None, None
-    elif "Sprint" in event_type:
+    elif "Sprint Shootout" == event_type:
+        try:
+            
+            time = data[event_key][Next_Location +" Sprint Shootout"]["time"]
+            date = data[event_key][Next_Location +" Sprint Shootout"]["date"]
+        except:
+            return None, None
+    elif "Sprint" == event_type:
         try:
             time = data[event_key][Next_Location +" Sprint"]["time"]
             date = data[event_key][Next_Location +" Sprint"]["date"]

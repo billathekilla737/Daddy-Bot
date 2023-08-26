@@ -13,7 +13,7 @@ import pytz
 
 def run_discord_bot():
     ###########Initialize Bot####################################
-    scrape_race_info()                                          #
+    #scrape_race_info()                                          #
     token, URL = Parse_Private()                                #
     Scrap_Names()                                               #
     Scrap_Melee()                                               #
@@ -56,6 +56,7 @@ def run_discord_bot():
         correctednow = datetime.datetime.now(chi_tz)
         if correctednow.hour < 4 or correctednow.hour > 5:
             await devchannel.send("I had an unscheduled restart!!!")
+            pass
 
 
 
@@ -76,14 +77,14 @@ def run_discord_bot():
                 if ("Free Practice" in Event):
                     FreePracticeRole = discord.utils.get(client.guilds[0].roles, name="Free Practice")
                     #Message = f"{role.mention} {Event} is in {TimeDelta}!"
-                    await channel.send(f"{FreePracticeRole.mention} {Event} is in {TimeDelta}!")
+                    await channel.send(f"{FreePracticeRole.mention} **{Event}** is in **{TimeDelta}!**")
                     PrevEvent = Event
 
                 #Ping if the User has the Qualifying role
                 elif "Qualifying" in Event or "Sprint" in Event:
                     QualifyingRole = discord.utils.get(client.guilds[0].roles, name="Qualifying")
                     #Message = f"{role.mention} {Event} is in {TimeDelta}!"
-                    await channel.send(f"{QualifyingRole.mention} {Event} is in {TimeDelta}!")
+                    await channel.send(f"{QualifyingRole.mention} **{Event}** is in **{TimeDelta}!**")
                     PrevEvent = Event
                     
                 #Ping if the User has the Grand Prix role
@@ -92,7 +93,7 @@ def run_discord_bot():
                     #Message = f"{role.mention} {Event} is in {TimeDelta}!"
                     PrevEvent = Event
                     Event = Event[:-10]
-                    await channel.send(f"{GrandPrix.mention} {Event} is in {TimeDelta}! <a:max_nice:1117178831120371824>")
+                    await channel.send(f"{GrandPrix.mention} **{Event}** is in **{TimeDelta}!** <a:max_nice:1117178831120371824>")
                     
 
             #Melee Reminder
@@ -103,7 +104,7 @@ def run_discord_bot():
                 #Message = f"{role.mention} {Event} is in {TimeDelta}!"
                 await meleechannel.send(f"{MeleeRole.mention} {MeleeEvent} is Today!")
                 PrevMeleeEvent = MeleeEvent
-                        #Flat Fuck Friday Reminder
+            #Flat Fuck Friday Reminder
             ################################################################
             if isFlatFuckFriday() and sent != True:
                 #IT'S FLAT FUCK FRIDAY! :FlatFuck:
@@ -124,26 +125,28 @@ def run_discord_bot():
         #Provide the user with a role
         await member.add_roles(discord.utils.get(member.guild.roles, name=roleList[2]))
 
-    @client.event
-    async def on_message(message):
-        if message.author == client.user:
-            return
-        if message.content.startswith('$test'):
-            pass
-            #Deactivated for now
-            #NextEvent, TimeDelta = find_closest_event(None)
-            #await message.channel.send(f"{NextEvent} is in {TimeDelta}!")
-            await message.channel.send(" is in timeeeeee! <:LewisDab:1132146326017167481>")
+    # @client.event
+    # async def on_message(message):
+    #     if message.author == client.user:
+    #         return
+    #     if message.content.startswith('$test'):
+    #         pass
+    #         #Deactivated for now
+    #         #NextEvent, TimeDelta = find_closest_event(None)
+    #         #await message.channel.send(f"{NextEvent} is in {TimeDelta}!")
+    #         await message.channel.send(" is in timeeeeee! <:LewisDab:1132146326017167481>")
     
 
 
     #Slash Commands
     ##############################################################################################################################################
+    #TODO Add locations to f1 commands
+    
     @tree.command(name="freepractice", description="Tells you the next F1 free practice event <:f1_logo:1132150006988673034>")
     async def freepractice(interaction: discord.Interaction, practice_number: str):
         date, time = find_next_of_type("Free Practice", practice_number)
         if date and time != None:
-            await interaction.response.send_message("The next F1 free practice " + practice_number + f" event is on {date} at {time}")
+            await interaction.response.send_message("The next F1 **Free Practice** " + practice_number + f" event is on **{date} at {time}**")
         else:
             await interaction.response.send_message(f"Free Practice, Not Found")
 
@@ -151,26 +154,36 @@ def run_discord_bot():
     async def qualifying(interaction: discord.Interaction):
         date, time = find_next_of_type("Qualifying", None)
         if date and time != None:
-            await interaction.response.send_message(f"The next F1 qualifying event is on {date} at {time} <:f1_logo:1132150006988673034>")
-        else:
-            date, time = find_next_of_type("Sprint",None)
-            await interaction.response.send_message(f"There is NO qualifying, SPRINT is on {date} at {time} <:f1_logo:1132150006988673034>")
+            await interaction.response.send_message(f"The next F1 **Qualifying** event is on **{date} at {time}** <:f1_logo:1132150006988673034>")
+        # else:
+        #     date, time = find_next_of_type("Sprint",None)
+        #     await interaction.response.send_message(f"There is NO qualifying, SPRINT is on {date} at {time} <:f1_logo:1132150006988673034>")
 
     @tree.command(name = "sprint", description = "Tells you the next F1 sprint event")
     async def sprint(interaction: discord.Interaction):
         date, time = find_next_of_type("Sprint",None)
         if date and time != None:
-            await interaction.response.send_message(f"The next F1 sprint event is on {date} at {time} <:f1_logo:1132150006988673034>")
-        else:
-            date, time = find_next_of_type("Qualifying",None)
-            await interaction.response.send_message(f"There is NO sprint, QUALIFYING is on {date} at {time} <:f1_logo:1132150006988673034>")
+            await interaction.response.send_message(f"The next F1 **Sprint** event is on **{date} at {time}** <:f1_logo:1132150006988673034>")
+        # else:
+        #     date, time = find_next_of_type("Qualifying",None)
+        #     await interaction.response.send_message(f"There is NO sprint, QUALIFYING is on {date} at {time} <:f1_logo:1132150006988673034>")
+
+    #TODO Add Sprint Shootout Command
+    #TODO#TODO#TODO#TODO#TODO#TODO#TODO#TODO#TODO#TODO
+    @tree.command(name = "sprintshootout", description = "Tells you the next F1 sprint shootout event")
+    async def sprintshootout(interaction: discord.Interaction):
+        date, time = find_next_of_type("Sprint Shootout",None)
+        await interaction.response.send_message(f"The next F1 **Sprint Shootout** event is on **{date} at {time}** <:f1_logo:1132150006988673034>")
 
     @tree.command(name = "grandprix", description = "Tells you the next F1 Grand Prix event")
     async def grandprix(interaction: discord.Interaction):
         date, time = find_next_of_type("Grand Prix",None)
-        await interaction.response.send_message(f"The next <:f1_logo:1132150006988673034> Grand Prix event is on {date} at {time} <a:max_nice:1117178831120371824>")
+        await interaction.response.send_message(f"The next <:f1_logo:1132150006988673034> **Grand Prix** event is on **{date} at {time}** <a:max_nice:1117178831120371824>")
 
 
+
+    #Redundant Code needs to be cleaned up
+    ##############################################################################################################################################
     @tree.command(name = "nextevent", description = "Tells you the next F1 Event <:f1_logo:1132150006988673034>")
     async def nextevent(interaction: discord.Interaction):
         Event, TimeDelta = find_closest_event(False)
@@ -188,19 +201,28 @@ def run_discord_bot():
                     date, time = find_next_of_type("Free Practice", "3")
                     if date:
                         fpdate, fptime = date, time
-            await interaction.response.send_message(f"The next F1 event is {Event} on {fpdate} at {fptime} <a:max_nice:1117178831120371824> \n T-minus {TimeDelta} until the next event!")    
+            await interaction.response.send_message(f"The next F1 event is **{Event} on {fpdate} at {fptime}** <a:max_nice:1117178831120371824> \n T-minus {TimeDelta} until the next event!")    
 
-        elif "Qualifying" in Event or "Sprint" in Event:
+        elif "Qualifying" in Event:
             date, time = find_next_of_type("Qualifying", None)
-            await interaction.response.send_message(f"The next F1 event is {Event} on {date} at {time} <a:max_nice:1117178831120371824> \n T-minus {TimeDelta} until the next event!")
+            await interaction.response.send_message(f"The next F1 event is **{Event} on {date} at {time}** <a:max_nice:1117178831120371824> \n T-minus {TimeDelta} until the next event!")
         
+
+        if "Sprint" in Event and "Sprint Shootout" not in Event:
+            # Handle Sprint event
+            date, time = find_next_of_type("Sprint", None)
+            await interaction.response.send_message(f"The next F1 event is **{Event} on {date} at {time}** <a:max_nice:1117178831120371824> \n T-minus {TimeDelta} until the next event!")
+        elif "Sprint Shootout" in Event:
+            # Handle Sprint Shootout event
+            date, time = find_next_of_type("Sprint Shootout", None)
+            await interaction.response.send_message(f"The next F1 event is **{Event} on {date} at {time}** <a:max_nice:1117178831120371824> \n T-minus {TimeDelta} until the next event!")
         elif "Grand Prix" in Event:
             date, time = find_next_of_type("Grand Prix", None)
-            await interaction.response.send_message(f"The next F1 event is {Event} on {date} at {time} <a:max_nice:1117178831120371824> \n T-minus {TimeDelta} until the next event!")
+            await interaction.response.send_message(f"The next F1 event is **{Event} on {date} at {time}** <a:max_nice:1117178831120371824> \n T-minus {TimeDelta} until the next event!")
         
         else:
-            await interaction.response.send_message(f"The next F1 event is the {Event} in {TimeDelta} <a:max_nice:1117178831120371824>")
-    
+            await interaction.response.send_message(f"The next F1 event is the **{Event} in {TimeDelta}** <a:max_nice:1117178831120371824>")
+    ##############################################################################################################################################
 
     @tree.command(name = "week", description = "Tells you the next F1 events for the week <:f1_logo:1132150006988673034>")
     async def week(interaction: discord.Interaction):
