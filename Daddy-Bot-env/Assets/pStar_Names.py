@@ -21,6 +21,5 @@ def Scrap_Names():
 
     print("Scraping Complete. Writing to file.")
     for i in range(len(Names)):
-        print(Names[i].text)
         nameFile.write(Names[i].text)
     nameFile.close()
