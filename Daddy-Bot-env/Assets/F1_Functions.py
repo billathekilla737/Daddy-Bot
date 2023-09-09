@@ -152,39 +152,6 @@ def Grab_Files():
 
     return nameList, roleList
 
-def Scrap_Names():
-    #If "Assets\Names.txt" does not exist, create it.
-    try:
-        nameFile = open("Daddy-Bot-env/Assets/Names.txt", "r")
-        nameFile.close()
-    except:
-        print("Scraping Names. This will take a few seconds.")
-        import requests
-        import time
-        from bs4 import BeautifulSoup
-        nameFile = open("Daddy-Bot-env/Assets/Names.txt", "w")
-        URL = 'https://www.pornhub.com/pornstars?gender=male&age=18-30'
-        page = requests.get(URL)
-        soup = BeautifulSoup(page.content, 'html.parser')
-        Names = soup.find_all('span', class_='pornStarName performerCardName')
-
-        #TODO: Grab the names of the "Actors" from pages 2-10
-        pagenum = 2
-        while pagenum != 10:
-            #Add a delay to be considerate to site
-            time.sleep(.2)
-            url = f"https://www.pornhub.com/pornstars?gender=male&age=18-30&page={pagenum}"
-            pagenum = pagenum + 1
-            reponse = requests.get(url)
-            soup = BeautifulSoup(page.content, 'html.parser')
-            Names = Names + soup.find_all('span', class_='pornStarName performerCardName')
-
-        #Write the names to the file
-        nameFile = open("Daddy-Bot-env/Assets/Names.txt", "w")
-        for i in range(len(Names)):
-            nameFile.write(Names[i].text)
-        nameFile.close()
-
 def Parse_Private():
     tokenFile = open("Daddy-Bot-env/Assets/Private.txt", "r")
     token = tokenFile.read()
@@ -290,30 +257,6 @@ def scrape_race_info():
     with open('Daddy-Bot-env/Assets/F1Information.json', 'w') as f1Info:
         json.dump(races, f1Info)
 
-# def IsRaceTime():
-#     from datetime import datetime
-#     #Checks if the Event is less than 30 minutes away
-#     closest_delta = find_closest_event(True)
-#     try:
-#         pattern = r'(\d+) days, (\d+):(\d+):'
-#         match = re.search(pattern, closest_delta)
-        
-#         #if days exist set to match.group1 else set to None
-#         days = int(match.group(1))
-#         hours = int(match.group(2))
-#         minutes = int(match.group(3))
-#     except:
-#         pattern = r'(\d+):(\d+):'
-#         match = re.search(pattern, closest_delta)
-#         hours = int(match.group(1))
-#         minutes = int(match.group(2))
-#         days = None
-
-#     print(days, hours, minutes)
-#     if days == None and hours == 0 and minutes <= 30:
-#         return True
-#     else:
-#         return False
     
 
 def IsRaceTime():
