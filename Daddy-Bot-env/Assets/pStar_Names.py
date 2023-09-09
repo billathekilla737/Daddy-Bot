@@ -1,6 +1,6 @@
 def Scrap_Names():
     #If "Assets\Names.txt" does not exist, create it.
-    nameFile = open("Daddy-Bot-env/Assets/Names.txt", "r")
+    nameFile = open("Daddy-Bot-env/Assets/Names.txt", "w")
     print("Scraping Names. This will take a few seconds.")
     import requests
     import time
