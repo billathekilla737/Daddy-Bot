@@ -120,6 +120,42 @@ def isMeleeTime():
                     return True
     return False
 
+
+
+#Can be used in the futre if melee majors are ever posted with their start time to give a 30m Warning.
+# def isMeleeTime():
+#     # Find the timedelta from now sys time to closed event time starting day. If less than 30 minutes, return true
+#     from datetime import datetime, timedelta
+#     import time
+#     MajorName, Month, StartDate, EndDate = find_Next_Major()
+#     # Use Datetime to get the current month
+#     chi_tz = pytz.timezone('America/Chicago')
+#     correctednow = datetime.now(chi_tz)
+#     current_sys_month = correctednow.strftime("%m")
+#     current_sys_day = correctednow.strftime("%d")
+#     current_sys_hour = correctednow.strftime("%H")
+#     current_sys_minute = correctednow.strftime("%M")
+#     # if current month has a 0 in front, remove it
+#     if current_sys_month[0] == "0":
+#         current_sys_month = current_sys_month[1:]
+#     # remove any spaces
+#     current_sys_month = current_sys_month.replace(" ", "")
+#     current_sys_day = current_sys_day.replace(" ", "")
+
+#     # If the current month is the same as the month of the next major
+#     if current_sys_month == Month:
+#         # If the current day is greater than or equal to the start date
+#         if int(current_sys_day) >= int(StartDate):
+#             # If the current day is less than or equal to the end date
+#             if int(current_sys_day) <= int(EndDate):
+#                 # Calculate the timedelta from now to the start of the event
+#                 event_start = datetime.strptime(f"{Month}/{StartDate}/{correctednow.year} 09:00", "%m/%d/%Y %H:%M")
+#                 event_start = chi_tz.localize(event_start)
+#                 time_to_event = event_start - correctednow
+#                 # If the timedelta is less than 30 minutes, return True
+#                 if time_to_event <= timedelta(minutes=30):
+#                     return True
+#     return False
     
 
 #Super Jank to add these back in retoactively

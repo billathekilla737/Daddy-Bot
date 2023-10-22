@@ -164,7 +164,7 @@ def run_discord_bot():
         #     await interaction.response.send_message(f"There is NO sprint, QUALIFYING is on {date} at {time} <:f1_logo:1132150006988673034>")
 
     #TODO Add Sprint Shootout Command
-    #TODO#TODO#TODO#TODO#TODO#TODO#TODO#TODO#TODO#TODO
+    #TODO Will not grab the next event from upcoming week if it has already happended.
     @tree.command(name = "sprintshootout", description = "Tells you the next F1 sprint shootout event")
     async def sprintshootout(interaction: discord.Interaction):
         date, time = find_next_of_type("Sprint Shootout",None)
@@ -178,7 +178,28 @@ def run_discord_bot():
         date, time = find_next_of_type("Grand Prix",None)
         await interaction.response.send_message(f"The next <:f1_logo:1132150006988673034> **Grand Prix** event is on **{date} at {time}** <a:max_nice:1117178831120371824>")
 
+    @tree.command(name="help", description="Tells you the commands for the bot")
+    async def help(interaction: discord.Interaction):
+        # Define the table headers
+        headers = ["Command", "Description"]
 
+        # Define the table rows
+        rows = [
+            ["/week", "Tells you the next F1 events for the week"],
+            ["/nextevent", "Tells you the next F1 Event"],
+            ["/freepractice [Number]", "Tells you the next F1 free practice event"],
+            ["/qualifying", "Tells you the next F1 qualifying event"],
+            ["/sprintshootout", "Tells you the next F1 sprint shootout event"],
+            ["/sprint", "Tells you the next F1 sprint event"],
+            ["/grandprix", "Tells you the next F1 Grand Prix event"],
+            ["/help", "Tells you the commands for the bot"]
+        ]
+
+        # Create the table
+        table = tabulate(rows, headers=headers, tablefmt="pipe")
+
+        # Send the table as a message
+        await interaction.response.send_message(f"Here are the available commands:\n\n```{table}```")
 
     #Redundant Code needs to be cleaned up
     ##############################################################################################################################################
@@ -234,22 +255,31 @@ def run_discord_bot():
         Next_Location                           = str(find_json_Next_Event_Location())
         Next_Location                           = Next_Location[:-4]
 
-        # if SprintDate == None:
-        #     await interaction.response.send_message('The next F1 Event is the ' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nQualifying on {QualifyingDate} at {QualifyingTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
-        # else:
-        #     await interaction.response.send_message('The next F1 Event is the ' + Next_Location + f' dates and times are: \n\nFree Practice 1 on {FreePractice1Date} at {FreePractice1Time} \nFree Practice 2 on {FreePractice2Date} at {FreePractice2Time} \nFree Practice 3 on {FreePractice3Date} at {FreePractice3Time} \nQualifying on {QualifyingDate} at {QualifyingTime} \nSprint Shootout on {SprintShootoutDate} at {SprintShootoutTime} \nSprint on {SprintDate} at {SprintTime} \nGrand Prix on {GrandPrixDate} at {GrandPrixTime}')
-
-
+        print(FreePractice2Time)
         headers = ["Location", "Event", "Date", "Time"]
-        rows = [
-            [Next_Location, "Free Practice 1", FreePractice1Date, FreePractice1Time],
-            [Next_Location, "Free Practice 2", FreePractice2Date, FreePractice2Time],
-            [Next_Location, "Free Practice 3", FreePractice3Date, FreePractice3Time],
-            [Next_Location, "Qualifying", QualifyingDate, QualifyingTime],
-            [Next_Location, "Sprint", SprintDate, SprintTime] if SprintDate else None,
-            [Next_Location, "Sprint Shootout", SprintShootoutDate, SprintShootoutTime] if SprintShootoutDate else None,
-            [Next_Location, "Grand Prix", GrandPrixDate, GrandPrixTime]
-        ]
+        #If it is not a sprint shootout weekend
+        if FreePractice2Time == None:
+            rows = [
+                [Next_Location, "Free Practice 1", FreePractice1Date, FreePractice1Time],
+                [Next_Location, "Qualifying", QualifyingDate, QualifyingTime],
+                [Next_Location, "Sprint Shootout", SprintShootoutDate, SprintShootoutTime] if SprintShootoutDate else None,
+                [Next_Location, "Sprint", SprintDate, SprintTime] if SprintDate else None,
+                [Next_Location, "Grand Prix", GrandPrixDate, GrandPrixTime]
+            ]
+                
+        #If it is a sprint shootout weekend
+        elif FreePractice2Time != None:
+            rows = [
+                [Next_Location, "Free Practice 1", FreePractice1Date, FreePractice1Time],
+                [Next_Location, "Free Practice 2", FreePractice2Date, FreePractice2Time],
+                [Next_Location, "Free Practice 3", FreePractice3Date, FreePractice3Time],
+                [Next_Location, "Qualifying", QualifyingDate, QualifyingTime],
+                [Next_Location, "Sprint Shootout", SprintShootoutDate, SprintShootoutTime] if SprintShootoutDate else None,
+                [Next_Location, "Sprint", SprintDate, SprintTime] if SprintDate else None,
+                [Next_Location, "Grand Prix", GrandPrixDate, GrandPrixTime]
+            ]
+
+
         rows = [row for row in rows if row is not None]
         table = tabulate(rows, headers=headers, tablefmt="plain")
         await interaction.response.send_message(f"```{table}```")

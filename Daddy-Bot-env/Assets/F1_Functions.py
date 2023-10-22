@@ -283,7 +283,7 @@ def IsRaceTime():
         microseconds = int(match.group(4))
     
     #print(f'Days: {days}, Hours: {hours}, Minutes: {minutes}, Seconds: {seconds}, Microseconds: {microseconds}')
-
+    #If the event is less than 30 minutes away, return true
     if days == 0 and hours == 0 and minutes <= 30:
         #print(f"It's Event time count down is Days: {days}, Hours: {hours}, Minutes: {minutes}, Seconds: {seconds}, Microseconds: {microseconds}")
         return True
