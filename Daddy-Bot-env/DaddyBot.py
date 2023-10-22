@@ -281,7 +281,7 @@ def run_discord_bot():
 
 
         rows = [row for row in rows if row is not None]
-        table = tabulate(rows, headers=headers, tablefmt="plain")
+        table = tabulate(rows, headers=headers, tablefmt="pipe")
         await interaction.response.send_message(f"```{table}```")
 
 
