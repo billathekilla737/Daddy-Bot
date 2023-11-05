@@ -101,7 +101,12 @@ def run_discord_bot():
 
             #Melee Reminder
             #################################################################
-            shouldSendMeleeReminder = isMeleeTime()
+            try:
+                shouldSendMeleeReminder = isMeleeTime()
+            except Exception as e:
+                print(f"{e}  Error in isMeleeTime()")
+                shouldSendMeleeReminder = False
+            
             if shouldSendMeleeReminder and PrevMeleeEvent != MeleeEvent:
                 MeleeRole = discord.utils.get(client.guilds[0].roles, name="Melee")
                 #Message = f"{role.mention} {Event} is in {TimeDelta}!"

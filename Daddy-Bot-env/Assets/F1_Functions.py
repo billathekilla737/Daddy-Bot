@@ -259,7 +259,7 @@ def scrape_race_info():
 
     
 
-def IsRaceTime():
+def fIsRaceTime():
     from datetime import datetime
     #Checks if the Event is less than 30 minutes away
     closest_delta = find_closest_event(True)

@@ -109,15 +109,17 @@ def isMeleeTime():
     current_sys_month = current_sys_month.replace(" ", "")
     current_sys_day = current_sys_day.replace(" ", "")
 
-    #If the current month is the same as the month of the next major
+    # If the current month is the same as the month of the next major
     if current_sys_month == Month:
-        #If the current day is greater than or equal to the start date
+        # If the current day is greater than or equal to the start date
         if int(current_sys_day) >= int(StartDate):
-            #If the current day is less than or equal to the end date
-            if int(current_sys_day) <= int(EndDate):
-                #If the current hour is greater than or equal to 9 and the current minute is greater than or equal to 30
-                if int(current_sys_hour) >= 9:
-                    return True
+            # If EndDate is not 'Unknown'
+            if EndDate.isdigit():
+                # If the current day is less than or equal to the end date
+                if int(current_sys_day) <= int(EndDate):
+                    # If the current hour is greater than or equal to 9 and the current minute is greater than or equal to 30
+                    if int(current_sys_hour) >= 9:
+                        return True
     return False
 
 
