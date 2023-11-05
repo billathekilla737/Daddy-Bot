@@ -1,9 +1,9 @@
 from Assets.F1_Functions import *
 from Assets.Melee_Functions import *
 from Assets.pStar_Names import *
+from Assets.FlatFuckFriday import *
 from discord import app_commands # type: ignore
 from discord.ext import commands # type: ignore
-from Assets.FlatFuckFriday import *
 import datetime
 import pytz
 from tabulate import tabulate
