@@ -57,8 +57,8 @@ def run_discord_bot():
         #####################################################################
         chi_tz = pytz.timezone('America/Chicago')
         correctednow = datetime.datetime.now(chi_tz)
-        if correctednow.hour < 4 or correctednow.hour > 5:
-            await devchannel.send("I had an unscheduled restart!!!")
+        if correctednow.hour < 3 or correctednow.hour > 6:
+            await devchannel.send("I had an unscheduled restart!!! at " + str(correctednow))
             pass
 
 
