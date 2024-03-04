@@ -16,276 +16,196 @@ import datetime
 import asyncio
 from discord import Interaction
 import pytz
+from datetime import datetime, timedelta
+url = 'https://f1calendar.com/'
 from datetime import datetime
-
-#Every Function needed for F1 Functionality
-def find_closest_event(IsTimeCheck):
-    #with open('Daddy-Bot-env/Assets/TestRace.Json', 'r') as f:
-    with open('Daddy-Bot-env/Assets/F1Information.json', 'r') as f:
-        events = json.load(f)
-    chi_tz = pytz.timezone('America/Chicago')
-    now = datetime.now(chi_tz)
-    closest_event = None
-    closest_delta = None
-    for event_name, event_data in events.items():
-        for sub_event_name, sub_event_data in event_data.items():
-            event_time = sub_event_data['time'].strip()
-            if not event_time:
-                continue
-            event_date_str = sub_event_data['date'] + ' ' + event_time
-            event_date_str = event_date_str.replace(event_date_str.split()[1], str(month_to_number(event_date_str.split()[1])))
-            event_date_str = f'{event_date_str} {datetime.now().year}'
-            event_date = chi_tz.localize(datetime.strptime(event_date_str, '%d %m %H:%M:%S %Y'))
-            delta = event_date - now
-            if delta.total_seconds() >= 0 and (closest_delta is None or delta < closest_delta):
-                closest_event = sub_event_name
-                closest_delta = delta
-    if closest_event is None:
-        return None
-    else:
-        if IsTimeCheck == True:
-            #Race Time Check Comes Here
-            return str(closest_delta)
-        else:
-            closest_delta = str(closest_delta)
-            #Write a formated string to place the words Hours, Minutes, and Seconds in the correct place.
-            closest_delta = closest_delta.replace(':', ' Hours, ', 1)
-            closest_delta = closest_delta.replace(':', ' Minutes, ', 1)
-            closest_delta = closest_delta.replace('.', ' Seconds', 1)
-            #Write regex to cut off all text after the seconds place
-            closest_delta = re.sub(r'(\d+ Hours, \d+ Minutes, \d+ Seconds).*', r'\1', closest_delta)
-            return closest_event, closest_delta
+import requests
+from bs4 import BeautifulSoup
+import json
+convert_to_12hr = lambda time_str: datetime.strptime(time_str, '%H:%M').strftime('%I:%M %p')
 
 
-def find_next_of_type(event_type, practiceNum):
-    Next_Location = find_json_Next_Event_Location()
-    #remove the last 4 characters from the string
-    Next_Location = Next_Location[:-4]
-    with open('Daddy-Bot-env/Assets/F1Information.json') as f:
-        data = json.load(f)
-    event_key = [key for key in data if Next_Location in key][0]
-    if "Free Practice" in event_type:
-        try:
-            time = data[event_key][Next_Location +" Free Practice " + practiceNum]["time"]
-            date = data[event_key][Next_Location +" Free Practice " + practiceNum]["date"]
-        except:
-            print("Error: Invalid Practice Number")
-            return None, None
-    elif "Qualifying" in event_type:
-        try:
-            time = data[event_key][Next_Location + " Qualifying"]["time"]
-            date = data[event_key][Next_Location + " Qualifying"]["date"]
-        except:
-            return None, None
-    elif "Sprint Shootout" == event_type:
-        try:
-            
-            time = data[event_key][Next_Location +" Sprint Shootout"]["time"]
-            date = data[event_key][Next_Location +" Sprint Shootout"]["date"]
-        except:
-            return None, None
-    elif "Sprint" == event_type:
-        try:
-            time = data[event_key][Next_Location +" Sprint"]["time"]
-            date = data[event_key][Next_Location +" Sprint"]["date"]
-        except:
-            return None, None
-    elif "Grand Prix" in event_type:
-        time = data[event_key][Next_Location +" Grand Prix"]["time"]
-        date = data[event_key][Next_Location +" Grand Prix"]["date"]
-    else:
-        return None, None
-    
 
-    #Clean up the readability of the date and time
-    time = twentyfourhr_to_twelvehr(time)
-    month = date[-3:]
-    date = month + " " + date[:2]
-    return date, time
-    
-def find_json_Next_Event_Location():
-    with open('Daddy-Bot-env/Assets/F1Information.json', 'r') as f:
-        events = json.load(f)
-    for event_name, event_data in events.items():
-        if "NEXT" in event_name:
-            return event_name
-    if event_name is None:
-        print("ERROR: F1_Functions.find_json_Next_Event_Location() -> No word \"NEXT\" found in event_name")
-        return None
-
-def month_to_number(month):
-    month_abbr = {
-        'Jan': 1,
-        'Feb': 2,
-        'Mar': 3,
-        'Apr': 4,
-        'May': 5,
-        'Jun': 6,
-        'Jul': 7,
-        'Aug': 8,
-        'Sep': 9,
-        'Oct': 10,
-        'Nov': 11,
-        'Dec': 12
-    }
-    if month in month_abbr:
-        return month_abbr[month]
-    else:
-        return "Err: Invalid month abbreviation"
-
-def Grab_Files():
-    try:
-        nameFile = open("Daddy-Bot-env/Assets/Names.txt", "r")
-        names = nameFile.read()
-        nameList = names.splitlines()
-        nameFile.close()
-    except:
-        print("Error: Names.txt not found!")
-    #Grab the list of roles from the text file
-    try:
-        roleFile = open("Daddy-Bot-env/Assets/Roles.txt", "r")
-        roles = roleFile.read()
-        roleList = roles.splitlines()
-        roleFile.close()
-    except:
-        print("Error: Roles.txt not found!")
-
-    return nameList, roleList
-
-def Parse_Private():
-    tokenFile = open("Daddy-Bot-env/Assets/Private.txt", "r")
-    token = tokenFile.read()
-    tokenFile.close()
-    #Use Regex to grab the token and URL from the file '([^']*)'
-    pattern = r"'(.*?)'"
-    # Extract the values and store them in a list
-    try:
-        values = re.findall(pattern, token)
-    except:
-        print("Error: Private Information Not Found!")
-    # Print the list
-    token = values[0]
-    URL = values[1]
-
-    return token, URL 
-
-def twentyfourhr_to_twelvehr(time):
-    # Check if the time is in the expected format
-    if ':' not in time:
-        return 'Invalid time format'
-    # Split the time into hours and minutes
-    time = time.split(":")
-    # Check if the time has at least two elements
-    if len(time) < 2:
-        return 'Invalid time format'
-    hours = time[0]
-    minutes = time[1]
-    # Convert the hours and minutes to integers
-    try:
-        hours = int(hours)
-        minutes = int(minutes)
-    except ValueError:
-        return 'Invalid time format'
-    # Check if the hours and minutes are valid
-    if hours < 0 or hours > 23 or minutes < 0 or minutes > 59:
-        return 'Invalid time format'
-    # If the hours are greater than or equal to 12, subtract 12 from the hours and add PM to the end
-    if hours >= 12:
-        if hours > 12:
-            hours = hours - 12
-        hours = str(hours)
-        time = hours + ":" + str(minutes).zfill(2) + " PM"
-    # If the hours are less than 12, add AM to the end
-    else:
-        hours = str(hours)
-        time = hours + ":" + str(minutes).zfill(2) + " AM"
-    return time
-
-def correct_for_timezone(time):
-    chi_tz = pytz.timezone('America/Chicago')
-    correctedNow = datetime.now(chi_tz)
-
-
-    if not time:
-        return ''
-
-    # Split the time string into hours and minutes if it contains a colon character
-    if ':' in time:
-        hours, minutes = time.split(':')
-    else:
-        # If the time string does not contain a colon character, assume that the minutes are 00
-        hours = time
-        minutes = '00'
-
-    # Subtract 6 hours from the hours
-    corrected_hours = int(hours) - 6
-
-    # Add 24 to the corrected hours if they are less than 0
-    if corrected_hours < 0:
-        corrected_hours += 24
-
-    # Combine the corrected hours and minutes into a datetime object
-    corrected_time_obj = datetime(1900, 1, 1, corrected_hours, int(minutes))
-
-    # Convert the corrected datetime object back to a string
-    corrected_time = corrected_time_obj.strftime('%H:%M:%S')
-
-
-   
-    return corrected_time
-
-def scrape_race_info():
-    import requests
-    from bs4 import BeautifulSoup
-    import json
-    URL = 'https://f1calendar.com/'
-    page = requests.get(URL)
-    soup = BeautifulSoup(page.content, 'html.parser')
-    race_tables = soup.select('tbody[id]')
+def scrape_f1_races(url):
     races = {}
-    for race_table in race_tables:
-        race_name = race_table.select_one('td span').text
-        races[race_name] = {}
-        race_rows = race_table.find_all('tr')
-        for race_row in race_rows:
-            race_type = race_row.select_one('td:nth-of-type(2)').text.strip()
-            race_date = race_row.select_one('td:nth-of-type(3)').text.strip()
-            race_time = race_row.select_one('td:nth-of-type(4)').text.strip()
-            race_time = correct_for_timezone(race_time)
-            #if "Grand Prix Grand Prix" not in race_type:
-            races[race_name][race_type] = {'date': race_date, 'time': race_time}
-    with open('Daddy-Bot-env/Assets/F1Information.json', 'w') as f1Info:
-        json.dump(races, f1Info)
-
-    
-
-def IsRaceTime():
-    from datetime import datetime
-    #Checks if the Event is less than 30 minutes away
-    closest_delta = find_closest_event(True)
-
-    #I think the top of this try statement can be removed, Leaving it in for now
+    #convert_to_12hr = lambda time_str: datetime.strptime(time_str, '%H:%M').strftime('%I:%M %p')
     try:
-        pattern = r'(\d+) days?, (\d+):(\d+):(\d+)\.(\d+)'
-        match = re.search(pattern, closest_delta)
-        days = int(match.group(1))
-        hours = int(match.group(2))
-        minutes = int(match.group(3))
-        seconds = int(match.group(4))
-        microseconds = int(match.group(5))
-    except:
-        pattern = r'(\d+):(\d+):(\d+)\.(\d+)'
-        match = re.search(pattern, closest_delta)
-        days = 0
-        hours = int(match.group(1))
-        minutes = int(match.group(2))
-        seconds = int(match.group(3))
-        microseconds = int(match.group(4))
+        response = requests.get(url)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            # Find the tbody element by ID, assuming each race's details are enclosed within a tbody with a unique ID
+            race_details = soup.find_all('tbody', class_='text-white')
+            for detail in race_details:
+                # Extract the race title from the th element
+                race_title = detail.find('th', id=lambda x: x and x.endswith('-header')).text.strip()
+                # Initialize the race detail list
+                races[race_title] = []
+                # Extract all related event rows within the tbody
+                event_rows = detail.find_all('tr')[1:]  # Skip the first row as it's the header
+                for row in event_rows:
+                    event_type = row.find_all('td')[1].text.strip()
+                    date = row.find('td', headers=lambda x: x and x.endswith('date_header')).text.strip()
+                    time = row.find('td', headers=lambda x: x and x.endswith('time_header')).find('div').text.strip()
+                    Biscet_Africa = datetime.strptime(time, '%H:%M').replace(tzinfo=pytz.timezone('Africa/Abidjan'))
+                    time_chicago = (Biscet_Africa.astimezone(pytz.timezone('America/Chicago')) - timedelta(minutes=25)).strftime('%H:%M')
+
+
+                    #Decided not to use. Leaving if I want in the future.
+                        #correctedTime = convert_to_12hr(time_chicago)
+                    races[race_title].append({
+                        "event_type": event_type,
+                        "date": date,
+                        "time": time_chicago
+                    })
+        else:
+            print("Failed to retrieve the webpage. Status code:", response.status_code)
+    except Exception as e:
+        print("An error occurred:", e)
+
+    races_json = json.dumps(races, indent=4)
+    with open('Daddy-Bot-env/Assets/F1Information.json', 'w') as file:
+        file.write(races_json)
+    return races_json
+
+def find_next_event(races_json):
+    # Convert current time to America/Chicago timezone
+    current_time_chicago = datetime.now(pytz.timezone('America/Chicago'))
     
-    #print(f'Days: {days}, Hours: {hours}, Minutes: {minutes}, Seconds: {seconds}, Microseconds: {microseconds}')
-    #If the event is less than 30 minutes away, return true
+    try:
+        with open(races_json, 'r') as file:
+            races_json = json.load(file)
+        # Now races_json is a dictionary, and you can use the previous logic here
+        # Your logic to find the next event...
+    except FileNotFoundError:
+        print("File not found.")
+    except json.JSONDecodeError:
+        print("Error decoding JSON.")
+
+    closest_event = None
+    closest_time_diff = None
+
+    for race_title, events in races_json.items():
+        for event in events:
+            # Assuming the year is the current year; adjust if necessary
+            event_date_str = event["date"] + " " + str(current_time_chicago.year)
+            event_datetime_str = f"{event_date_str} {event['time']}"
+            
+            # Convert event date and time to datetime object in America/Chicago timezone
+            try:
+                event_datetime = datetime.strptime(event_datetime_str, '%d %b %Y %H:%M')
+                event_datetime = pytz.timezone('America/Chicago').localize(event_datetime)
+            except ValueError:
+                # Handle the case where date parsing fails
+                print(f"Failed to parse date/time for event: {event['event_type']}")
+                continue
+            
+            # Calculate time difference from now, if it's in the future
+            if event_datetime > current_time_chicago:
+                time_diff = event_datetime - current_time_chicago
+                if closest_time_diff is None or time_diff < closest_time_diff:
+                    closest_event = event
+                    closest_time_diff = time_diff
+
+    return closest_event
+
+#TODO; For some reason this is 6hr off from the actual time. I.E. 1:30pm is 7:30am
+def get_timedelta_to_next_event(races_json):
+    # Assuming find_next_event() returns a dictionary with 'date' and 'time' keys
+    next_event = find_next_event(races_json)
+    
+    if not next_event:
+        return "No next event found."
+
+    # Determine the current year and the year for the event
+    current_time_chicago = datetime.now(pytz.timezone('America/Chicago'))
+    current_year = current_time_chicago.year
+    next_year = current_year + 1
+
+    # First, try parsing the date as if the event is in the current year
+    datetime_str = f"{next_event['date']} {next_event['time']} {current_year}"
+    event_datetime = datetime.strptime(datetime_str, '%d %b %H:%M %Y').replace(tzinfo=pytz.timezone('America/Chicago'))
+
+    # If the event datetime is in the past, it means the event is in the next year
+    if event_datetime < current_time_chicago:
+        datetime_str = f"{next_event['date']} {next_event['time']} {next_year}"
+        event_datetime = datetime.strptime(datetime_str, '%d %b %H:%M %Y').replace(tzinfo=pytz.timezone('America/Chicago'))
+
+    # Calculate the timedelta
+    delta = event_datetime - current_time_chicago
+    
+    # Include days in the timedelta calculation
+    days = delta.days
+    hours, remainder = divmod(delta.seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    
+    # Format the timedelta to include days, hours, and minutes
+    return days, hours, minutes
+
+
+#TODO: Make this function try Except for when they ask for an event that doesn't exist. I.E. Sprint
+def find_next_event_by_type(json_file_path, event_type_keyword):
+    # Load JSON data from the file
+    with open(json_file_path, 'r') as file:
+        races_json = json.load(file)
+
+    # Convert current time to America/Chicago timezone
+    current_time_chicago = datetime.now(pytz.timezone('America/Chicago'))
+    
+    closest_event = None
+    closest_time_diff = timedelta.max
+
+    for race_title, events in races_json.items():
+        for event in events:
+            # Check if the event type keyword is part of the event type string
+            if event_type_keyword in event["event_type"]:
+                # Correct the datetime format to match the 24-hour format without AM/PM
+                event_datetime_str = f"{event['date']} {event['time']} 2024"  # Adjust the year as necessary
+                event_datetime = datetime.strptime(event_datetime_str, '%d %b %H:%M %Y')
+                event_datetime = pytz.timezone('America/Chicago').localize(event_datetime)
+
+                time_diff = event_datetime - current_time_chicago
+                # Check if this event is closer to the current time than previous ones and is in the future
+                if 0 < time_diff.total_seconds() < closest_time_diff.total_seconds():
+                    closest_event = event
+                    closest_time_diff = time_diff
+    
+    return closest_event
+
+def IsRaceTime(races_json):
+    days, hours, minutes = get_timedelta_to_next_event(races_json)
     if days == 0 and hours == 0 and minutes <= 30:
-        #print(f"It's Event time count down is Days: {days}, Hours: {hours}, Minutes: {minutes}, Seconds: {seconds}, Microseconds: {microseconds}")
         return True
     else:
         return False
+
+
+#Testing
+#################################################################################################
+#...
+#...
+#...
+#Testing the Scrape Function
+###############################################################
+# Example usage
+#races = scrape_f1_races(url)
+
+#Testing the Find Next Event Function
+###############################################################
+#next_event = find_next_event('Daddy-Bot-env/Assets/F1Information.json')
+#print(next_event)
+#print('Next Event is: ' + next_event['event_type'] + ' on ' + next_event['date'] + ' at ' + convert_to_12hr(next_event['time']) + ' ... America/Chicago')
+
+# Testing the Countdown to Next Event Function
+#timedelta_to_next_event = get_timedelta_to_next_event('Daddy-Bot-env/Assets/F1Information.json')
+#print(timedelta_to_next_event)
+
+# #Testing the Find Next Event by Type Function
+# ###############################################################
+#event_type = "Free Practice 2"
+#next_event = find_next_event_by_type('Daddy-Bot-env/Assets/F1Information.json', event_type)
+#print('Next Event is: ' + next_event['event_type'] + ' on ' + next_event['date'] + ' at ' + convert_to_12hr(next_event['time']) + ' ... America/Chicago')
+    
+#Testing IsRaceTime Function
+###############################################################
+#...
+    

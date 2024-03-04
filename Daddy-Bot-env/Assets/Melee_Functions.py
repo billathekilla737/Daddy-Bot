@@ -1,55 +1,55 @@
-from Assets.F1_Functions import month_to_number
 import json
 import pytz
 
 def Scrap_Melee():
     
-    print("Scraping Melee Data. This will take a few seconds.")
-    import requests
-    import time
-    from bs4 import BeautifulSoup
-    import re
+    # print("Scraping Melee Data. This will take a few seconds.")
+    # import requests
+    # import time
+    # from bs4 import BeautifulSoup
+    # import re
 
-    Meleejson = {}
-    URL = 'https://meleemajors.com/'
-    page = requests.get(URL)
-    soup = BeautifulSoup(page.content, 'html.parser')
-    Names = [name.text for name in soup.find_all('h2')]
-    #Remove the first two elements in Names
-    Names = Names[2:]
+    # Meleejson = {}
+    # URL = 'https://meleemajors.com/'
+    # page = requests.get(URL)
+    # soup = BeautifulSoup(page.content, 'html.parser')
+    # Names = [name.text for name in soup.find_all('h2')]
+    # #Remove the first two elements in Names
+    # Names = Names[2:]
 
-    Dates = [date.text for date in soup.find_all('h4')]
-    Dates = [re.sub(r'(\d+)(st|nd|rd|th)', r'\1', date) for date in Dates]
+    # Dates = [date.text for date in soup.find_all('h4')]
+    # Dates = [re.sub(r'(\d+)(st|nd|rd|th)', r'\1', date) for date in Dates]
 
-    Months = [date[:3] for date in Dates]
-    Months = [month_to_number(month) for month in Months]
-    Months = [str(month) for month in Months]
+    # Months = [date[:3] for date in Dates]
+    # Months = [month_to_number(month) for month in Months]
+    # Months = [str(month) for month in Months]
     
-    Dates = [re.sub(r'[a-zA-Z]', r'', date) for date in Dates]
-    Dates = [date.replace(" ", "") for date in Dates]
-    Dates = [date.split("-") for date in Dates]
-    StartDate = [date[0] if len(date) > 0 else "Unknown" for date in Dates]
-    EndDate = [date[1] if len(date) > 1 else "Unknown" for date in Dates]
+    # Dates = [re.sub(r'[a-zA-Z]', r'', date) for date in Dates]
+    # Dates = [date.replace(" ", "") for date in Dates]
+    # Dates = [date.split("-") for date in Dates]
+    # StartDate = [date[0] if len(date) > 0 else "Unknown" for date in Dates]
+    # EndDate = [date[1] if len(date) > 1 else "Unknown" for date in Dates]
 
-    for i in range(len(Names)):
-        #Give each name a key
-        Meleejson[Names[i]] = {}
-        #Give each key a value
-        Meleejson[Names[i]]["Month"] = Months[i]
-        Meleejson[Names[i]]["Start Date"] = StartDate[i]
-        try:
-            Meleejson[Names[i]]["End Date"] = EndDate[i]
-        except IndexError:
-            print(f"No end date found for {Names[i]}")
-            EndDate.append("N/A")
-            Meleejson[Names[i]]["End Date"] = "N/A"
+    # for i in range(len(Names)):
+    #     #Give each name a key
+    #     Meleejson[Names[i]] = {}
+    #     #Give each key a value
+    #     Meleejson[Names[i]]["Month"] = Months[i]
+    #     Meleejson[Names[i]]["Start Date"] = StartDate[i]
+    #     try:
+    #         Meleejson[Names[i]]["End Date"] = EndDate[i]
+    #     except IndexError:
+    #         print(f"No end date found for {Names[i]}")
+    #         EndDate.append("N/A")
+    #         Meleejson[Names[i]]["End Date"] = "N/A"
     
     
-    #Write the json file
-    with open('Daddy-Bot-env/Assets/Melee.json', 'w') as json_file:
-        json.dump(Meleejson, json_file)
+    # #Write the json file
+    # with open('Daddy-Bot-env/Assets/Melee.json', 'w') as json_file:
+    #     json.dump(Meleejson, json_file)
 
-    return Names, Months, StartDate, EndDate
+    # return Names, Months, StartDate, EndDate
+    pass
 
 def find_Next_Major():
     with open('Daddy-Bot-env/Assets/Melee.json') as json_file:
