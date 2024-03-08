@@ -130,7 +130,7 @@ def run_discord_bot():
             if isFlatFuckFriday() and sent != True:
                 #IT'S FLAT FUCK FRIDAY! :FlatFuck:
                 #Send a message in General that it's Flat Fuck Friday!
-                message = "<:FlatFuck:1117199409478914128> It's Flat Fuck Friday You Fucking Losers! <:FlatFuck:1117199409478914128> \nhttps://youtu.be/SqfurZF4Xg4"
+                message = "<:FlatFuck:1117199409478914128> It's Flat Fuck Friday You Fucking Losers! <:FlatFuck:1117199409478914128> \nhttps://vimeo.com/921143035"
                 GeneralChannel = client.get_channel(632027078371573775)
                 await GeneralChannel.send(message)
                 sent = True
