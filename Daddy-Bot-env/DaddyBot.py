@@ -236,7 +236,6 @@ def run_discord_bot():
         #To do this we will check if the date of any of the events is past the final even which is the Grand Prix if is we set it's NextName['info'] to None
         #Then we will remove all the events that have a None value for their info
 
-
         if Next_Location not in NextFP1['event_type']:
             NextFP1['date'] = 'Completed'
             NextFP1['time'] = 'Completed'
