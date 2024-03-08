@@ -152,19 +152,10 @@ def run_discord_bot():
     ##############################################################################################################################################
     @tree.command(name="freepractice", description="Tells you the next F1 free practice event <:f1_logo:1132150006988673034>")
     async def freepractice(interaction: discord.Interaction, practice_number: str):
-        NextFP1 = find_next_event_by_type(RacesJson, "Free Practice 1")
-        if NextFP1 != None:
-            NextFP = NextFP1
-        NextFP2 = find_next_event_by_type(RacesJson, "Free Practice 2")
-        if NextFP2 != None:
-            NextFP = NextFP2
-        NextFP3 = find_next_event_by_type(RacesJson, "Free Practice 3")
-        if NextFP3 != None:
-            NextFP = NextFP3
-        if NextFP != None:
-            await interaction.response.send_message('The Next Practice #' + practice_number + ' is: ' + next_event['event_type'] + ' on ' + next_event['date'] + ' at ' + convert_to_12hr(next_event['time']))
-        else:
-            await interaction.response.send_message(f"Free Practice, Not Found")
+        NextFP = find_next_event_by_type(RacesJson, "Free Practice " + str(practice_number))
+        #TODO: Make an Exception if it's end of season and no fp1, fp2, or fp3
+        await interaction.response.send_message('The Next Practice #' + practice_number + ' is: ' + NextFP['event_type'] + ' on ' + NextFP['date'] + ' at ' + convert_to_12hr(NextFP['time']))
+
 
     @tree.command(name = "qualifying", description = "Tells you the next F1 qualifying event")
     async def qualifying(interaction: discord.Interaction):
