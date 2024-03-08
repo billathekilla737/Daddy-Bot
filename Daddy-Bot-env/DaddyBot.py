@@ -17,6 +17,9 @@ def convert_to_12hr(time_str):
         return 'Completed'
     else:
         return datetime.strptime(time_str, '%H:%M').strftime('%I:%M %p')
+    
+def convert_date(date_str):
+    return datetime.strptime(date_str, "%d %b").strftime("%d %B")
 
 ###############Bot Description#####################
 #The goal of this bot is to give a new users a nickname from a list of names from a text file.
@@ -228,14 +231,11 @@ def run_discord_bot():
         Next_Location           = find_next_event(RacesJson)['event_type']
         Next_Location           = Next_Location[:-11]
 
-
-
         #Clean up and remove the Events where there data is already passed
         #####################################################################
         #To do this we will check if the date of any of the events is past the final even which is the Grand Prix if is we set it's NextName['info'] to None
         #Then we will remove all the events that have a None value for their info
-        def convert_date(date_str):
-            return datetime.strptime(date_str, "%d %b").strftime("%d %B")
+
 
         if Next_Location not in NextFP1['event_type']:
             NextFP1['date'] = 'Completed'
@@ -279,8 +279,6 @@ def run_discord_bot():
         rows = [row for row in rows if row[1] != None]
         table = tabulate(rows, headers=headers, tablefmt="pipe")
         await interaction.response.send_message(f"Here are the next F1 events for the week:\n\n```{table}```")
-
-
 
 
     #Reaction Roles
