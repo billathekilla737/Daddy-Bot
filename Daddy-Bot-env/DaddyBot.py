@@ -8,7 +8,15 @@ from discord.ext import commands # type: ignore
 import pytz
 from tabulate import tabulate
 from datetime import datetime, timedelta
-convert_to_12hr = lambda time_str: datetime.strptime(time_str, '%H:%M').strftime('%I:%M %p')
+
+
+
+
+def convert_to_12hr(time_str):
+    if time_str == 'Completed':
+        return 'Completed'
+    else:
+        return datetime.strptime(time_str, '%H:%M').strftime('%I:%M %p')
 
 ###############Bot Description#####################
 #The goal of this bot is to give a new users a nickname from a list of names from a text file.
@@ -217,50 +225,69 @@ def run_discord_bot():
         await interaction.response.send_message(f"The next F1 event is **{nextevent['event_type']}** on **{nextevent['date']} at {nextevent['time']}** <a:max_nice:1117178831120371824> \n T-minus {timedelta_str} until the next event!")
     #############################################################################################################################################
     #TODO FIX WEEK COMMAND
-    # @tree.command(name = "week", description = "Tells you the next F1 events for the week <:f1_logo:1132150006988673034>")
-    # async def week(interaction: discord.Interaction):
-    #     FreePractice1Date, FreePractice1Time    = find_next_event_by_type(RacesJson, "Free Practice 1")
-    #     FreePractice2Date, FreePractice2Time    = find_next_event_by_type(RacesJson, "Free Practice 2")
-    #     FreePractice3Date, FreePractice3Time    = find_next_event_by_type(RacesJson, "Free Practice 3")
-    #     QualifyingDate, QualifyingTime          = find_next_event_by_type(RacesJson, "Qualifying")
-    #     SprintDate, SprintTime                  = find_next_event_by_type(RacesJson, "Sprint")
-    #     SprintShootoutDate, SprintShootoutTime  = find_next_event_by_type(RacesJson, "Sprint Shootout")
-    #     GrandPrixDate, GrandPrixTime            = find_next_event_by_type(RacesJson, "Grand Prix")
-    #     Next_Location                           = str(find_json_Next_Event_Location())
-    #     Next_Location                           = Next_Location[:-4]
-
-    #     print(FreePractice2Time)
-    #     headers = ["Location", "Event", "Date", "Time"]
-    #     #If it is not a sprint shootout weekend
-    #     if FreePractice2Time == None:
-    #         rows = [
-    #             [Next_Location, "Free Practice 1", FreePractice1Date, FreePractice1Time],
-    #             [Next_Location, "Qualifying", QualifyingDate, QualifyingTime],
-    #             [Next_Location, "Sprint Shootout", SprintShootoutDate, SprintShootoutTime] if SprintShootoutDate else None,
-    #             [Next_Location, "Sprint", SprintDate, SprintTime] if SprintDate else None,
-    #             [Next_Location, "Grand Prix", GrandPrixDate, GrandPrixTime]
-    #         ]
-                
-    #     #If it is a sprint shootout weekend
-    #     elif FreePractice2Time != None:
-    #         rows = [
-    #             [Next_Location, "Free Practice 1", FreePractice1Date, FreePractice1Time],
-    #             [Next_Location, "Free Practice 2", FreePractice2Date, FreePractice2Time],
-    #             [Next_Location, "Free Practice 3", FreePractice3Date, FreePractice3Time],
-    #             [Next_Location, "Qualifying", QualifyingDate, QualifyingTime],
-    #             [Next_Location, "Sprint Shootout", SprintShootoutDate, SprintShootoutTime] if SprintShootoutDate else None,
-    #             [Next_Location, "Sprint", SprintDate, SprintTime] if SprintDate else None,
-    #             [Next_Location, "Grand Prix", GrandPrixDate, GrandPrixTime]
-    #         ]
-
-
-    #     rows = [row for row in rows if row is not None]
-    #     table = tabulate(rows, headers=headers, tablefmt="pipe")
-    #     await interaction.response.send_message(f"```{table}```")
+    @tree.command(name = "week", description = "Tells you the next F1 events for the week <:f1_logo:1132150006988673034>")
+    async def week(interaction: discord.Interaction):
+        NextFP1                 = find_next_event_by_type(RacesJson, "Free Practice 1")
+        NextFP2                 = find_next_event_by_type(RacesJson, "Free Practice 2")
+        NextFP3                 = find_next_event_by_type(RacesJson, "Free Practice 3")
+        NextQualifying          = find_next_event_by_type(RacesJson, "Qualifying")
+        NextSprintShootout      = find_next_event_by_type(RacesJson, "Sprint Shootout")
+        NextSprint              = find_next_event_by_type(RacesJson, "Sprint")
+        NextGrandPrix           = find_next_event_by_type(RacesJson, "Grand Prix")
+        Next_Location           = find_next_event(RacesJson)['event_type']
+        Next_Location           = Next_Location[:-11]
 
 
 
+        #Clean up and remove the Events where there data is already passed
+        #####################################################################
+        #To do this we will check if the date of any of the events is past the final even which is the Grand Prix if is we set it's NextName['info'] to None
+        #Then we will remove all the events that have a None value for their info
+        def convert_date(date_str):
+            return datetime.strptime(date_str, "%d %b").strftime("%d %B")
 
+        if Next_Location not in NextFP1['event_type']:
+            NextFP1['date'] = 'Completed'
+            NextFP1['time'] = 'Completed'
+        if Next_Location not in NextFP2['event_type']:
+            NextFP2['date'] = 'Completed'
+            NextFP2['time'] = 'Completed'
+        if Next_Location not in NextFP3['event_type']:
+            NextFP3['date'] = 'Completed'
+            NextFP3['time'] = 'Completed'
+        if Next_Location not in NextSprintShootout['event_type']:
+            NextSprintShootout['date'] = 'Completed'
+            NextSprintShootout['time'] = 'Completed'
+        if Next_Location not in NextSprint['event_type']:
+            NextSprint['date'] = 'Completed'
+            NextSprint['time'] = 'Completed'
+        if Next_Location not in NextQualifying['event_type']:
+            NextQualifying['date'] = 'Completed'
+            NextQualifying['time'] = 'Completed'
+        
+
+        headers = ["Location", "Event", "Date", "Time"]
+        if NextSprintShootout != None and NextSprint['event_type'][:-11] == Next_Location:
+            rows = [
+                [Next_Location, "Free Practice 1", NextFP1['date'], convert_to_12hr(NextFP1['time'])],
+                [Next_Location, "Free Practice 2", NextFP2['date'], convert_to_12hr(NextFP2['time'])],
+                [Next_Location, "Free Practice 3", NextFP3['date'], convert_to_12hr(NextFP3['time'])],
+                [Next_Location, "Sprint Shootout", NextSprintShootout['date'], convert_to_12hr(NextSprintShootout['time'])],
+                [Next_Location, "Sprint", NextSprint['date'], convert_to_12hr(NextSprint['time'])],
+                [Next_Location, "Qualifying", NextQualifying['date'], convert_to_12hr(NextQualifying['time'])],
+                [Next_Location, "Grand Prix", NextGrandPrix['date'], convert_to_12hr(NextGrandPrix['time'])]
+            ]
+        else:
+            rows = [
+                [Next_Location, "Free Practice 1", NextFP1['date'], convert_to_12hr(NextFP1['time'])],
+                [Next_Location, "Free Practice 2", NextFP2['date'], convert_to_12hr(NextFP2['time'])],
+                [Next_Location, "Free Practice 3", NextFP3['date'], convert_to_12hr(NextFP3['time'])],
+                [Next_Location, "Qualifying", NextQualifying['date'], convert_to_12hr(NextQualifying['time'])],
+                [Next_Location, "Grand Prix", NextGrandPrix['date'], convert_to_12hr(NextGrandPrix['time'])]
+            ]
+        rows = [row for row in rows if row[1] != None]
+        table = tabulate(rows, headers=headers, tablefmt="pipe")
+        await interaction.response.send_message(f"Here are the next F1 events for the week:\n\n```{table}```")
 
 
 
