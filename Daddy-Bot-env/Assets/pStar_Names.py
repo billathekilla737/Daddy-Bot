@@ -23,3 +23,4 @@ def Scrap_Names():
     for i in range(len(Names)):
         nameFile.write(Names[i].text)
     nameFile.close()
+

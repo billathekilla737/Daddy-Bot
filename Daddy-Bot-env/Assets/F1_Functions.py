@@ -28,7 +28,6 @@ convert_to_12hr = lambda time_str: datetime.strptime(time_str, '%H:%M').strftime
 
 def scrape_f1_races(url):
     races = {}
-    #convert_to_12hr = lambda time_str: datetime.strptime(time_str, '%H:%M').strftime('%I:%M %p')
     try:
         response = requests.get(url)
         if response.status_code == 200:
@@ -168,7 +167,7 @@ def find_next_event_by_type(json_file_path, event_type_keyword):
                 if 0 < time_diff.total_seconds() < closest_time_diff.total_seconds():
                     closest_event = event
                     closest_time_diff = time_diff
-    
+
     return closest_event
 
 def IsRaceTime(races_json):
@@ -204,7 +203,6 @@ def IsRaceTime(races_json):
 #event_type = "Free Practice 2"
 #next_event = find_next_event_by_type('Daddy-Bot-env/Assets/F1Information.json', event_type)
 #print('Next Event is: ' + next_event['event_type'] + ' on ' + next_event['date'] + ' at ' + convert_to_12hr(next_event['time']) + ' ... America/Chicago')
-    
 #Testing IsRaceTime Function
 ###############################################################
 #...
