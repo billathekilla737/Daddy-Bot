@@ -200,9 +200,21 @@ def IsRaceTime(races_json):
 
 # #Testing the Find Next Event by Type Function
 # ###############################################################
-#event_type = "Free Practice 2"
-#next_event = find_next_event_by_type('Daddy-Bot-env/Assets/F1Information.json', event_type)
-#print('Next Event is: ' + next_event['event_type'] + ' on ' + next_event['date'] + ' at ' + convert_to_12hr(next_event['time']) + ' ... America/Chicago')
+# event_type = "Qualifying"
+# next_event = find_next_event_by_type('Daddy-Bot-env/Assets/F1Information.json', event_type)
+# #print('Next Event is: ' + next_event['event_type'] + ' on ' + next_event['date'] + ' at ' + convert_to_12hr(next_event['time']) + ' ... America/Chicago')
+
+# print(next_event)
+# Next_Location           = find_next_event('Daddy-Bot-env/Assets/F1Information.json')['event_type']
+# pattern = r"^(.*?Grand Prix)"
+# match = re.search(pattern, Next_Location)
+# if match:
+#     extracted_part = match.group(1)
+#     print("Match Found: " + extracted_part)
+
+# print(Next_Location + '    ' + next_event['event_type'])
+# if Next_Location not in next_event['event_type']:
+#     print("Not a Match")
 #Testing IsRaceTime Function
 ###############################################################
 #...

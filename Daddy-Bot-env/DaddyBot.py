@@ -229,7 +229,14 @@ def run_discord_bot():
         NextSprint              = find_next_event_by_type(RacesJson, "Sprint")
         NextGrandPrix           = find_next_event_by_type(RacesJson, "Grand Prix")
         Next_Location           = find_next_event(RacesJson)['event_type']
-        Next_Location           = Next_Location[:-11]
+        pattern = r"^(.*?Grand Prix)"
+        match = re.search(pattern, Next_Location)
+        if match:
+            Next_Location = match.group(1)
+        else:
+            print("Regex Match Not Found, Week Command")
+        #Next_Location           = Next_Location[:-11]
+
 
         #Clean up and remove the Events where there data is already passed
         #####################################################################
