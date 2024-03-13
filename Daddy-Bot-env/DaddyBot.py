@@ -216,7 +216,7 @@ def run_discord_bot():
         days, hours, minutes = get_timedelta_to_next_event(RacesJson)
         timedelta_str = f"{days} days, {hours} hours, {minutes:02d} minutes"
         nextevent = find_next_event(RacesJson)
-        await interaction.response.send_message(f"The next F1 event is **{nextevent['event_type']}** on **{nextevent['date']} at {nextevent['time']}** <a:max_nice:1117178831120371824> \n T-minus {timedelta_str} until the next event!")
+        await interaction.response.send_message(f"The next F1 event is **{nextevent['event_type']}** on **{nextevent['date']} at {convert_to_12hr(nextevent['time'])}** <a:max_nice:1117178831120371824> \n T-minus {timedelta_str} until the next event!")
     #############################################################################################################################################
     #TODO FIX WEEK COMMAND
     @tree.command(name = "week", description = "Tells you the next F1 events for the week <:f1_logo:1132150006988673034>")
@@ -235,8 +235,6 @@ def run_discord_bot():
             Next_Location = match.group(1)
         else:
             print("Regex Match Not Found, Week Command")
-        #Next_Location           = Next_Location[:-11]
-
 
         #Clean up and remove the Events where there data is already passed
         #####################################################################
