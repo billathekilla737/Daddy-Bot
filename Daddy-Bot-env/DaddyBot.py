@@ -227,7 +227,7 @@ def run_discord_bot():
         NextQualifying          = find_next_event_by_type(RacesJson, "Qualifying")
         NextSprintShootout      = find_next_event_by_type(RacesJson, "Sprint Shootout")
         NextSprint              = find_next_event_by_type(RacesJson, "Sprint")
-        NextGrandPrix           = find_next_event_by_type(RacesJson, "Grand Prix")
+        NextGrandPrix           = find_next_event_by_type(RacesJson, "Grand Prix Grand Prix")
         Next_Location           = find_next_event(RacesJson)['event_type']
         pattern = r"^(.*?Grand Prix)"
         match = re.search(pattern, Next_Location)
