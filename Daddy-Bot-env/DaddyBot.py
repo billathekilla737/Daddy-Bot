@@ -255,16 +255,6 @@ def run_discord_bot():
         
 
         headers = ["Location", "Event", "Date", "Time"]
-        print(f"The Next Sprint Qualifying is: {NextSprintQualifying}, the Next Location is: {Next_Location}")
-        if NextSprint['event_type'][:-11] == Next_Location:
-            print(NextSprint['event_type'][:-11])
-            print(Next_Location)
-            print(NextSprintQualifying)
-        else:
-            print('Else Statement')
-            print(NextSprint['event_type'][:-11])
-            print(Next_Location)
-            print(NextSprintQualifying)
         
         if (NextSprintQualifying != None and NextSprint['event_type'][:-11] == Next_Location) or NextSprintQualifying['time'] == 'Completed':
             rows = [
