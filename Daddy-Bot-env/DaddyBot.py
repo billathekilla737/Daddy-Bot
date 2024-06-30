@@ -26,10 +26,10 @@ def convert_date(date_str):
 
 def run_discord_bot():
     ###########Initialize Bot####################################
-    #scrape_race_info()                                          #
+                                                                #
     token, URL = Parse_Private()                                #
     Scrap_Names()                                               #
-    scrape_f1_races('https://f1calendar.com')
+    scrape_f1_races('https://f1calendar.com')                   #
     intents = discord.Intents.all()                             #
     global sent                                                 #
                                                                 #
@@ -37,7 +37,7 @@ def run_discord_bot():
     client = discord.Client(command_prefix='/',intents=intents) #
     #Set the bot's status                                       #
     tree = app_commands.CommandTree(client)                     #
-    #bot = commands.Bot(command_prefix='/', intents=intents)    #
+                                                                #
     nameList, roleList = Grab_Files()                           #
     RacesJson = 'Daddy-Bot-env/Assets/F1Information.json'
     
@@ -53,7 +53,8 @@ def run_discord_bot():
         PrevEvent = "" 
         # Event = find_next_event(RacesJson) # type: ignore
         # days, hours, minutes = get_timedelta_to_next_event(RacesJson)
-        channel = client.get_channel(907764974099787797)
+        channel = client.get_channel(907764974099787797)#F1 Channel
+        #channel = client.get_channel(1115817757267730533)#TEST CHANNEL
         #meleechannel = client.get_channel(1117158502989844600)
         meleechannel = client.get_channel(1117158502989844600)
         devchannel = client.get_channel(1115817757267730533)
@@ -92,29 +93,29 @@ def run_discord_bot():
                 event_type = next_event['event_type']
                 if "Free Practice" in event_type:
                     FreePracticeRole = discord.utils.get(client.guilds[0].roles, name="Free Practice")
-                    await channel.send(f"{FreePracticeRole.mention} **{event_type}** is in {hours} hours and {minutes} minutes!")
+                    await channel.send(f"{FreePracticeRole.mention} The **{event_type}** is in {hours} hours and {minutes} minutes!")
                     PrevEvent = event_type
 
                 elif "Sprint Shootout" in event_type:
                     SprintShootoutRole = discord.utils.get(client.guilds[0].roles, name="Sprint Shootout")
-                    await channel.send(f"{SprintShootoutRole.mention} **{event_type}** is in {hours} hours and {minutes} minutes!")
+                    await channel.send(f"{SprintShootoutRole.mention} The **{event_type}** is in {hours} hours and {minutes} minutes!")
                     PrevEvent = event_type
 
                 elif "Sprint" in event_type:
                     SprintRole = discord.utils.get(client.guilds[0].roles, name="Sprint")
-                    await channel.send(f"{SprintRole.mention} **{event_type}** is in {hours} hours and {minutes} minutes!")
+                    await channel.send(f"{SprintRole.mention} The **{event_type}** is in {hours} hours and {minutes} minutes!")
                     PrevEvent = event_type
 
                 elif "Qualifying" in event_type or "Sprint" in event_type:
                     QualifyingRole = discord.utils.get(client.guilds[0].roles, name="Qualifying")
-                    await channel.send(f"{QualifyingRole.mention} **{event_type}** is in {hours} hours and {minutes} minutes!")
+                    await channel.send(f"{QualifyingRole.mention} The **{event_type}** is in {hours} hours and {minutes} minutes!")
                     PrevEvent = event_type
                              
                 elif "Grand Prix Grand Prix" in event_type:
                     GrandPrixRole = discord.utils.get(client.guilds[0].roles, name="Grand Prix")
                     PrevEvent = event_type
                     event_type = event_type.replace(" Grand Prix", "")
-                    await channel.send(f"{GrandPrixRole.mention} **{event_type}** is in {hours} hours and {minutes} minutes!")
+                    await channel.send(f"{GrandPrixRole.mention} The **{event_type} Grand Prix** is in {hours} hours and {minutes} minutes!")
                     
 
             #Melee Reminder (SHUT DOWN UNTIL A Better Site To Scrap Is Found)
@@ -141,7 +142,7 @@ def run_discord_bot():
                 await GeneralChannel.send(message)
                 sent = True
                 asyncio.create_task(reset_sent())
-            await asyncio.sleep(45)
+            await asyncio.sleep(30)
         
 
     @client.event
@@ -240,28 +241,17 @@ def run_discord_bot():
             print("Regex Match Not Found, Week Command")
 
         #Clean up and remove the Events where there data is already passed
-        #####################################################################
-        #To do this we will check if the date of any of the events is past the final even which is the Grand Prix if is we set it's NextName['info'] to None
-        #Then we will remove all the events that have a None value for their info
+        ###############################################################################
 
-        if Next_Location not in NextFP1['event_type']:
-            NextFP1['date'] = 'Completed'
-            NextFP1['time'] = 'Completed'
-        if Next_Location not in NextFP2['event_type']:
-            NextFP2['date'] = 'Completed'
-            NextFP2['time'] = 'Completed'
-        if Next_Location not in NextFP3['event_type']:
-            NextFP3['date'] = 'Completed'
-            NextFP3['time'] = 'Completed'
-        if Next_Location not in NextSprintShootout['event_type']:
-            NextSprintShootout['date'] = 'Completed'
-            NextSprintShootout['time'] = 'Completed'
-        if Next_Location not in NextSprint['event_type']:
-            NextSprint['date'] = 'Completed'
-            NextSprint['time'] = 'Completed'
-        if Next_Location not in NextQualifying['event_type']:
-            NextQualifying['date'] = 'Completed'
-            NextQualifying['time'] = 'Completed'
+        #Check if the event exist for the current week and if it has already passed.
+        #If it has, then mark it as completed
+        events = [NextFP1, NextFP2, NextFP3, NextSprintShootout, NextSprint, NextQualifying]
+
+        for event in events:
+            if event is not None and Next_Location not in event['event_type']:
+                event['date'] = 'Completed'
+                event['time'] = 'Completed'
+
         
 
         headers = ["Location", "Event", "Date", "Time"]

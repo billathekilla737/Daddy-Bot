@@ -72,33 +72,35 @@ def find_next_event(races_json):
     
     try:
         with open(races_json, 'r') as file:
-            races_json = json.load(file)
-        # Now races_json is a dictionary, and you can use the previous logic here
-        # Your logic to find the next event...
+            races_data = json.load(file)
     except FileNotFoundError:
         print("File not found.")
+        return None
     except json.JSONDecodeError:
         print("Error decoding JSON.")
+        return None
 
     closest_event = None
     closest_time_diff = None
 
-    for race_title, events in races_json.items():
+    for race_title, events in races_data.items():
         for event in events:
-            # Assuming the year is the current year; adjust if necessary
             event_date_str = event["date"] + " " + str(current_time_chicago.year)
             event_datetime_str = f"{event_date_str} {event['time']}"
             
-            # Convert event date and time to datetime object in America/Chicago timezone
             try:
-                event_datetime = datetime.strptime(event_datetime_str, '%d %b %Y %H:%M')
-                event_datetime = pytz.timezone('America/Chicago').localize(event_datetime)
+                event_datetime_naive = datetime.strptime(event_datetime_str, '%d %b %Y %H:%M')
+                event_datetime = pytz.timezone('America/Chicago').localize(event_datetime_naive, is_dst=None)
             except ValueError:
-                # Handle the case where date parsing fails
                 print(f"Failed to parse date/time for event: {event['event_type']}")
                 continue
-            
-            # Calculate time difference from now, if it's in the future
+            except pytz.AmbiguousTimeError:
+                print(f"Ambiguous time due to DST for event: {event['event_type']}")
+                continue
+            except pytz.NonExistentTimeError:
+                print(f"Non-existent time due to DST for event: {event['event_type']}")
+                continue
+
             if event_datetime > current_time_chicago:
                 time_diff = event_datetime - current_time_chicago
                 if closest_time_diff is None or time_diff < closest_time_diff:
@@ -107,9 +109,7 @@ def find_next_event(races_json):
 
     return closest_event
 
-#TODO; For some reason this is 6hr off from the actual time. I.E. 1:30pm is 7:30am
 def get_timedelta_to_next_event(races_json):
-    # Assuming find_next_event() returns a dictionary with 'date' and 'time' keys
     next_event = find_next_event(races_json)
     
     if not next_event:
@@ -122,12 +122,23 @@ def get_timedelta_to_next_event(races_json):
 
     # First, try parsing the date as if the event is in the current year
     datetime_str = f"{next_event['date']} {next_event['time']} {current_year}"
-    event_datetime = datetime.strptime(datetime_str, '%d %b %H:%M %Y').replace(tzinfo=pytz.timezone('America/Chicago'))
+    try:
+        event_datetime_naive = datetime.strptime(datetime_str, '%d %b %H:%M %Y')
+        event_datetime = pytz.timezone('America/Chicago').localize(event_datetime_naive)
+    except ValueError:
+        print(f"Failed to parse date/time for event: {next_event['event_type']}")
+        return None
 
     # If the event datetime is in the past, it means the event is in the next year
     if event_datetime < current_time_chicago:
         datetime_str = f"{next_event['date']} {next_event['time']} {next_year}"
-        event_datetime = datetime.strptime(datetime_str, '%d %b %H:%M %Y').replace(tzinfo=pytz.timezone('America/Chicago'))
+        try:
+            event_datetime_naive = datetime.strptime(datetime_str, '%d %b %H:%M %Y')
+            event_datetime = pytz.timezone('America/Chicago').localize(event_datetime_naive)
+            print(f"Event datetime for next year: {event_datetime.isoformat()}")
+        except ValueError:
+            print(f"Failed to parse date/time for event: {next_event['event_type']}")
+            return None
 
     # Calculate the timedelta
     delta = event_datetime - current_time_chicago
