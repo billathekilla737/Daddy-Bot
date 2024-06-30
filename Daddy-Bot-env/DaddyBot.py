@@ -174,7 +174,7 @@ def run_discord_bot():
             await interaction.response.send_message(f"Qualifying, Not Found. Tell Zack...or don't. I don't care.")
 
 
-    @tree.command(name = "sprintQualifying", description = "Tells you the next F1 sprint Qualifying event")
+    @tree.command(name = "sprintqualifying", description = "Tells you the next F1 sprint Qualifying event")
     async def sprintQualifying(interaction: discord.Interaction):
         NextSprintQualifying = find_next_event_by_type(RacesJson, "Sprint Qualifying")
         if NextSprintQualifying != None:
@@ -207,7 +207,7 @@ def run_discord_bot():
             ["/nextevent", "Tells you the next F1 Event"],
             ["/freepractice [Number]", "Tells you the next F1 free practice event"],
             ["/qualifying", "Tells you the next F1 qualifying event"],
-            ["/sprintQualifying", "Tells you the next F1 sprint Qualifying event"],
+            ["/sprintqualifying", "Tells you the next F1 sprint Qualifying event"],
             ["/sprint", "Tells you the next F1 sprint event"],
             ["/grandprix", "Tells you the next F1 Grand Prix event"],
             ["/help", "Tells you the commands for the bot"]
@@ -229,7 +229,7 @@ def run_discord_bot():
         NextFP2                 = find_next_event_by_type(RacesJson, "Free Practice 2")
         NextFP3                 = find_next_event_by_type(RacesJson, "Free Practice 3")
         NextQualifying          = find_next_event_by_type(RacesJson, "Qualifying")
-        NextSprintQualifying      = find_next_event_by_type(RacesJson, "Sprint Qualifying")
+        NextSprintQualifying    = find_next_event_by_type(RacesJson, "Sprint Qualifying")
         NextSprint              = find_next_event_by_type(RacesJson, "Sprint")
         NextGrandPrix           = find_next_event_by_type(RacesJson, "Grand Prix Grand Prix")
         Next_Location           = find_next_event(RacesJson)['event_type']
@@ -255,7 +255,18 @@ def run_discord_bot():
         
 
         headers = ["Location", "Event", "Date", "Time"]
-        if NextSprintQualifying != None and NextSprint['event_type'][:-11] == Next_Location:
+        print(f"The Next Sprint Qualifying is: {NextSprintQualifying}, the Next Location is: {Next_Location}")
+        if NextSprint['event_type'][:-11] == Next_Location:
+            print(NextSprint['event_type'][:-11])
+            print(Next_Location)
+            print(NextSprintQualifying)
+        else:
+            print('Else Statement')
+            print(NextSprint['event_type'][:-11])
+            print(Next_Location)
+            print(NextSprintQualifying)
+        
+        if (NextSprintQualifying != None and NextSprint['event_type'][:-11] == Next_Location) or NextSprintQualifying['time'] == 'Completed':
             rows = [
                 [Next_Location, "Free Practice 1", NextFP1['date'], convert_to_12hr(NextFP1['time'])],
                 [Next_Location, "Free Practice 2", NextFP2['date'], convert_to_12hr(NextFP2['time'])],
