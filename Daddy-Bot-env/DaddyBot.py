@@ -96,9 +96,9 @@ def run_discord_bot():
                     await channel.send(f"{FreePracticeRole.mention} The **{event_type}** is in {hours} hours and {minutes} minutes!")
                     PrevEvent = event_type
 
-                elif "Sprint Shootout" in event_type:
-                    SprintShootoutRole = discord.utils.get(client.guilds[0].roles, name="Sprint Shootout")
-                    await channel.send(f"{SprintShootoutRole.mention} The **{event_type}** is in {hours} hours and {minutes} minutes!")
+                elif "Sprint Qualifying" in event_type:
+                    SprintQualifyingRole = discord.utils.get(client.guilds[0].roles, name="Sprint Qualifying")
+                    await channel.send(f"{SprintQualifyingRole.mention} The **{event_type}** is in {hours} hours and {minutes} minutes!")
                     PrevEvent = event_type
 
                 elif "Sprint" in event_type:
@@ -174,13 +174,13 @@ def run_discord_bot():
             await interaction.response.send_message(f"Qualifying, Not Found. Tell Zack...or don't. I don't care.")
 
 
-    @tree.command(name = "sprintshootout", description = "Tells you the next F1 sprint shootout event")
-    async def sprintshootout(interaction: discord.Interaction):
-        NextSprintShootout = find_next_event_by_type(RacesJson, "Sprint Shootout")
-        if NextSprintShootout != None:
-            await interaction.response.send_message(f"The next F1 **Sprint Shootout** event is on **{NextSprintShootout['date']} at {NextSprintShootout['time']}** <:f1_logo:1132150006988673034>")
+    @tree.command(name = "sprintQualifying", description = "Tells you the next F1 sprint Qualifying event")
+    async def sprintQualifying(interaction: discord.Interaction):
+        NextSprintQualifying = find_next_event_by_type(RacesJson, "Sprint Qualifying")
+        if NextSprintQualifying != None:
+            await interaction.response.send_message(f"The next F1 **Sprint Qualifying** event is on **{NextSprintQualifying['date']} at {NextSprintQualifying['time']}** <:f1_logo:1132150006988673034>")
         else:
-            await interaction.response.send_message(f"Sprint Shootout, Not Found. Tell Zack...or don't. I don't care.")
+            await interaction.response.send_message(f"Sprint Qualifying, Not Found. Tell Zack...or don't. I don't care.")
 
     @tree.command(name = "sprint", description = "Tells you the next F1 sprint event")
     async def sprint(interaction: discord.Interaction):
@@ -207,7 +207,7 @@ def run_discord_bot():
             ["/nextevent", "Tells you the next F1 Event"],
             ["/freepractice [Number]", "Tells you the next F1 free practice event"],
             ["/qualifying", "Tells you the next F1 qualifying event"],
-            ["/sprintshootout", "Tells you the next F1 sprint shootout event"],
+            ["/sprintQualifying", "Tells you the next F1 sprint Qualifying event"],
             ["/sprint", "Tells you the next F1 sprint event"],
             ["/grandprix", "Tells you the next F1 Grand Prix event"],
             ["/help", "Tells you the commands for the bot"]
@@ -229,7 +229,7 @@ def run_discord_bot():
         NextFP2                 = find_next_event_by_type(RacesJson, "Free Practice 2")
         NextFP3                 = find_next_event_by_type(RacesJson, "Free Practice 3")
         NextQualifying          = find_next_event_by_type(RacesJson, "Qualifying")
-        NextSprintShootout      = find_next_event_by_type(RacesJson, "Sprint Shootout")
+        NextSprintQualifying      = find_next_event_by_type(RacesJson, "Sprint Qualifying")
         NextSprint              = find_next_event_by_type(RacesJson, "Sprint")
         NextGrandPrix           = find_next_event_by_type(RacesJson, "Grand Prix Grand Prix")
         Next_Location           = find_next_event(RacesJson)['event_type']
@@ -245,7 +245,7 @@ def run_discord_bot():
 
         #Check if the event exist for the current week and if it has already passed.
         #If it has, then mark it as completed
-        events = [NextFP1, NextFP2, NextFP3, NextSprintShootout, NextSprint, NextQualifying]
+        events = [NextFP1, NextFP2, NextFP3, NextSprintQualifying, NextSprint, NextQualifying]
 
         for event in events:
             if event is not None and Next_Location not in event['event_type']:
@@ -255,12 +255,12 @@ def run_discord_bot():
         
 
         headers = ["Location", "Event", "Date", "Time"]
-        if NextSprintShootout != None and NextSprint['event_type'][:-11] == Next_Location:
+        if NextSprintQualifying != None and NextSprint['event_type'][:-11] == Next_Location:
             rows = [
                 [Next_Location, "Free Practice 1", NextFP1['date'], convert_to_12hr(NextFP1['time'])],
                 [Next_Location, "Free Practice 2", NextFP2['date'], convert_to_12hr(NextFP2['time'])],
                 [Next_Location, "Free Practice 3", NextFP3['date'], convert_to_12hr(NextFP3['time'])],
-                [Next_Location, "Sprint Shootout", NextSprintShootout['date'], convert_to_12hr(NextSprintShootout['time'])],
+                [Next_Location, "Sprint Qualifying", NextSprintQualifying['date'], convert_to_12hr(NextSprintQualifying['time'])],
                 [Next_Location, "Sprint", NextSprint['date'], convert_to_12hr(NextSprint['time'])],
                 [Next_Location, "Qualifying", NextQualifying['date'], convert_to_12hr(NextQualifying['time'])],
                 [Next_Location, "Grand Prix", NextGrandPrix['date'], convert_to_12hr(NextGrandPrix['time'])]
