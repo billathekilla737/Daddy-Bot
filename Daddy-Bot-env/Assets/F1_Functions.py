@@ -28,43 +28,67 @@ convert_to_12hr = lambda time_str: datetime.strptime(time_str, '%H:%M').strftime
 
 def scrape_f1_races(url):
     races = {}
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
+        'Accept-Language': 'en-US,en;q=0.9'
+    }
+
     try:
-        response = requests.get(url)
-        if response.status_code == 200:
-            soup = BeautifulSoup(response.content, 'html.parser')
-            # Find the tbody element by ID, assuming each race's details are enclosed within a tbody with a unique ID
-            race_details = soup.find_all('tbody', class_='text-white')
-            for detail in race_details:
-                # Extract the race title from the th element
-                race_title = detail.find('th', id=lambda x: x and x.endswith('-header')).text.strip()
-                # Initialize the race detail list
-                races[race_title] = []
-                # Extract all related event rows within the tbody
-                event_rows = detail.find_all('tr')[1:]  # Skip the first row as it's the header
-                for row in event_rows:
-                    event_type = row.find_all('td')[1].text.strip()
-                    date = row.find('td', headers=lambda x: x and x.endswith('date_header')).text.strip()
-                    time = row.find('td', headers=lambda x: x and x.endswith('time_header')).find('div').text.strip()
-                    Biscet_Africa = datetime.strptime(time, '%H:%M').replace(tzinfo=pytz.timezone('Africa/Abidjan'))
-                    time_chicago = (Biscet_Africa.astimezone(pytz.timezone('America/Chicago')) - timedelta(minutes=25)).strftime('%H:%M')
-
-
-                    #Decided not to use. Leaving if I want in the future.
-                        #correctedTime = convert_to_12hr(time_chicago)
-                    races[race_title].append({
-                        "event_type": event_type,
-                        "date": date,
-                        "time": time_chicago
-                    })
-        else:
+        response = requests.get(url, headers=headers)
+        if response.status_code != 200:
             print("Failed to retrieve the webpage. Status code:", response.status_code)
+            return None
+
+        soup = BeautifulSoup(response.content, 'html.parser')
+        race_details = soup.find_all('tbody', class_='text-white')
+
+        for detail in race_details:
+            race_title = detail.find('th', id=lambda x: x and x.endswith('-header')).text.strip()
+            races[race_title] = []
+
+            event_rows = detail.find_all('tr')[1:]
+
+            for row in event_rows:
+                event_type = row.find_all('td')[1].text.strip()
+                date = row.find('td', headers=lambda x: x and x.endswith('date_header')).text.strip()
+                time_str = row.find('td', headers=lambda x: x and x.endswith('time_header')).find('div').text.strip()
+
+                try:
+                    year = datetime.now().year
+                    dt_str = f"{date} {time_str} {year}"
+                    dt_utc = datetime.strptime(dt_str, "%d %b %H:%M %Y")
+
+                    # ✅ "Dumb" but correct: subtract 6 hours to get "local time"
+                    dt_local = dt_utc - timedelta(hours=6)
+                    formatted_time = dt_local.strftime('%H:%M')
+                except Exception as e:
+                    print(f"Time parsing failed for {event_type} on {date}: {e}")
+                    formatted_time = time_str
+
+                races[race_title].append({
+                    "event_type": event_type,
+                    "date": date,
+                    "time": formatted_time
+                })
+
     except Exception as e:
-        print("An error occurred:", e)
+        print("An error occurred while scraping:", e)
+        return None
 
     races_json = json.dumps(races, indent=4)
     with open('Daddy-Bot-env/Assets/F1Information.json', 'w') as file:
         file.write(races_json)
+
     return races_json
+
+
+
+
+
+
+
+
+
 
 def find_next_event(races_json):
     # Convert current time to America/Chicago timezone
@@ -154,27 +178,38 @@ def get_timedelta_to_next_event(races_json):
 
 #TODO: Make this function try Except for when they ask for an event that doesn't exist. I.E. Sprint
 def find_next_event_by_type(json_file_path, event_type_keyword):
-    # Load JSON data from the file
     with open(json_file_path, 'r') as file:
         races_json = json.load(file)
 
-    # Convert current time to America/Chicago timezone
-    current_time_chicago = datetime.now(pytz.timezone('America/Chicago'))
+    tz = pytz.timezone('America/Chicago')
+    current_time_chicago = datetime.now(tz)
     
     closest_event = None
     closest_time_diff = timedelta.max
 
     for race_title, events in races_json.items():
         for event in events:
-            # Check if the event type keyword is part of the event type string
             if event_type_keyword in event["event_type"]:
-                # Correct the datetime format to match the 24-hour format without AM/PM
-                event_datetime_str = f"{event['date']} {event['time']} 2024"  # Adjust the year as necessary
-                event_datetime = datetime.strptime(event_datetime_str, '%d %b %H:%M %Y')
-                event_datetime = pytz.timezone('America/Chicago').localize(event_datetime)
+                date_str = event["date"]  # e.g., '4 May'
+                time_str = event["time"]  # e.g., '16:00'
 
-                time_diff = event_datetime - current_time_chicago
-                # Check if this event is closer to the current time than previous ones and is in the future
+                # Start with current year
+                year = current_time_chicago.year
+                try:
+                    event_naive = datetime.strptime(f"{date_str} {time_str} {year}", '%d %b %H:%M %Y')
+                    event_local = tz.localize(event_naive)
+
+                    # If the time has already passed this year, try next year
+                    if event_local < current_time_chicago:
+                        year += 1
+                        event_naive = datetime.strptime(f"{date_str} {time_str} {year}", '%d %b %H:%M %Y')
+                        event_local = tz.localize(event_naive)
+
+                except ValueError as e:
+                    print(f"Error parsing datetime for {event['event_type']} on {date_str}: {e}")
+                    continue
+
+                time_diff = event_local - current_time_chicago
                 if 0 < time_diff.total_seconds() < closest_time_diff.total_seconds():
                     closest_event = event
                     closest_time_diff = time_diff

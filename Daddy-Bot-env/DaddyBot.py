@@ -46,9 +46,11 @@ def run_discord_bot():
     #################################-Bot Events-########################################
     @client.event
     async def on_ready():
-        #Variable Initialization
-        #####################################################################
+        # Initialization
+        #region  Initialization
         print('We have logged in as {0.user}'.format(client))
+        #This is for the Biscet Hosting Server to make sure the bot is running
+        print('successfully finished startup')
         await client.change_presence(activity=discord.Game('with your mom'))
         PrevEvent = "" 
         # Event = find_next_event(RacesJson) # type: ignore
@@ -64,6 +66,8 @@ def run_discord_bot():
             print(f"Synced {len(synced)} commands")
         except Exception as e:
             print(e)
+        #endregion
+        #####################################################################
 
         #Send Startup Message to Dev Channel if the system time is not between 4-5a.m. chicago time
         #####################################################################
@@ -74,12 +78,8 @@ def run_discord_bot():
             pass
 
 
-
-
-
-
-
         #   RECURRING TASKS (45 sec Loop)
+        #region Looping Tasks
         #####################################################################
         while True:
             #F1 Race Reminders
@@ -119,6 +119,7 @@ def run_discord_bot():
                     
 
             #Melee Reminder (SHUT DOWN UNTIL A Better Site To Scrap Is Found)
+            #region Melee Reminder
             #################################################################
             # try:
             #     shouldSendMeleeReminder = isMeleeTime()
@@ -131,7 +132,10 @@ def run_discord_bot():
             #     #Message = f"{role.mention} {Event} is in {TimeDelta}!"
             #     await meleechannel.send(f"{MeleeRole.mention} {MeleeEvent} is Today!")
             #     PrevMeleeEvent = MeleeEvent
-
+            #endregion Melee Reminder
+            ################################################################
+            
+            
             #Flat Fuck Friday Reminder
             ################################################################
             if isFlatFuckFriday() and sent != True:
@@ -143,8 +147,12 @@ def run_discord_bot():
                 sent = True
                 asyncio.create_task(reset_sent())
             await asyncio.sleep(30)
-        
+        #endregion
 
+
+    #Nicknamer on Join
+    #region
+    
     @client.event
     async def on_member_join(member):
         #Change the user's nickname
@@ -152,10 +160,11 @@ def run_discord_bot():
         await member.edit(nick=randomName)
         #Provide the user with a role
         await member.add_roles(discord.utils.get(member.guild.roles, name=roleList[2]))
-
-
+    #endregion
+    ############################################################################################
 
     #Slash Commands
+    #region
     ##############################################################################################################################################
     @tree.command(name="freepractice", description="Tells you the next F1 free practice event <:f1_logo:1132150006988673034>")
     async def freepractice(interaction: discord.Interaction, practice_number: str):
@@ -221,8 +230,10 @@ def run_discord_bot():
         timedelta_str = f"{days} days, {hours} hours, {minutes:02d} minutes"
         nextevent = find_next_event(RacesJson)
         await interaction.response.send_message(f"The next F1 event is **{nextevent['event_type']}** on **{nextevent['date']} at {convert_to_12hr(nextevent['time'])}** <a:max_nice:1117178831120371824> \n T-minus {timedelta_str} until the next event!")
+    #endregion
     #############################################################################################################################################
-    
+    #Week Command
+    #region Week Command
     @tree.command(name = "week", description = "Tells you the next F1 events for the week <:f1_logo:1132150006988673034>")
     async def week(interaction: discord.Interaction):
         NextFP1                 = find_next_event_by_type(RacesJson, "Free Practice 1")
@@ -277,9 +288,10 @@ def run_discord_bot():
         rows = [row for row in rows if row[1] != None]
         table = tabulate(rows, headers=headers, tablefmt="pipe")
         await interaction.response.send_message(f"Here are the next F1 events for the week:\n\n```{table}```")
-
+    #endregion Week Command
 
     #Reaction Roles
+    #region
     ##############################################################################################################################################
     #Shutting Down Melee Reaction Roles for now
     #@client.event
@@ -300,15 +312,16 @@ def run_discord_bot():
     #         role = discord.utils.get(guild.roles, name="Melee")
     #         await member.remove_roles(role)
     #Misc.
+    #endregion
     ##############################################################################################################################################
+
+
+
     async def reset_sent():
         await asyncio.sleep(24 * 60 * 60) # Wait for 24 hours
         global sent
         sent = False
         print("Reset for FFF sent")
-        
-    
-
     ####Initilize the bot###
                            #
     client.run(token)      #
